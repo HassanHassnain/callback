@@ -1,0 +1,18 @@
+{
+  "idempotent_up": true,
+  "created_resource_count_before": 13,
+  "created_resource_count_after": 13,
+  "buckets": {
+    "cb-receipts": {
+      "authenticated_head_status": 200,
+      "private_acl": true
+    },
+    "cb-seeds": {
+      "authenticated_head_status": 200,
+      "private_acl": true
+    }
+  },
+  "registry_v2_http_status": 401,
+  "registry_region": "sjc",
+  "preservation": "Pre-existing resources preserved; task-created bootstrap-only sandbox retired after live owner verification and API absence proof."
+}
