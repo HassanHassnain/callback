@@ -1,0 +1,924 @@
+{
+  "realm": "acme",
+  "displayName": "Acme \u2014 synthetic demo organization",
+  "enabled": true,
+  "registrationAllowed": false,
+  "resetPasswordAllowed": false,
+  "sslRequired": "all",
+  "groups": [
+    {
+      "name": "admins"
+    },
+    {
+      "name": "finance"
+    },
+    {
+      "name": "engineering"
+    },
+    {
+      "name": "sales"
+    },
+    {
+      "name": "executives"
+    }
+  ],
+  "users": [
+    {
+      "id": "38a03a30-1fe0-5349-9f26-5d7ac8bcb91f",
+      "username": "dana.whitfield",
+      "firstName": "Dana",
+      "lastName": "Whitfield",
+      "email": "dana.whitfield@acme.example",
+      "emailVerified": true,
+      "enabled": true,
+      "attributes": {
+        "tier": [
+          "privileged"
+        ],
+        "employee_id": [
+          "ACME-1001"
+        ]
+      },
+      "groups": [
+        "admins",
+        "executives",
+        "finance"
+      ],
+      "requiredActions": [],
+      "fixture_otp_enabled": true
+    },
+    {
+      "id": "aa8de62e-2a4f-57dd-b372-7ce6f983f53b",
+      "username": "sam.rivera",
+      "firstName": "Sam",
+      "lastName": "Rivera",
+      "email": "sam.rivera@acme.example",
+      "emailVerified": true,
+      "enabled": true,
+      "attributes": {
+        "tier": [
+          "standard"
+        ],
+        "employee_id": [
+          "ACME-1002"
+        ]
+      },
+      "groups": [
+        "sales"
+      ],
+      "requiredActions": [],
+      "fixture_otp_enabled": false
+    },
+    {
+      "id": "3fc587df-7f1a-5854-b6cc-1ab947edb3be",
+      "username": "priya.nair",
+      "firstName": "Priya",
+      "lastName": "Nair",
+      "email": "priya.nair@acme.example",
+      "emailVerified": true,
+      "enabled": true,
+      "attributes": {
+        "tier": [
+          "privileged"
+        ],
+        "employee_id": [
+          "ACME-1003"
+        ]
+      },
+      "groups": [
+        "admins",
+        "engineering"
+      ],
+      "requiredActions": [],
+      "fixture_otp_enabled": true
+    },
+    {
+      "id": "bf272153-cb27-5765-9c67-a74af315094f",
+      "username": "marcus.chen",
+      "firstName": "Marcus",
+      "lastName": "Chen",
+      "email": "marcus.chen@acme.example",
+      "emailVerified": true,
+      "enabled": true,
+      "attributes": {
+        "tier": [
+          "privileged"
+        ],
+        "employee_id": [
+          "ACME-1004"
+        ]
+      },
+      "groups": [
+        "admins",
+        "engineering"
+      ],
+      "requiredActions": [],
+      "fixture_otp_enabled": true
+    },
+    {
+      "id": "1f67844a-3a98-5f2b-8b62-7d95cf8b8036",
+      "username": "aisha.patel",
+      "firstName": "Aisha",
+      "lastName": "Patel",
+      "email": "aisha.patel@acme.example",
+      "emailVerified": true,
+      "enabled": true,
+      "attributes": {
+        "tier": [
+          "privileged"
+        ],
+        "employee_id": [
+          "ACME-1005"
+        ]
+      },
+      "groups": [
+        "admins",
+        "engineering"
+      ],
+      "requiredActions": [],
+      "fixture_otp_enabled": true
+    },
+    {
+      "id": "fa6edbba-13dc-568d-bfcd-338562e350f6",
+      "username": "leo.martinez",
+      "firstName": "Leo",
+      "lastName": "Martinez",
+      "email": "leo.martinez@acme.example",
+      "emailVerified": true,
+      "enabled": true,
+      "attributes": {
+        "tier": [
+          "privileged"
+        ],
+        "employee_id": [
+          "ACME-1006"
+        ]
+      },
+      "groups": [
+        "admins",
+        "engineering"
+      ],
+      "requiredActions": [],
+      "fixture_otp_enabled": true
+    },
+    {
+      "id": "040851a5-027c-5a7c-9faa-a1e52fb58e40",
+      "username": "nina.brooks",
+      "firstName": "Nina",
+      "lastName": "Brooks",
+      "email": "nina.brooks@acme.example",
+      "emailVerified": true,
+      "enabled": true,
+      "attributes": {
+        "tier": [
+          "privileged"
+        ],
+        "employee_id": [
+          "ACME-1007"
+        ]
+      },
+      "groups": [
+        "admins",
+        "engineering"
+      ],
+      "requiredActions": [],
+      "fixture_otp_enabled": true
+    },
+    {
+      "id": "09d5d80a-984f-57b0-b69b-ae7fa77b531b",
+      "username": "owen.reed",
+      "firstName": "Owen",
+      "lastName": "Reed",
+      "email": "owen.reed@acme.example",
+      "emailVerified": true,
+      "enabled": true,
+      "attributes": {
+        "tier": [
+          "privileged"
+        ],
+        "employee_id": [
+          "ACME-1008"
+        ]
+      },
+      "groups": [
+        "admins",
+        "engineering"
+      ],
+      "requiredActions": [],
+      "fixture_otp_enabled": true
+    },
+    {
+      "id": "3935fd5b-645b-529e-b293-a2b2618cf9c0",
+      "username": "maya.gupta",
+      "firstName": "Maya",
+      "lastName": "Gupta",
+      "email": "maya.gupta@acme.example",
+      "emailVerified": true,
+      "enabled": true,
+      "attributes": {
+        "tier": [
+          "privileged"
+        ],
+        "employee_id": [
+          "ACME-1009"
+        ]
+      },
+      "groups": [
+        "admins",
+        "engineering"
+      ],
+      "requiredActions": [],
+      "fixture_otp_enabled": true
+    },
+    {
+      "id": "7864d7f5-87bf-597f-a956-0f40dc08ed67",
+      "username": "theo.kim",
+      "firstName": "Theo",
+      "lastName": "Kim",
+      "email": "theo.kim@acme.example",
+      "emailVerified": true,
+      "enabled": true,
+      "attributes": {
+        "tier": [
+          "privileged"
+        ],
+        "employee_id": [
+          "ACME-1010"
+        ]
+      },
+      "groups": [
+        "admins",
+        "engineering"
+      ],
+      "requiredActions": [],
+      "fixture_otp_enabled": true
+    },
+    {
+      "id": "1c1718f8-aa0a-59d6-a464-0d0ead4d81ee",
+      "username": "zoe.turner",
+      "firstName": "Zoe",
+      "lastName": "Turner",
+      "email": "zoe.turner@acme.example",
+      "emailVerified": true,
+      "enabled": true,
+      "attributes": {
+        "tier": [
+          "privileged"
+        ],
+        "employee_id": [
+          "ACME-1011"
+        ]
+      },
+      "groups": [
+        "admins",
+        "finance"
+      ],
+      "requiredActions": [],
+      "fixture_otp_enabled": true
+    },
+    {
+      "id": "54b7df92-b2c3-59fc-ad3d-21d9c9d15a59",
+      "username": "ethan.wright",
+      "firstName": "Ethan",
+      "lastName": "Wright",
+      "email": "ethan.wright@acme.example",
+      "emailVerified": true,
+      "enabled": true,
+      "attributes": {
+        "tier": [
+          "privileged"
+        ],
+        "employee_id": [
+          "ACME-1012"
+        ]
+      },
+      "groups": [
+        "admins",
+        "finance"
+      ],
+      "requiredActions": [],
+      "fixture_otp_enabled": true
+    },
+    {
+      "id": "b749558d-a462-5a33-8e37-84011c8ae968",
+      "username": "sofia.lopez",
+      "firstName": "Sofia",
+      "lastName": "Lopez",
+      "email": "sofia.lopez@acme.example",
+      "emailVerified": true,
+      "enabled": true,
+      "attributes": {
+        "tier": [
+          "privileged"
+        ],
+        "employee_id": [
+          "ACME-1013"
+        ]
+      },
+      "groups": [
+        "admins",
+        "finance"
+      ],
+      "requiredActions": [],
+      "fixture_otp_enabled": true
+    },
+    {
+      "id": "991fb9cd-a1f5-5fae-a3cc-468ec740595c",
+      "username": "noah.clark",
+      "firstName": "Noah",
+      "lastName": "Clark",
+      "email": "noah.clark@acme.example",
+      "emailVerified": true,
+      "enabled": true,
+      "attributes": {
+        "tier": [
+          "privileged"
+        ],
+        "employee_id": [
+          "ACME-1014"
+        ]
+      },
+      "groups": [
+        "admins",
+        "finance"
+      ],
+      "requiredActions": [],
+      "fixture_otp_enabled": true
+    },
+    {
+      "id": "bf62460a-6c56-5088-99ae-3fc373819256",
+      "username": "grace.hughes",
+      "firstName": "Grace",
+      "lastName": "Hughes",
+      "email": "grace.hughes@acme.example",
+      "emailVerified": true,
+      "enabled": true,
+      "attributes": {
+        "tier": [
+          "privileged"
+        ],
+        "employee_id": [
+          "ACME-1015"
+        ]
+      },
+      "groups": [
+        "admins",
+        "finance"
+      ],
+      "requiredActions": [],
+      "fixture_otp_enabled": true
+    },
+    {
+      "id": "2b33017d-3a6d-5fb1-9b06-5a1612a0df22",
+      "username": "elena.ward",
+      "firstName": "Elena",
+      "lastName": "Ward",
+      "email": "elena.ward@acme.example",
+      "emailVerified": true,
+      "enabled": true,
+      "attributes": {
+        "tier": [
+          "privileged"
+        ],
+        "employee_id": [
+          "ACME-1016"
+        ]
+      },
+      "groups": [
+        "executives",
+        "sales"
+      ],
+      "requiredActions": [],
+      "fixture_otp_enabled": true
+    },
+    {
+      "id": "d015b50f-7eff-59c4-8d44-f52f872e42ab",
+      "username": "isaac.morgan",
+      "firstName": "Isaac",
+      "lastName": "Morgan",
+      "email": "isaac.morgan@acme.example",
+      "emailVerified": true,
+      "enabled": true,
+      "attributes": {
+        "tier": [
+          "standard"
+        ],
+        "employee_id": [
+          "ACME-1017"
+        ]
+      },
+      "groups": [
+        "sales"
+      ],
+      "requiredActions": [],
+      "fixture_otp_enabled": true
+    },
+    {
+      "id": "07cc569b-4990-565e-96d4-323996544e0e",
+      "username": "ava.bennett",
+      "firstName": "Ava",
+      "lastName": "Bennett",
+      "email": "ava.bennett@acme.example",
+      "emailVerified": true,
+      "enabled": true,
+      "attributes": {
+        "tier": [
+          "standard"
+        ],
+        "employee_id": [
+          "ACME-1018"
+        ]
+      },
+      "groups": [
+        "engineering"
+      ],
+      "requiredActions": [],
+      "fixture_otp_enabled": false
+    },
+    {
+      "id": "862b2b63-7edf-550b-b7f0-aa5961712235",
+      "username": "liam.foster",
+      "firstName": "Liam",
+      "lastName": "Foster",
+      "email": "liam.foster@acme.example",
+      "emailVerified": true,
+      "enabled": true,
+      "attributes": {
+        "tier": [
+          "standard"
+        ],
+        "employee_id": [
+          "ACME-1019"
+        ]
+      },
+      "groups": [
+        "finance"
+      ],
+      "requiredActions": [],
+      "fixture_otp_enabled": true
+    },
+    {
+      "id": "1edf9897-f285-5e2e-9f4a-aa56db3fefe2",
+      "username": "olivia.scott",
+      "firstName": "Olivia",
+      "lastName": "Scott",
+      "email": "olivia.scott@acme.example",
+      "emailVerified": true,
+      "enabled": true,
+      "attributes": {
+        "tier": [
+          "privileged"
+        ],
+        "employee_id": [
+          "ACME-1020"
+        ]
+      },
+      "groups": [
+        "executives",
+        "sales"
+      ],
+      "requiredActions": [],
+      "fixture_otp_enabled": true
+    },
+    {
+      "id": "6163f29e-ff7a-5aaf-8103-68657ed7fcbc",
+      "username": "lucas.reyes",
+      "firstName": "Lucas",
+      "lastName": "Reyes",
+      "email": "lucas.reyes@acme.example",
+      "emailVerified": true,
+      "enabled": true,
+      "attributes": {
+        "tier": [
+          "standard"
+        ],
+        "employee_id": [
+          "ACME-1021"
+        ]
+      },
+      "groups": [
+        "sales"
+      ],
+      "requiredActions": [],
+      "fixture_otp_enabled": true
+    },
+    {
+      "id": "5da7856b-82c0-5f31-802f-e9448b1b7ac5",
+      "username": "chloe.adams",
+      "firstName": "Chloe",
+      "lastName": "Adams",
+      "email": "chloe.adams@acme.example",
+      "emailVerified": true,
+      "enabled": true,
+      "attributes": {
+        "tier": [
+          "standard"
+        ],
+        "employee_id": [
+          "ACME-1022"
+        ]
+      },
+      "groups": [
+        "engineering"
+      ],
+      "requiredActions": [],
+      "fixture_otp_enabled": false
+    },
+    {
+      "id": "69c93ac8-55bd-525d-bbee-77f460f6728f",
+      "username": "daniel.park",
+      "firstName": "Daniel",
+      "lastName": "Park",
+      "email": "daniel.park@acme.example",
+      "emailVerified": true,
+      "enabled": true,
+      "attributes": {
+        "tier": [
+          "standard"
+        ],
+        "employee_id": [
+          "ACME-1023"
+        ]
+      },
+      "groups": [
+        "finance"
+      ],
+      "requiredActions": [],
+      "fixture_otp_enabled": true
+    },
+    {
+      "id": "81049072-0d4c-5b54-8442-d8cf8de72abf",
+      "username": "amara.okafor",
+      "firstName": "Amara",
+      "lastName": "Okafor",
+      "email": "amara.okafor@acme.example",
+      "emailVerified": true,
+      "enabled": true,
+      "attributes": {
+        "tier": [
+          "standard"
+        ],
+        "employee_id": [
+          "ACME-1024"
+        ]
+      },
+      "groups": [
+        "sales"
+      ],
+      "requiredActions": [],
+      "fixture_otp_enabled": false
+    },
+    {
+      "id": "9255ef9b-bf7b-5484-9557-d8caf77626c7",
+      "username": "henry.walsh",
+      "firstName": "Henry",
+      "lastName": "Walsh",
+      "email": "henry.walsh@acme.example",
+      "emailVerified": true,
+      "enabled": true,
+      "attributes": {
+        "tier": [
+          "standard"
+        ],
+        "employee_id": [
+          "ACME-1025"
+        ]
+      },
+      "groups": [
+        "sales"
+      ],
+      "requiredActions": [],
+      "fixture_otp_enabled": true
+    },
+    {
+      "id": "d2ccd6b1-7ccf-578c-bb2e-8012ced0827c",
+      "username": "layla.hassan",
+      "firstName": "Layla",
+      "lastName": "Hassan",
+      "email": "layla.hassan@acme.example",
+      "emailVerified": true,
+      "enabled": true,
+      "attributes": {
+        "tier": [
+          "standard"
+        ],
+        "employee_id": [
+          "ACME-1026"
+        ]
+      },
+      "groups": [
+        "engineering"
+      ],
+      "requiredActions": [],
+      "fixture_otp_enabled": false
+    },
+    {
+      "id": "3795cf7b-23bd-5fda-b3f0-3d9bca2e8b60",
+      "username": "julian.ross",
+      "firstName": "Julian",
+      "lastName": "Ross",
+      "email": "julian.ross@acme.example",
+      "emailVerified": true,
+      "enabled": true,
+      "attributes": {
+        "tier": [
+          "standard"
+        ],
+        "employee_id": [
+          "ACME-1027"
+        ]
+      },
+      "groups": [
+        "finance"
+      ],
+      "requiredActions": [],
+      "fixture_otp_enabled": true
+    },
+    {
+      "id": "ecb87a05-814a-5943-a2f2-d8cc228b2182",
+      "username": "mila.carter",
+      "firstName": "Mila",
+      "lastName": "Carter",
+      "email": "mila.carter@acme.example",
+      "emailVerified": true,
+      "enabled": true,
+      "attributes": {
+        "tier": [
+          "standard"
+        ],
+        "employee_id": [
+          "ACME-1028"
+        ]
+      },
+      "groups": [
+        "sales"
+      ],
+      "requiredActions": [],
+      "fixture_otp_enabled": false
+    },
+    {
+      "id": "9d200ed1-85f6-5c1a-9b52-d99383fd7c0f",
+      "username": "arjun.mehta",
+      "firstName": "Arjun",
+      "lastName": "Mehta",
+      "email": "arjun.mehta@acme.example",
+      "emailVerified": true,
+      "enabled": true,
+      "attributes": {
+        "tier": [
+          "standard"
+        ],
+        "employee_id": [
+          "ACME-1029"
+        ]
+      },
+      "groups": [
+        "sales"
+      ],
+      "requiredActions": [],
+      "fixture_otp_enabled": true
+    },
+    {
+      "id": "ce9f569f-3fe7-5398-8e07-49b04a0e6335",
+      "username": "alice.green",
+      "firstName": "Alice",
+      "lastName": "Green",
+      "email": "alice.green@acme.example",
+      "emailVerified": true,
+      "enabled": true,
+      "attributes": {
+        "tier": [
+          "standard"
+        ],
+        "employee_id": [
+          "ACME-1030"
+        ]
+      },
+      "groups": [
+        "engineering"
+      ],
+      "requiredActions": [],
+      "fixture_otp_enabled": false
+    },
+    {
+      "id": "502b1082-ca46-5edc-90e7-f98849cd1641",
+      "username": "david.stone",
+      "firstName": "David",
+      "lastName": "Stone",
+      "email": "david.stone@acme.example",
+      "emailVerified": true,
+      "enabled": true,
+      "attributes": {
+        "tier": [
+          "standard"
+        ],
+        "employee_id": [
+          "ACME-1031"
+        ]
+      },
+      "groups": [
+        "finance"
+      ],
+      "requiredActions": [],
+      "fixture_otp_enabled": true
+    },
+    {
+      "id": "efad4e3b-b514-514b-a23d-bce02131c212",
+      "username": "sara.ali",
+      "firstName": "Sara",
+      "lastName": "Ali",
+      "email": "sara.ali@acme.example",
+      "emailVerified": true,
+      "enabled": true,
+      "attributes": {
+        "tier": [
+          "standard"
+        ],
+        "employee_id": [
+          "ACME-1032"
+        ]
+      },
+      "groups": [
+        "sales"
+      ],
+      "requiredActions": [],
+      "fixture_otp_enabled": false
+    },
+    {
+      "id": "b4247b66-e9af-595f-8e09-458eaedb58e7",
+      "username": "ben.miller",
+      "firstName": "Ben",
+      "lastName": "Miller",
+      "email": "ben.miller@acme.example",
+      "emailVerified": true,
+      "enabled": true,
+      "attributes": {
+        "tier": [
+          "standard"
+        ],
+        "employee_id": [
+          "ACME-1033"
+        ]
+      },
+      "groups": [
+        "sales"
+      ],
+      "requiredActions": [],
+      "fixture_otp_enabled": true
+    },
+    {
+      "id": "aae84fa6-a0a9-5739-a871-019307272f9f",
+      "username": "fatima.khan",
+      "firstName": "Fatima",
+      "lastName": "Khan",
+      "email": "fatima.khan@acme.example",
+      "emailVerified": true,
+      "enabled": true,
+      "attributes": {
+        "tier": [
+          "standard"
+        ],
+        "employee_id": [
+          "ACME-1034"
+        ]
+      },
+      "groups": [
+        "engineering"
+      ],
+      "requiredActions": [],
+      "fixture_otp_enabled": false
+    },
+    {
+      "id": "46c2a0fb-f74b-5b9f-aa7e-71d059c5162c",
+      "username": "eli.rivers",
+      "firstName": "Eli",
+      "lastName": "Rivers",
+      "email": "eli.rivers@acme.example",
+      "emailVerified": true,
+      "enabled": true,
+      "attributes": {
+        "tier": [
+          "standard"
+        ],
+        "employee_id": [
+          "ACME-1035"
+        ]
+      },
+      "groups": [
+        "finance"
+      ],
+      "requiredActions": [],
+      "fixture_otp_enabled": true
+    },
+    {
+      "id": "b49ad9d9-9830-57d8-91a6-bae373a2d08f",
+      "username": "yuna.sato",
+      "firstName": "Yuna",
+      "lastName": "Sato",
+      "email": "yuna.sato@acme.example",
+      "emailVerified": true,
+      "enabled": true,
+      "attributes": {
+        "tier": [
+          "standard"
+        ],
+        "employee_id": [
+          "ACME-1036"
+        ]
+      },
+      "groups": [
+        "sales"
+      ],
+      "requiredActions": [],
+      "fixture_otp_enabled": false
+    },
+    {
+      "id": "c84abcc5-9e15-58ea-8074-75de32c9c26b",
+      "username": "hugo.diaz",
+      "firstName": "Hugo",
+      "lastName": "Diaz",
+      "email": "hugo.diaz@acme.example",
+      "emailVerified": true,
+      "enabled": true,
+      "attributes": {
+        "tier": [
+          "standard"
+        ],
+        "employee_id": [
+          "ACME-1037"
+        ]
+      },
+      "groups": [
+        "sales"
+      ],
+      "requiredActions": [],
+      "fixture_otp_enabled": true
+    },
+    {
+      "id": "4b22c4bd-987b-5b8d-91de-019e76988508",
+      "username": "emma.wilson",
+      "firstName": "Emma",
+      "lastName": "Wilson",
+      "email": "emma.wilson@acme.example",
+      "emailVerified": true,
+      "enabled": true,
+      "attributes": {
+        "tier": [
+          "standard"
+        ],
+        "employee_id": [
+          "ACME-1038"
+        ]
+      },
+      "groups": [
+        "engineering"
+      ],
+      "requiredActions": [],
+      "fixture_otp_enabled": false
+    },
+    {
+      "id": "7c9276cd-a302-50bf-bc67-36b49c1c1dde",
+      "username": "ryan.cole",
+      "firstName": "Ryan",
+      "lastName": "Cole",
+      "email": "ryan.cole@acme.example",
+      "emailVerified": true,
+      "enabled": true,
+      "attributes": {
+        "tier": [
+          "standard"
+        ],
+        "employee_id": [
+          "ACME-1039"
+        ]
+      },
+      "groups": [
+        "finance"
+      ],
+      "requiredActions": [],
+      "fixture_otp_enabled": true
+    },
+    {
+      "id": "dd026469-3729-5956-ab33-aead8a4a243a",
+      "username": "leah.price",
+      "firstName": "Leah",
+      "lastName": "Price",
+      "email": "leah.price@acme.example",
+      "emailVerified": true,
+      "enabled": true,
+      "attributes": {
+        "tier": [
+          "standard"
+        ],
+        "employee_id": [
+          "ACME-1040"
+        ]
+      },
+      "groups": [
+        "sales"
+      ],
+      "requiredActions": [],
+      "fixture_otp_enabled": false
+    }
+  ]
+}

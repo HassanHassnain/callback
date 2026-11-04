@@ -1,0 +1,406 @@
+{
+  "synthetic": true,
+  "authoritative_for_tier": false,
+  "employees": [
+    {
+      "employee_id": "ACME-1001",
+      "username": "dana.whitfield",
+      "name": "Dana Whitfield",
+      "title": "Chief Financial Officer",
+      "department": "finance",
+      "manager": "Elena Ward",
+      "masked_phone": "+1 \u2022\u2022\u2022 \u2022\u2022\u2022 0100",
+      "location": "Seattle"
+    },
+    {
+      "employee_id": "ACME-1002",
+      "username": "sam.rivera",
+      "name": "Sam Rivera",
+      "title": "Sales Associate",
+      "department": "sales",
+      "manager": "Ava Bennett",
+      "masked_phone": "+1 \u2022\u2022\u2022 \u2022\u2022\u2022 0101",
+      "location": "Chicago"
+    },
+    {
+      "employee_id": "ACME-1003",
+      "username": "priya.nair",
+      "name": "Priya Nair",
+      "title": "IT Administrator",
+      "department": "engineering",
+      "manager": "Elena Ward",
+      "masked_phone": "+1 \u2022\u2022\u2022 \u2022\u2022\u2022 0102",
+      "location": "Austin"
+    },
+    {
+      "employee_id": "ACME-1004",
+      "username": "marcus.chen",
+      "name": "Marcus Chen",
+      "title": "Identity Administrator",
+      "department": "engineering",
+      "manager": "Elena Ward",
+      "masked_phone": "+1 \u2022\u2022\u2022 \u2022\u2022\u2022 0103",
+      "location": "Remote"
+    },
+    {
+      "employee_id": "ACME-1005",
+      "username": "aisha.patel",
+      "name": "Aisha Patel",
+      "title": "Identity Administrator",
+      "department": "engineering",
+      "manager": "Elena Ward",
+      "masked_phone": "+1 \u2022\u2022\u2022 \u2022\u2022\u2022 0104",
+      "location": "Seattle"
+    },
+    {
+      "employee_id": "ACME-1006",
+      "username": "leo.martinez",
+      "name": "Leo Martinez",
+      "title": "Identity Administrator",
+      "department": "engineering",
+      "manager": "Elena Ward",
+      "masked_phone": "+1 \u2022\u2022\u2022 \u2022\u2022\u2022 0105",
+      "location": "Chicago"
+    },
+    {
+      "employee_id": "ACME-1007",
+      "username": "nina.brooks",
+      "name": "Nina Brooks",
+      "title": "Identity Administrator",
+      "department": "engineering",
+      "manager": "Elena Ward",
+      "masked_phone": "+1 \u2022\u2022\u2022 \u2022\u2022\u2022 0106",
+      "location": "Austin"
+    },
+    {
+      "employee_id": "ACME-1008",
+      "username": "owen.reed",
+      "name": "Owen Reed",
+      "title": "Identity Administrator",
+      "department": "engineering",
+      "manager": "Elena Ward",
+      "masked_phone": "+1 \u2022\u2022\u2022 \u2022\u2022\u2022 0107",
+      "location": "Remote"
+    },
+    {
+      "employee_id": "ACME-1009",
+      "username": "maya.gupta",
+      "name": "Maya Gupta",
+      "title": "Identity Administrator",
+      "department": "engineering",
+      "manager": "Elena Ward",
+      "masked_phone": "+1 \u2022\u2022\u2022 \u2022\u2022\u2022 0108",
+      "location": "Seattle"
+    },
+    {
+      "employee_id": "ACME-1010",
+      "username": "theo.kim",
+      "name": "Theo Kim",
+      "title": "Identity Administrator",
+      "department": "engineering",
+      "manager": "Elena Ward",
+      "masked_phone": "+1 \u2022\u2022\u2022 \u2022\u2022\u2022 0109",
+      "location": "Chicago"
+    },
+    {
+      "employee_id": "ACME-1011",
+      "username": "zoe.turner",
+      "name": "Zoe Turner",
+      "title": "Identity Administrator",
+      "department": "finance",
+      "manager": "Elena Ward",
+      "masked_phone": "+1 \u2022\u2022\u2022 \u2022\u2022\u2022 0110",
+      "location": "Austin"
+    },
+    {
+      "employee_id": "ACME-1012",
+      "username": "ethan.wright",
+      "name": "Ethan Wright",
+      "title": "Identity Administrator",
+      "department": "finance",
+      "manager": "Elena Ward",
+      "masked_phone": "+1 \u2022\u2022\u2022 \u2022\u2022\u2022 0111",
+      "location": "Remote"
+    },
+    {
+      "employee_id": "ACME-1013",
+      "username": "sofia.lopez",
+      "name": "Sofia Lopez",
+      "title": "Identity Administrator",
+      "department": "finance",
+      "manager": "Elena Ward",
+      "masked_phone": "+1 \u2022\u2022\u2022 \u2022\u2022\u2022 0112",
+      "location": "Seattle"
+    },
+    {
+      "employee_id": "ACME-1014",
+      "username": "noah.clark",
+      "name": "Noah Clark",
+      "title": "Identity Administrator",
+      "department": "finance",
+      "manager": "Elena Ward",
+      "masked_phone": "+1 \u2022\u2022\u2022 \u2022\u2022\u2022 0113",
+      "location": "Chicago"
+    },
+    {
+      "employee_id": "ACME-1015",
+      "username": "grace.hughes",
+      "name": "Grace Hughes",
+      "title": "Identity Administrator",
+      "department": "finance",
+      "manager": "Elena Ward",
+      "masked_phone": "+1 \u2022\u2022\u2022 \u2022\u2022\u2022 0114",
+      "location": "Austin"
+    },
+    {
+      "employee_id": "ACME-1016",
+      "username": "elena.ward",
+      "name": "Elena Ward",
+      "title": "Chief Executive Officer",
+      "department": "sales",
+      "manager": "Elena Ward",
+      "masked_phone": "+1 \u2022\u2022\u2022 \u2022\u2022\u2022 0115",
+      "location": "Remote"
+    },
+    {
+      "employee_id": "ACME-1017",
+      "username": "isaac.morgan",
+      "name": "Isaac Morgan",
+      "title": "Sales Specialist",
+      "department": "sales",
+      "manager": "Ava Bennett",
+      "masked_phone": "+1 \u2022\u2022\u2022 \u2022\u2022\u2022 0116",
+      "location": "Seattle"
+    },
+    {
+      "employee_id": "ACME-1018",
+      "username": "ava.bennett",
+      "name": "Ava Bennett",
+      "title": "Engineering Specialist",
+      "department": "engineering",
+      "manager": "Ava Bennett",
+      "masked_phone": "+1 \u2022\u2022\u2022 \u2022\u2022\u2022 0117",
+      "location": "Chicago"
+    },
+    {
+      "employee_id": "ACME-1019",
+      "username": "liam.foster",
+      "name": "Liam Foster",
+      "title": "Finance Specialist",
+      "department": "finance",
+      "manager": "Ava Bennett",
+      "masked_phone": "+1 \u2022\u2022\u2022 \u2022\u2022\u2022 0118",
+      "location": "Austin"
+    },
+    {
+      "employee_id": "ACME-1020",
+      "username": "olivia.scott",
+      "name": "Olivia Scott",
+      "title": "VP Operations",
+      "department": "sales",
+      "manager": "Elena Ward",
+      "masked_phone": "+1 \u2022\u2022\u2022 \u2022\u2022\u2022 0119",
+      "location": "Remote"
+    },
+    {
+      "employee_id": "ACME-1021",
+      "username": "lucas.reyes",
+      "name": "Lucas Reyes",
+      "title": "Sales Specialist",
+      "department": "sales",
+      "manager": "Ava Bennett",
+      "masked_phone": "+1 \u2022\u2022\u2022 \u2022\u2022\u2022 0120",
+      "location": "Seattle"
+    },
+    {
+      "employee_id": "ACME-1022",
+      "username": "chloe.adams",
+      "name": "Chloe Adams",
+      "title": "Engineering Specialist",
+      "department": "engineering",
+      "manager": "Ava Bennett",
+      "masked_phone": "+1 \u2022\u2022\u2022 \u2022\u2022\u2022 0121",
+      "location": "Chicago"
+    },
+    {
+      "employee_id": "ACME-1023",
+      "username": "daniel.park",
+      "name": "Daniel Park",
+      "title": "Finance Specialist",
+      "department": "finance",
+      "manager": "Ava Bennett",
+      "masked_phone": "+1 \u2022\u2022\u2022 \u2022\u2022\u2022 0122",
+      "location": "Austin"
+    },
+    {
+      "employee_id": "ACME-1024",
+      "username": "amara.okafor",
+      "name": "Amara Okafor",
+      "title": "Sales Specialist",
+      "department": "sales",
+      "manager": "Ava Bennett",
+      "masked_phone": "+1 \u2022\u2022\u2022 \u2022\u2022\u2022 0123",
+      "location": "Remote"
+    },
+    {
+      "employee_id": "ACME-1025",
+      "username": "henry.walsh",
+      "name": "Henry Walsh",
+      "title": "Sales Specialist",
+      "department": "sales",
+      "manager": "Ava Bennett",
+      "masked_phone": "+1 \u2022\u2022\u2022 \u2022\u2022\u2022 0124",
+      "location": "Seattle"
+    },
+    {
+      "employee_id": "ACME-1026",
+      "username": "layla.hassan",
+      "name": "Layla Hassan",
+      "title": "Engineering Specialist",
+      "department": "engineering",
+      "manager": "Ava Bennett",
+      "masked_phone": "+1 \u2022\u2022\u2022 \u2022\u2022\u2022 0125",
+      "location": "Chicago"
+    },
+    {
+      "employee_id": "ACME-1027",
+      "username": "julian.ross",
+      "name": "Julian Ross",
+      "title": "Finance Specialist",
+      "department": "finance",
+      "manager": "Ava Bennett",
+      "masked_phone": "+1 \u2022\u2022\u2022 \u2022\u2022\u2022 0126",
+      "location": "Austin"
+    },
+    {
+      "employee_id": "ACME-1028",
+      "username": "mila.carter",
+      "name": "Mila Carter",
+      "title": "Sales Specialist",
+      "department": "sales",
+      "manager": "Ava Bennett",
+      "masked_phone": "+1 \u2022\u2022\u2022 \u2022\u2022\u2022 0127",
+      "location": "Remote"
+    },
+    {
+      "employee_id": "ACME-1029",
+      "username": "arjun.mehta",
+      "name": "Arjun Mehta",
+      "title": "Sales Specialist",
+      "department": "sales",
+      "manager": "Ava Bennett",
+      "masked_phone": "+1 \u2022\u2022\u2022 \u2022\u2022\u2022 0128",
+      "location": "Seattle"
+    },
+    {
+      "employee_id": "ACME-1030",
+      "username": "alice.green",
+      "name": "Alice Green",
+      "title": "Engineering Specialist",
+      "department": "engineering",
+      "manager": "Ava Bennett",
+      "masked_phone": "+1 \u2022\u2022\u2022 \u2022\u2022\u2022 0129",
+      "location": "Chicago"
+    },
+    {
+      "employee_id": "ACME-1031",
+      "username": "david.stone",
+      "name": "David Stone",
+      "title": "Finance Specialist",
+      "department": "finance",
+      "manager": "Ava Bennett",
+      "masked_phone": "+1 \u2022\u2022\u2022 \u2022\u2022\u2022 0130",
+      "location": "Austin"
+    },
+    {
+      "employee_id": "ACME-1032",
+      "username": "sara.ali",
+      "name": "Sara Ali",
+      "title": "Sales Specialist",
+      "department": "sales",
+      "manager": "Ava Bennett",
+      "masked_phone": "+1 \u2022\u2022\u2022 \u2022\u2022\u2022 0131",
+      "location": "Remote"
+    },
+    {
+      "employee_id": "ACME-1033",
+      "username": "ben.miller",
+      "name": "Ben Miller",
+      "title": "Sales Specialist",
+      "department": "sales",
+      "manager": "Ava Bennett",
+      "masked_phone": "+1 \u2022\u2022\u2022 \u2022\u2022\u2022 0132",
+      "location": "Seattle"
+    },
+    {
+      "employee_id": "ACME-1034",
+      "username": "fatima.khan",
+      "name": "Fatima Khan",
+      "title": "Engineering Specialist",
+      "department": "engineering",
+      "manager": "Ava Bennett",
+      "masked_phone": "+1 \u2022\u2022\u2022 \u2022\u2022\u2022 0133",
+      "location": "Chicago"
+    },
+    {
+      "employee_id": "ACME-1035",
+      "username": "eli.rivers",
+      "name": "Eli Rivers",
+      "title": "Finance Specialist",
+      "department": "finance",
+      "manager": "Ava Bennett",
+      "masked_phone": "+1 \u2022\u2022\u2022 \u2022\u2022\u2022 0134",
+      "location": "Austin"
+    },
+    {
+      "employee_id": "ACME-1036",
+      "username": "yuna.sato",
+      "name": "Yuna Sato",
+      "title": "Sales Specialist",
+      "department": "sales",
+      "manager": "Ava Bennett",
+      "masked_phone": "+1 \u2022\u2022\u2022 \u2022\u2022\u2022 0135",
+      "location": "Remote"
+    },
+    {
+      "employee_id": "ACME-1037",
+      "username": "hugo.diaz",
+      "name": "Hugo Diaz",
+      "title": "Sales Specialist",
+      "department": "sales",
+      "manager": "Ava Bennett",
+      "masked_phone": "+1 \u2022\u2022\u2022 \u2022\u2022\u2022 0136",
+      "location": "Seattle"
+    },
+    {
+      "employee_id": "ACME-1038",
+      "username": "emma.wilson",
+      "name": "Emma Wilson",
+      "title": "Engineering Specialist",
+      "department": "engineering",
+      "manager": "Ava Bennett",
+      "masked_phone": "+1 \u2022\u2022\u2022 \u2022\u2022\u2022 0137",
+      "location": "Chicago"
+    },
+    {
+      "employee_id": "ACME-1039",
+      "username": "ryan.cole",
+      "name": "Ryan Cole",
+      "title": "Finance Specialist",
+      "department": "finance",
+      "manager": "Ava Bennett",
+      "masked_phone": "+1 \u2022\u2022\u2022 \u2022\u2022\u2022 0138",
+      "location": "Austin"
+    },
+    {
+      "employee_id": "ACME-1040",
+      "username": "leah.price",
+      "name": "Leah Price",
+      "title": "Sales Specialist",
+      "department": "sales",
+      "manager": "Ava Bennett",
+      "masked_phone": "+1 \u2022\u2022\u2022 \u2022\u2022\u2022 0139",
+      "location": "Remote"
+    }
+  ]
+}

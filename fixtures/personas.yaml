@@ -1,0 +1,14 @@
+synthetic: true
+personas:
+- username: dana.whitfield
+  tier: privileged
+  scenario: lost-phone MFA reset
+  otp: true
+- username: sam.rivera
+  tier: standard
+  scenario: legitimate password reset
+  otp: false
+- username: priya.nair
+  tier: privileged
+  scenario: IT administrator
+  otp: true

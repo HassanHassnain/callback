@@ -1,0 +1,13 @@
+.git
+.env
+.env.*
+.local
+.venv
+infra/state.json
+infra/private
+__pycache__
+*.pem
+*.key
+node_modules
+docs
+bench/results
