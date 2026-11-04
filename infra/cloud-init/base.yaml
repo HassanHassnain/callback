@@ -1,0 +1,38 @@
+#cloud-config
+package_update: true
+packages:
+  - ca-certificates
+  - curl
+  - gnupg
+  - docker.io
+  - docker-compose-v2
+  - nftables
+  - python3
+  - rsync
+  - jq
+ssh_pwauth: false
+disable_root: false
+write_files:
+  - path: /usr/local/sbin/callback-bootstrap
+    permissions: '0755'
+    content: |
+      #!/bin/bash
+      set -euo pipefail
+      install -d -m 0755 /opt/callback /etc/callback
+      systemctl enable --now docker
+      if [ "__ROLE__" = sandbox ]; then
+        curl -fsSL https://gvisor.dev/archive.key -o /etc/callback/gvisor-archive.key
+        gpg --batch --yes --dearmor -o /usr/share/keyrings/gvisor-archive-keyring.gpg /etc/callback/gvisor-archive.key
+        echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/gvisor-archive-keyring.gpg] https://storage.googleapis.com/gvisor/releases release main' > /etc/apt/sources.list.d/gvisor.list
+        apt-get update
+        DEBIAN_FRONTEND=noninteractive apt-get install -y runsc
+        runsc install
+        systemctl restart docker
+      fi
+      if [ "__ROLE__" = control ]; then
+        DEBIAN_FRONTEND=noninteractive apt-get install -y ffmpeg
+      fi
+      printf '%s\n' '__ROLE__' > /etc/callback/role
+      touch /etc/callback/bootstrap-complete
+runcmd:
+  - [bash, /usr/local/sbin/callback-bootstrap]
