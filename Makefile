@@ -1,4 +1,4 @@
-.PHONY: setup preflight smoke catalog test lint
+.PHONY: setup preflight smoke catalog test lint provision status deploy verify-infra teardown-plan
 
 setup:
 	uv sync
@@ -17,3 +17,18 @@ test:
 
 lint:
 	uv run ruff check .
+
+provision:
+	uv run python infra/provision.py up
+
+status:
+	uv run python infra/provision.py status
+
+deploy:
+	uv run python infra/deploy.py
+
+verify-infra:
+	uv run python infra/deploy.py --verify
+
+teardown-plan:
+	uv run python infra/provision.py down

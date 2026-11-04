@@ -85,3 +85,52 @@ retains null returned model IDs, `model_id_verified=false`, and explicit
 catalog-only exception metadata. Previous failed evidence was not changed.
 P0 checkpoint: both keys work; DeepSeek is the initial planner, with GLM and
 Qwen as verified alternatives. Proceeding to P1 per the brief.
+
+## 2026-11-04 — P1 infrastructure complete
+
+Built an idempotent Vultr API provisioner with persistent creation records,
+random ownership tags, live ownership checks before deletion, ambiguous-create
+protection, and a dry-run default for teardown. Provisioned four Ubuntu 24.04
+VMs in Seattle, a VPC, cloud firewalls, private Object Storage buckets
+`cb-receipts` / `cb-seeds`, and a private free-tier Container Registry in SJC
+(the catalog has no Seattle registry region). Local keys and storage/registry
+credentials remain in owner-only ignored files. No secrets are in cloud-init.
+
+Deployed Caddy HTTPS and an explicitly labelled P1 port listener on prod-idp.
+The health endpoint reports `application_ready=false`; it does not claim a
+working identity provider or app. Host nftables restricts the IdP port to the
+executor and the executor port to control, including Docker-forwarded traffic.
+Vultr's Ubuntu image also enables UFW; exact source/port allowances were added
+without disabling its deny policy. The public firewall exposes only control
+80/443 and SSH restricted to the Mac.
+
+Verification:
+
+- `make lint`: passed; `make test`: 15 passed, including ownership rejection
+  and the registry pagination regression.
+- `infra/provision.py up`: repeated successfully with no new resource IDs or
+  creation events. Resource count before/after remained 13 (including one
+  historical retired sandbox). `docs/infra/P1-resources.json` records this and
+  real private-ACL/authenticated-head checks on both buckets.
+- `infra/deploy.py --verify`: passed real HTTPS, gVisor hello-world, and VPC
+  reachability. Evidence: `docs/infra/P1-20261104T184315Z.json`. `/dev/kvm` exists.
+- `runsc` version: release-20261102.0; Docker Compose: 2.40.3.
+- Control -> prod-idp:8080 blocked; executor -> prod-idp:8080 connected. This
+  uses a P1 connectivity listener; P2 must replace it with real Keycloak.
+
+Decisions/fixes: Seattle storage's cheapest tier is $50/month. The initial
+4-core sandbox plus storage exceeded the account's $200 service-fee limit.
+Retired only that task-created, bootstrap-only VM after verifying its creation
+record, live tag, resource ID and path; confirmed API 404 afterward. Created
+the brief's 2-core/16-GB/120-GB fallback instead. Current planned base fees:
+$24 + $70.08 + $24 + $5 + $50 + free registry = $173.08/month before usage extras.
+The preserved state retains the retired VM and absence proof.
+
+Registry API details required lowercase alphanumeric names, flat resource
+responses, and stopping pagination at the reported total despite a spurious
+next cursor. Corrected those and reconciled the one successful registry create
+from the recorded pending request; no duplicate registry was created.
+
+Live health: https://callback-45-63-34-5.sslip.io/health
+Remaining: P2 identity provider, fixtures, executor signing key and signed
+scrubbed seed export. No containment or production-apply claim yet.

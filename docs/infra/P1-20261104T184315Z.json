@@ -1,0 +1,37 @@
+{
+  "observed_at": "2026-11-04T18:42:54.378376+00:00",
+  "checks": {
+    "https_health": {
+      "passed": true,
+      "url": "https://callback-45-63-34-5.sslip.io/health",
+      "body": {
+        "status": "ok",
+        "phase": "P1",
+        "application_ready": false
+      }
+    },
+    "gvisor_hello_world": {
+      "passed": true,
+      "output": "runsc version release-20261102.0\nspec: 1.2.1\n\nHello from Docker!\nThis message shows that your installation appears to be working correctly.\n\nTo generate this message, Docker took the following steps:\n 1. The Docker client contacted the Docker daemon.\n 2. The Docker daemon pulled the \"hello-world\" image from the Docker Hub.\n    (amd64)\n 3. The Docker daemon created a new container from that image which runs the\n    executable that produces the output you are currently reading.\n 4. The Docker daemon streamed that output to the Docker client, which sent it\n    to your terminal.\n\nTo try something more ambitious, you can run an Ubuntu container with:\n $ docker run -it ubuntu bash\n\nShare images, automate workflows, and more with a free Docker ID:\n https://hub.docker.com/\n\nFor more examples and ideas, visit:\n https://docs.docker.com/get-started/\n\n"
+    },
+    "kvm_observation": {
+      "present": true,
+      "output": "crw-rw---- 1 root kvm 10, 232 Nov  4 18:35 /dev/kvm\n"
+    },
+    "control_to_prod_port": {
+      "passed": true,
+      "connected": false,
+      "port": 8080
+    },
+    "executor_to_prod_port": {
+      "passed": true,
+      "connected": true,
+      "port": 8080
+    }
+  },
+  "limits": [
+    "Port 8080 uses a labelled P1 listener; real Keycloak arrives in P2.",
+    "SSH bootstrap uses trust on first use, pinned in a dedicated known_hosts file."
+  ],
+  "all_passed": true
+}

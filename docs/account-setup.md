@@ -42,8 +42,8 @@ delete an item merely because its label matches the project name.
 - A phone and browser signing-key ceremony occurs in P5.
 - Vultr's hackathon welcome email says account access expires in 30 days unless
   a valid payment method is added. No payment method was added by this task.
-- Audio responses omit a model identifier; this conflicts with the brief's
-  per-response identity assertion. See `models.md` and the smoke evidence.
+- The user approved catalog validation for TTS/STT when response model identity
+  is omitted. This limitation remains explicit in `models.md` and smoke evidence.
 
 Official pages: [API access](https://console.vultr.com/user/apiaccess/),
 [inference](https://console.vultr.com/inference/),

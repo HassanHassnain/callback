@@ -1,7 +1,7 @@
 # Callback status
 
 Updated: 2026-11-04. P0 complete under the explicit user-approved audio
-identity exception. P1 infrastructure is in progress.
+identity exception. P1 infrastructure checks pass; P2 identity setup is next.
 
 ## Done
 
@@ -27,6 +27,11 @@ identity exception. P1 infrastructure is in progress.
   for both. Functional success is separate from the failed identity assertions.
 - Eight local inference boundary tests and Ruff pass.
 
+- P1: four live Seattle VMs, VPC, source-restricted firewalls, private buckets,
+  private SJC registry, public HTTPS health, gVisor hello-world, and /dev/kvm.
+- Network verification: executor can connect to the IdP port; control cannot.
+- Provisioning rerun created no duplicates; both bucket ACLs are private.
+
 ## P0 checkpoint
 
 The latest full run is `docs/smoke/20261104T182519488993Z.json`: **13 PASS**,
@@ -45,10 +50,16 @@ remain mandatory for every other route. See `docs/account-setup.md` for setup.
 
 ## Not done
 
-P1 in progress; P2–P10 not started. No deployed application, production identity realm, benchmark,
+P2–P10 not completed. No deployed application, production identity realm, benchmark,
 phone enrollment, or submission assets have been deployed yet.
 
 ## Known limits
+
+- P1 port verification used a labelled listener, not Keycloak; P2 replaces it.
+- Sandbox uses the brief's 2-core/16-GB fallback to fit the account fee limit.
+- Container Registry is in SJC because Seattle is absent from its region list.
+- SSH host keys use trust on first use, pinned in a dedicated local known_hosts.
+- Base service fees are approximately $173.08/month, excluding usage extras.
 
 - Vultr speech SSE and transcription JSON responses omit `model`. Neither
   provides a model identity header. Audio is accepted under the user-approved catalog-only exception; individual audio
@@ -62,7 +73,8 @@ phone enrollment, or submission assets have been deployed yet.
 
 ## URLs and demo
 
-No live demo yet. Source: https://github.com/HassanHassnain/callback
+Infrastructure health (application not ready): https://callback-45-63-34-5.sslip.io/health
+Source: https://github.com/HassanHassnain/callback
 
 Run `make setup`, `make preflight`, `make test`, `make lint`, and `make smoke`.
 `make smoke` applies the documented audio-only exception and checks functional output.

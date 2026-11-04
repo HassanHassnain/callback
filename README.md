@@ -6,8 +6,9 @@ Approval prompts show what the agent says it will do. Callback shows what it
 actually did — in a twin — and only that can reach production.
 
 Callback is being built for Vultr: Agent Rush, Challenge 1, Blast Radius Zero.
-The implementation is in Phase 0. There is no live application or benchmark
-result yet. See [build status](docs/STATUS.md) and the [complete brief](docs/BRIEF.md).
+P0 model checks and P1 infrastructure checks pass. There is no live application
+or benchmark result yet. Infrastructure-only [health](https://callback-45-63-34-5.sslip.io/health)
+explicitly reports `application_ready=false`. See [build status](docs/STATUS.md) and the [complete brief](docs/BRIEF.md).
 
 The intended production boundary is a disposable Keycloak twin, typed effects
 derived from its state, deterministic policy, device and approver signatures
@@ -20,7 +21,16 @@ Serverless Inference.
 Install Python 3.12 and uv, then run `make setup`. Create `.env` using
 `.env.example` as the template; never commit or print the populated file.
 Run `make catalog` to record the current model catalog and `make smoke` to
-exercise the required model capabilities against Vultr.
+exercise the required model capabilities against Vultr. Audio uses the explicit
+user-approved catalog-validation exception because Vultr omits per-response
+TTS/STT model identity; chat and decision responses require exact model IDs.
+
+`make provision`, `make status`, `make deploy`, and `make verify-infra` operate
+only on the recorded project infrastructure. `make teardown-plan` is a dry run;
+actual teardown requires an explicit `--execute` argument and matching live
+ownership metadata. Estimated base services are $173.08/month before usage.
+The sandbox uses the brief's smaller 16-GB plan, and the private registry is in SJC.
+See [infrastructure evidence](docs/infra/P1-resources.json).
 
 Existing files, cloud resources, and account items from before this task are
 preserved. Destructive tests and teardown apply only to resources created by
