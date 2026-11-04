@@ -5,6 +5,8 @@
 .venv
 infra/state.json
 infra/private
+executor-private
+idp-private
 __pycache__
 *.pem
 *.key

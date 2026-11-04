@@ -39,7 +39,9 @@ def firewall(state, role):
             allowed = vpc_ip(state, source_role)
             rules.append(f"ip saddr {allowed} tcp dport {port} accept")
             # Docker-published ports pass through FORWARD instead of INPUT.
-            forward.append(f"tcp dport {port} ip saddr != {allowed} drop")
+            # Match the original published port, including after Docker DNAT
+            # maps prod 8080 to Keycloak's TLS listener on container port 8443.
+            forward.append(f"meta l4proto tcp ct original proto-dst {port} ip saddr != {allowed} drop")
     return ("table inet callback {\n chain input {\n type filter hook input priority -50; policy drop;\n"
             + "\n".join("  " + line + ";" for line in rules) + "\n }\n chain forward {\n"
             + " type filter hook forward priority -50; policy accept;\n"
@@ -121,6 +123,8 @@ def deploy(state):
                 "ports": ["80:80", "443:443"],
                 "volumes": ["./Caddyfile:/etc/caddy/Caddyfile:ro", "caddy_data:/data", "caddy_config:/config"]}},
                "volumes": {"caddy_data": {}, "caddy_config": {}}}
+    if state.get("executor_public_key"):
+        compose["services"]["caddy"]["volumes"].append("./executor-pubkey.json:/srv/executor-pubkey.json:ro")
     (staging / "compose.yaml").write_text(yaml.safe_dump(compose))
     upload(state, "control", [staging / "Caddyfile", staging / "compose.yaml"])
     ssh(state, "control", "set -e\ncd /opt/callback\ndocker compose up -d\n", timeout=60)
@@ -144,7 +148,8 @@ CALLBACK_UNIT
 systemctl daemon-reload
 systemctl enable --now callback-p1-probe
 """
-    ssh(state, "prod-idp", script)
+    if not state.get("identity_provider_deployed"):
+        ssh(state, "prod-idp", script)
     state["public_host"] = host
     state["public_url"] = "https://" + host
     state["p1_deployed_at"] = datetime.now(UTC).isoformat()

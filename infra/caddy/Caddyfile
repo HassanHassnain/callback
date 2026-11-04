@@ -1,9 +1,16 @@
 # The deployment script replaces CALLBACK_HOST with the discovered sslip.io name.
 CALLBACK_HOST {
-    @health path /health
-    header @health Content-Type application/json
-    respond @health `{"status":"ok","phase":"P1","application_ready":false}` 200
-    respond "Callback infrastructure is online. Application build is in progress." 200
+    handle /executor-pubkey.json {
+        root * /srv
+        file_server
+    }
+    handle /health {
+        header Content-Type application/json
+        respond `{"status":"ok","phase":"P1","application_ready":false}` 200
+    }
+    handle {
+        respond "Callback infrastructure is online. Application build is in progress." 200
+    }
     log {
         output stdout
         format json
