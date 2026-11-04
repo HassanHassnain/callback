@@ -1,0 +1,209 @@
+{
+  "run_id": "20261104T181858581084Z",
+  "completed_at": "2026-11-04T18:19:12.284090+00:00",
+  "only": null,
+  "all_passed": false,
+  "catalog_model_count": 35,
+  "results": [
+    {
+      "name": "planner-tools",
+      "requested_model": "deepseek-v4.1-flash-1017",
+      "started_at": "2026-11-04T18:19:02.703758+00:00",
+      "returned_model": "deepseek-v4.1-flash-1017",
+      "arguments": {
+        "query": "sam.rivera"
+      },
+      "usage": {
+        "prompt_tokens": 293,
+        "completion_tokens": 43,
+        "total_tokens": 336,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "status": "PASS",
+      "latency_seconds": 0.735
+    },
+    {
+      "name": "decision-yes-no",
+      "requested_model": "clef-flash",
+      "started_at": "2026-11-04T18:19:02.725905+00:00",
+      "returned_model": "clef-flash",
+      "answers": {
+        "bypass": {
+          "type": "noul",
+          "noul": 0.9525741338729858
+        }
+      },
+      "usage": {
+        "input_tokens": 161,
+        "output_tokens": 0
+      },
+      "status": "PASS",
+      "latency_seconds": 1.057
+    },
+    {
+      "name": "planner-tools",
+      "requested_model": "glm-5.3-flash",
+      "started_at": "2026-11-04T18:19:02.705036+00:00",
+      "returned_model": "glm-5.3-flash",
+      "arguments": {
+        "query": "sam.rivera"
+      },
+      "usage": {
+        "prompt_tokens": 178,
+        "completion_tokens": 36,
+        "total_tokens": 214,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 21
+        }
+      },
+      "status": "PASS",
+      "latency_seconds": 1.389
+    },
+    {
+      "name": "planner-json-schema",
+      "requested_model": "glm-5.3-flash",
+      "started_at": "2026-11-04T18:19:02.705317+00:00",
+      "status": "FAIL",
+      "error": "ValueError: Incomplete response: finish_reason=length",
+      "latency_seconds": 2.052
+    },
+    {
+      "name": "planner-json-schema",
+      "requested_model": "deepseek-v4.1-flash-1017",
+      "started_at": "2026-11-04T18:19:02.704443+00:00",
+      "returned_model": "deepseek-v4.1-flash-1017",
+      "output": {
+        "username": "sam.rivera",
+        "action": "user.password.reset",
+        "needs_device": true
+      },
+      "usage": {
+        "prompt_tokens": 37,
+        "completion_tokens": 30,
+        "total_tokens": 67,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "status": "PASS",
+      "latency_seconds": 2.552
+    },
+    {
+      "name": "vision-image",
+      "requested_model": "mimo-v2.6-pro",
+      "started_at": "2026-11-04T18:19:02.706209+00:00",
+      "status": "FAIL",
+      "error": "ValidationError: 'red square' is not one of ['red rectangle']\n\nFailed validating 'enum' in schema['properties']['left']:\n    {'type': 'string', 'enum': ['red rectangle']}\n\nOn instance['left']:\n    'red square'",
+      "latency_seconds": 2.837
+    },
+    {
+      "name": "moderation-injection",
+      "requested_model": "nemotron-3.5-content-safety",
+      "started_at": "2026-11-04T18:19:02.726096+00:00",
+      "returned_model": "nemotron-3.5-content-safety",
+      "classification": "User Safety: unsafe",
+      "usage": {
+        "prompt_tokens": 494,
+        "completion_tokens": 5,
+        "total_tokens": 499,
+        "prompt_tokens_details": {
+          "cached_tokens": 336
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "status": "PASS",
+      "latency_seconds": 3.507
+    },
+    {
+      "name": "planner-tools",
+      "requested_model": "qwen3.8-flash-next",
+      "started_at": "2026-11-04T18:19:02.705543+00:00",
+      "returned_model": "qwen3.8-flash-next",
+      "arguments": {
+        "query": "sam.rivera"
+      },
+      "usage": {
+        "prompt_tokens": 298,
+        "completion_tokens": 29,
+        "total_tokens": 327,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "status": "PASS",
+      "latency_seconds": 3.78
+    },
+    {
+      "name": "planner-json-schema",
+      "requested_model": "qwen3.8-flash-next",
+      "started_at": "2026-11-04T18:19:02.705886+00:00",
+      "returned_model": "qwen3.8-flash-next",
+      "output": {
+        "username": "sam.rivera",
+        "action": "user.password.reset",
+        "needs_device": true
+      },
+      "usage": {
+        "prompt_tokens": 45,
+        "completion_tokens": 32,
+        "total_tokens": 77,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "status": "PASS",
+      "latency_seconds": 4.841
+    },
+    {
+      "name": "tts-ryan",
+      "requested_model": "qwen3-tts-12hz-1.7b",
+      "started_at": "2026-11-04T18:19:07.546863+00:00",
+      "status": "FAIL",
+      "error": "KeyError: 'delta'",
+      "latency_seconds": 3.158
+    },
+    {
+      "name": "stt-ryan",
+      "requested_model": "whisper-large-v3-turbo",
+      "started_at": "2026-11-04T18:19:10.704758+00:00",
+      "status": "FAIL",
+      "error": "ValueError: TTS produced no WAV to transcribe",
+      "latency_seconds": 0.0
+    },
+    {
+      "name": "tts-aiden",
+      "requested_model": "qwen3-tts-12hz-1.7b",
+      "started_at": "2026-11-04T18:19:10.704935+00:00",
+      "status": "FAIL",
+      "error": "KeyError: 'delta'",
+      "latency_seconds": 1.578
+    },
+    {
+      "name": "stt-aiden",
+      "requested_model": "whisper-large-v3-turbo",
+      "started_at": "2026-11-04T18:19:12.283432+00:00",
+      "status": "FAIL",
+      "error": "ValueError: TTS produced no WAV to transcribe",
+      "latency_seconds": 0.0
+    }
+  ]
+}

@@ -93,7 +93,7 @@ async def planner_tools(client: VultrInference, model: str) -> dict:
             "parameters": QUERY_SCHEMA, "strict": True,
         }}],
         tool_choice={"type": "function", "function": {"name": "lookup_employee"}},
-        temperature=0, max_completion_tokens=256, reasoning={"enabled": False},
+        temperature=0, max_completion_tokens=1024, reasoning={"enabled": False},
     )
     calls = message(data).get("tool_calls", [])
     if len(calls) != 1 or calls[0]["function"]["name"] != "lookup_employee":
@@ -113,7 +113,7 @@ async def planner_schema(client: VultrInference, model: str) -> dict:
             "with username sam.rivera, action user.password.reset and needs_device true."
         )}],
         response_format=response_format(RESET_SCHEMA, "reset_proposal"),
-        temperature=0, max_completion_tokens=256, reasoning={"enabled": False},
+        temperature=0, max_completion_tokens=1024, reasoning={"enabled": False},
     )
     output = json.loads(message(data)["content"])
     jsonschema.validate(output, RESET_SCHEMA)
@@ -123,8 +123,8 @@ async def planner_schema(client: VultrInference, model: str) -> dict:
 async def vision(client: VultrInference, artifact_dir: Path) -> dict:
     image = Image.new("RGB", (360, 180), "white")
     draw = ImageDraw.Draw(image)
-    draw.rectangle((25, 35, 155, 145), fill="red")
-    draw.ellipse((220, 35, 330, 145), fill="blue")
+    draw.rectangle((15, 60, 185, 120), fill="red")
+    draw.ellipse((225, 35, 335, 145), fill="blue")
     path = artifact_dir / "vision-fixture.png"
     image.save(path)
     encoded = base64.b64encode(path.read_bytes()).decode()
@@ -202,7 +202,12 @@ async def speech(client: VultrInference, voice: str, artifact_dir: Path) -> dict
             data = json.loads(line[5:].strip())
             event_type = data.get("type")
             if event_type == "speech.audio.delta":
-                audio.extend(base64.b64decode(data["delta"], validate=True))
+                # Vultr's live speech SSE shape uses `audio`; retain `delta`
+                # compatibility for providers following the prose reference.
+                encoded = data.get("audio", data.get("delta"))
+                if not isinstance(encoded, str):
+                    raise ValueError("Speech delta contains no base64 audio")
+                audio.extend(base64.b64decode(encoded, validate=True))
             elif event_type == "speech.audio.done":
                 done = data
             elif event_type == "speech.audio.error" or "error" in data:
@@ -348,9 +353,14 @@ async def main(args) -> int:
                     await run_case(f"stt-{voice}", STT, lambda v=voice: transcription(client, v, artifact_dir), results)
     report = {"run_id": run_id, "completed_at": utc_now(), "only": args.only,
               "all_passed": bool(results) and all(r["status"] == "PASS" for r in results),
+              "phase0_accepted": (not args.catalog_only and args.only is None
+                                  and len(results) == 13
+                                  and all(r["status"] == "PASS" for r in results)),
               "catalog_model_count": len(catalog["data"]), "results": results}
     write_json(ROOT / "docs/smoke" / f"{run_id}.json", report)
     write_json(ROOT / "docs/smoke/latest.json", report)
+    if not args.catalog_only and args.only is None:
+        write_json(ROOT / "docs/smoke/latest-full.json", report)
     render_models(catalog, public, results, run_id)
     print(f"Evidence: docs/smoke/{run_id}.json", flush=True)
     return 0 if args.catalog_only or report["all_passed"] else 1

@@ -1,0 +1,331 @@
+{
+  "run_id": "20261104T181942065956Z",
+  "completed_at": "2026-11-04T18:20:01.955222+00:00",
+  "only": null,
+  "all_passed": false,
+  "catalog_model_count": 35,
+  "results": [
+    {
+      "name": "planner-tools",
+      "requested_model": "deepseek-v4.1-flash-1017",
+      "started_at": "2026-11-04T18:19:49.423017+00:00",
+      "returned_model": "deepseek-v4.1-flash-1017",
+      "arguments": {
+        "query": "sam.rivera"
+      },
+      "usage": {
+        "prompt_tokens": 293,
+        "completion_tokens": 43,
+        "total_tokens": 336,
+        "prompt_tokens_details": {
+          "cached_tokens": 256
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "status": "PASS",
+      "latency_seconds": 0.711
+    },
+    {
+      "name": "decision-yes-no",
+      "requested_model": "clef-flash",
+      "started_at": "2026-11-04T18:19:49.431407+00:00",
+      "returned_model": "clef-flash",
+      "answers": {
+        "bypass": {
+          "type": "noul",
+          "noul": 0.9525741338729858
+        }
+      },
+      "usage": {
+        "input_tokens": 161,
+        "output_tokens": 0
+      },
+      "status": "PASS",
+      "latency_seconds": 1.295
+    },
+    {
+      "name": "planner-tools",
+      "requested_model": "glm-5.3-flash",
+      "started_at": "2026-11-04T18:19:49.424413+00:00",
+      "returned_model": "glm-5.3-flash",
+      "arguments": {
+        "query": "sam.rivera"
+      },
+      "usage": {
+        "prompt_tokens": 178,
+        "completion_tokens": 36,
+        "total_tokens": 214,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 21
+        }
+      },
+      "status": "PASS",
+      "latency_seconds": 1.313
+    },
+    {
+      "name": "planner-tools",
+      "requested_model": "qwen3.8-flash-next",
+      "started_at": "2026-11-04T18:19:49.425111+00:00",
+      "returned_model": "qwen3.8-flash-next",
+      "arguments": {
+        "query": "sam.rivera"
+      },
+      "usage": {
+        "prompt_tokens": 298,
+        "completion_tokens": 29,
+        "total_tokens": 327,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "status": "PASS",
+      "latency_seconds": 1.359
+    },
+    {
+      "name": "planner-json-schema",
+      "requested_model": "qwen3.8-flash-next",
+      "started_at": "2026-11-04T18:19:49.425347+00:00",
+      "returned_model": "qwen3.8-flash-next",
+      "output": {
+        "username": "sam.rivera",
+        "action": "user.password.reset",
+        "needs_device": true
+      },
+      "usage": {
+        "prompt_tokens": 45,
+        "completion_tokens": 32,
+        "total_tokens": 77,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "status": "PASS",
+      "latency_seconds": 1.514
+    },
+    {
+      "name": "planner-json-schema",
+      "requested_model": "deepseek-v4.1-flash-1017",
+      "started_at": "2026-11-04T18:19:49.423941+00:00",
+      "returned_model": "deepseek-v4.1-flash-1017",
+      "output": {
+        "username": "sam.rivera",
+        "action": "user.password.reset",
+        "needs_device": true
+      },
+      "usage": {
+        "prompt_tokens": 37,
+        "completion_tokens": 30,
+        "total_tokens": 67,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "status": "PASS",
+      "latency_seconds": 1.762
+    },
+    {
+      "name": "vision-image",
+      "requested_model": "mimo-v2.6-pro",
+      "started_at": "2026-11-04T18:19:49.425593+00:00",
+      "returned_model": "mimo-v2.6-pro",
+      "output": {
+        "left": "red rectangle",
+        "right": "blue circle"
+      },
+      "usage": {
+        "prompt_tokens": 104,
+        "completion_tokens": 19,
+        "total_tokens": 123,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "fixture_sha256": "52120498d02f833a524c34cb53536fc2e4a5bae17286cdc317af725ac858f812",
+      "status": "PASS",
+      "latency_seconds": 1.838
+    },
+    {
+      "name": "moderation-injection",
+      "requested_model": "nemotron-3.5-content-safety",
+      "started_at": "2026-11-04T18:19:49.431654+00:00",
+      "returned_model": "nemotron-3.5-content-safety",
+      "classification": "User Safety: unsafe",
+      "usage": {
+        "prompt_tokens": 494,
+        "completion_tokens": 5,
+        "total_tokens": 499,
+        "prompt_tokens_details": {
+          "cached_tokens": 480
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "status": "PASS",
+      "latency_seconds": 1.845
+    },
+    {
+      "name": "planner-json-schema",
+      "requested_model": "glm-5.3-flash",
+      "started_at": "2026-11-04T18:19:49.424821+00:00",
+      "status": "FAIL",
+      "error": "ValueError: Incomplete response: finish_reason=length",
+      "latency_seconds": 1.956
+    },
+    {
+      "name": "tts-ryan",
+      "requested_model": "qwen3-tts-12hz-1.7b",
+      "started_at": "2026-11-04T18:19:51.381050+00:00",
+      "voice": "ryan",
+      "functional_pass": true,
+      "returned_model": null,
+      "model_id_verified": false,
+      "duration_seconds": 5.6,
+      "audio_sha256": "9da3fbdfb9644b916daa4e5bdc5cb65c1a846de392d0a805b6bbdcd8ea76f423",
+      "usage": {
+        "input_tokens": 12,
+        "output_tokens": 71,
+        "total_tokens": 83,
+        "seconds": 6,
+        "cost": "0.00168"
+      },
+      "response_header_names": [
+        "access-control-allow-credentials",
+        "access-control-allow-headers",
+        "access-control-allow-origin",
+        "access-control-expose-headers",
+        "cache-control",
+        "content-encoding",
+        "content-type",
+        "date",
+        "server",
+        "transfer-encoding",
+        "vary",
+        "x-generation-id",
+        "x-powered-by"
+      ],
+      "identity_error": "Speech response omitted or mismatched the model ID",
+      "status": "FAIL",
+      "error": "ModelIdentityError: Model identity check failed: requested 'qwen3-tts-12hz-1.7b', returned None",
+      "latency_seconds": 4.885
+    },
+    {
+      "name": "stt-ryan",
+      "requested_model": "whisper-large-v3-turbo",
+      "started_at": "2026-11-04T18:19:56.265906+00:00",
+      "voice": "ryan",
+      "functional_pass": true,
+      "transcript": " Callback confirms the request. Please approve on your registered device.",
+      "expected_word_recall": 1.0,
+      "returned_model": null,
+      "model_id_verified": false,
+      "usage": {
+        "type": "duration",
+        "seconds": 6
+      },
+      "response_header_names": [
+        "access-control-allow-credentials",
+        "access-control-allow-headers",
+        "access-control-allow-origin",
+        "access-control-expose-headers",
+        "cache-control",
+        "content-type",
+        "date",
+        "server",
+        "transfer-encoding",
+        "vary",
+        "x-powered-by"
+      ],
+      "identity_error": "Transcription response omitted or mismatched the model ID",
+      "status": "FAIL",
+      "error": "ModelIdentityError: Model identity check failed: requested 'whisper-large-v3-turbo', returned None",
+      "latency_seconds": 2.246
+    },
+    {
+      "name": "tts-aiden",
+      "requested_model": "qwen3-tts-12hz-1.7b",
+      "started_at": "2026-11-04T18:19:58.511718+00:00",
+      "voice": "aiden",
+      "functional_pass": true,
+      "returned_model": null,
+      "model_id_verified": false,
+      "duration_seconds": 4.08,
+      "audio_sha256": "47b36c789f2e249f126534ecde89e06388c946fcba1986e7ea5ded43239a112e",
+      "usage": {
+        "input_tokens": 12,
+        "output_tokens": 52,
+        "total_tokens": 64,
+        "seconds": 5,
+        "cost": "0.0014"
+      },
+      "response_header_names": [
+        "access-control-allow-credentials",
+        "access-control-allow-headers",
+        "access-control-allow-origin",
+        "access-control-expose-headers",
+        "cache-control",
+        "content-encoding",
+        "content-type",
+        "date",
+        "server",
+        "transfer-encoding",
+        "vary",
+        "x-generation-id",
+        "x-powered-by"
+      ],
+      "identity_error": "Speech response omitted or mismatched the model ID",
+      "status": "FAIL",
+      "error": "ModelIdentityError: Model identity check failed: requested 'qwen3-tts-12hz-1.7b', returned None",
+      "latency_seconds": 2.178
+    },
+    {
+      "name": "stt-aiden",
+      "requested_model": "whisper-large-v3-turbo",
+      "started_at": "2026-11-04T18:20:00.689310+00:00",
+      "voice": "aiden",
+      "functional_pass": true,
+      "transcript": " Callback confirms the request. Please approve on your registered device.",
+      "expected_word_recall": 1.0,
+      "returned_model": null,
+      "model_id_verified": false,
+      "usage": {
+        "type": "duration",
+        "seconds": 5
+      },
+      "response_header_names": [
+        "access-control-allow-credentials",
+        "access-control-allow-headers",
+        "access-control-allow-origin",
+        "access-control-expose-headers",
+        "cache-control",
+        "content-type",
+        "date",
+        "server",
+        "transfer-encoding",
+        "vary",
+        "x-powered-by"
+      ],
+      "identity_error": "Transcription response omitted or mismatched the model ID",
+      "status": "FAIL",
+      "error": "ModelIdentityError: Model identity check failed: requested 'whisper-large-v3-turbo', returned None",
+      "latency_seconds": 1.265
+    }
+  ]
+}

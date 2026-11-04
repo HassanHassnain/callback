@@ -1,7 +1,10 @@
-.PHONY: setup smoke catalog test lint
+.PHONY: setup preflight smoke catalog test lint
 
 setup:
 	uv sync
+
+preflight:
+	uv run python scripts/check_setup.py
 
 smoke:
 	uv run python scripts/si_smoke.py
