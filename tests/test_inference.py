@@ -57,3 +57,21 @@ def test_transport_retries_transient_failure_but_rejects_model_fallback():
                 await client.json("chat/completions", model="expected", messages=[])
             assert len(calls) == 2
     asyncio.run(check())
+
+
+def test_audio_omission_exception_requires_catalog_modality_and_rejects_mismatch():
+    async def check():
+        async with VultrInference("synthetic-key") as client:
+            client.models = {"tts": {"output_modalities": [{"type": "speech"}]}}
+            audit = client.validate_identity("audio/speech", "tts", {})
+            assert audit["model_id_verified"] is False
+            assert audit["identity_validation"] == "catalog_only_user_exception"
+            with pytest.raises(ModelIdentityError):
+                client.validate_identity("audio/speech", "tts", {"model": "different"})
+            with pytest.raises(ModelIdentityError):
+                client.validate_identity("audio/transcriptions", "tts", {})
+            with pytest.raises(ModelIdentityError):
+                client.validate_identity("chat/completions", "tts", {})
+            with pytest.raises(InferenceError):
+                client.validate_identity("audio/speech", "unknown", {})
+    asyncio.run(check())

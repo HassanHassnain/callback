@@ -8,6 +8,13 @@ Preserve every file, cloud resource, account item, key, and project that existed
 
 ## Brief non-negotiables (verbatim)
 
+**User-approved exception, 2026-11-04:** For Vultr TTS/STT only, allow audio
+using live catalog validation when the provider omits response model identity.
+Record `model_id_verified=false` and `identity_validation=catalog_only_user_exception`;
+never invent a returned model ID. A returned but mismatched model still fails.
+All chat, vision, moderation, and decision responses retain exact model checks.
+This explicit user instruction supersedes item 2 below only for that omission.
+
 1. **Use only Vultr Serverless Inference** for every runtime model call: LLM, vision, decision, STT, TTS, moderation. Never call OpenAI, Anthropic or other model APIs at runtime.
 2. **The model ID must match.** Every Serverless Inference call asserts that the response's `model` equals the requested model. Unknown IDs silently fall back to `deepseek-v4.1-flash-1017`, which must raise an error, not pass silently.
 3. **No secrets in sandboxes.** Twins get only twin-only throwaway credentials and planted **canary** values. The inference key, Vultr API key, production admin credential and all signing keys never enter a sandbox, its image or its environment.

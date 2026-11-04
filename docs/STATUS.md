@@ -1,7 +1,7 @@
 # Callback status
 
-Updated: 2026-11-04. P0 bootstrap and account setup complete; strict audio
-model-identity acceptance is blocked by the provider response format.
+Updated: 2026-11-04. P0 complete under the explicit user-approved audio
+identity exception. P1 infrastructure is in progress.
 
 ## Done
 
@@ -25,31 +25,34 @@ model-identity acceptance is blocked by the provider response format.
 - MiMo image input, Clef Flash decision probability, and Nemotron moderation passed.
 - Both Qwen stock voices produced WAVs; Whisper transcribed the expected words
   for both. Functional success is separate from the failed identity assertions.
-- Seven local inference boundary tests and Ruff pass.
+- Eight local inference boundary tests and Ruff pass.
 
 ## P0 checkpoint
 
-The latest full run is `docs/smoke/20261104T182141769962Z.json`: **9 PASS, 4 FAIL**.
-All four failures are the TTS/STT response model ID being absent. The smoke
-script exits 1 and `phase0_accepted` is false. No failure was relabelled a pass.
+The latest full run is `docs/smoke/20261104T182519488993Z.json`: **13 PASS**,
+exit 0, `phase0_accepted=true`. The user explicitly approved live catalog
+validation for audio responses that omit model identity. Those four results
+retain `returned_model=null` and `model_id_verified=false`. Earlier strict-policy
+failures remain unchanged in their original evidence files.
 
 DeepSeek is the initial planner recommendation: both probes passed and their
 combined latency was lowest in this single small fixture run. GLM and Qwen also
 passed; this is not a broad quality benchmark. All keys work.
 
-Awaiting the user's choice: continue P1 with voice disabled, or explicitly allow
-catalog-validated audio with the missing per-response identity documented.
-Voice remains gated until that decision. See `docs/account-setup.md` for setup.
+User decision: allow catalog-validated TTS/STT with the missing per-response
+identity documented. A returned mismatch is still rejected. Exact model checks
+remain mandatory for every other route. See `docs/account-setup.md` for setup.
 
 ## Not done
 
-P1–P10. No infrastructure, application, production identity realm, benchmark,
+P1 in progress; P2–P10 not started. No deployed application, production identity realm, benchmark,
 phone enrollment, or submission assets have been deployed yet.
 
 ## Known limits
 
 - Vultr speech SSE and transcription JSON responses omit `model`. Neither
-  provides a model identity header. Strict identity checks therefore fail.
+  provides a model identity header. Audio is accepted under the user-approved catalog-only exception; individual audio
+  response identity remains unverifiable.
 - GLM needed a 1024-token completion budget to avoid truncation on the schema
   probe. It reported reasoning tokens even with reasoning disabled in the request.
 - Endpoint smoke tests do not establish moderation/injection detection accuracy,
@@ -62,4 +65,4 @@ phone enrollment, or submission assets have been deployed yet.
 No live demo yet. Source: https://github.com/HassanHassnain/callback
 
 Run `make setup`, `make preflight`, `make test`, `make lint`, and `make smoke`.
-`make smoke` intentionally fails while audio identity is unverifiable.
+`make smoke` applies the documented audio-only exception and checks functional output.

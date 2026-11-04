@@ -13,6 +13,7 @@ import httpx
 
 BASE_URL = "https://api.vultrinference.com/v1"
 RETRYABLE = {429, 502, 503, 504, 529}
+AUDIO_OUTPUTS = {"audio/speech": "speech", "audio/transcriptions": "transcription"}
 
 
 class InferenceError(RuntimeError):
@@ -75,6 +76,20 @@ class VultrInference:
         if model not in self.models:
             raise InferenceError(f"Model {model!r} absent from the live Vultr catalog")
 
+    def validate_identity(self, path: str, model: str, response: dict) -> dict:
+        """Apply the user's audio-only omission exception; never accept a mismatch."""
+        self.require_model(model)
+        returned = response.get("model")
+        if returned is None and path in AUDIO_OUTPUTS:
+            outputs = {item["type"] for item in self.models[model].get("output_modalities", [])}
+            if AUDIO_OUTPUTS[path] not in outputs:
+                raise ModelIdentityError("Catalog model does not support the requested audio route")
+            return {"model_id_verified": False,
+                    "identity_validation": "catalog_only_user_exception",
+                    "identity_limitation": "Provider omitted per-response model identity"}
+        assert_model(model, response)
+        return {"model_id_verified": True, "identity_validation": "exact_response_model"}
+
     async def request(self, path: str, *, model: str, body: dict[str, Any]) -> httpx.Response:
         # The base URL is deliberately fixed. Never forward credentials to another host.
         if path not in {"chat/completions", "systemone", "audio/speech", "audio/transcriptions"}:
@@ -116,5 +131,5 @@ class VultrInference:
             data = response.json()
         except (ValueError, json.JSONDecodeError) as exc:
             raise InferenceError("Expected a JSON response") from exc
-        assert_model(model, data)
+        self.validate_identity(path, model, data)
         return data

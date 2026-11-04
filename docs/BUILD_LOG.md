@@ -71,3 +71,17 @@ model, but Vultr's documented speech/transcription format does not. A user
 decision is pending about continuing text-first or accepting an explicit audio
 identity limitation. No audio identity exception has been assumed, and no VM
 has been provisioned yet.
+
+## 2026-11-04 — P0 accepted with explicit audio identity exception
+
+The user approved: "Allow audio using catalog validation, with the missing
+response identity documented". Recorded the exception in AGENTS.md. It is
+limited to omitted TTS/STT response IDs; unknown catalog IDs, wrong modality,
+returned model mismatches, and omitted IDs on other routes still fail.
+
+Verification: `make lint` passed; `make test` 8 passed; `make smoke` completed
+all 13 checks successfully in run `20261104T182519488993Z`. Audio evidence
+retains null returned model IDs, `model_id_verified=false`, and explicit
+catalog-only exception metadata. Previous failed evidence was not changed.
+P0 checkpoint: both keys work; DeepSeek is the initial planner, with GLM and
+Qwen as verified alternatives. Proceeding to P1 per the brief.

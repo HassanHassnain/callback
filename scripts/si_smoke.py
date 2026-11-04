@@ -227,8 +227,7 @@ async def speech(client: VultrInference, voice: str, artifact_dir: Path) -> dict
         "audio_sha256": hashlib.sha256(audio).hexdigest(), "usage": done.get("usage"),
         "response_header_names": sorted(response.headers.keys()),
     }
-    if returned != TTS:
-        evidence["identity_error"] = "Speech response omitted or mismatched the model ID"
+    evidence.update(client.validate_identity("audio/speech", TTS, done))
     return evidence
 
 
@@ -253,8 +252,7 @@ async def transcription(client: VultrInference, voice: str, artifact_dir: Path) 
         "model_id_verified": data.get("model") == STT, "usage": data.get("usage"),
         "response_header_names": sorted(response.headers.keys()),
     }
-    if data.get("model") != STT:
-        evidence["identity_error"] = "Transcription response omitted or mismatched the model ID"
+    evidence.update(client.validate_identity("audio/transcriptions", STT, data))
     return evidence
 
 
@@ -264,7 +262,11 @@ async def run_case(name: str, model: str, operation, results: list[dict]) -> Non
     try:
         evidence = await operation()
         result.update(evidence)
-        assert_model(model, {"model": evidence.get("returned_model")})
+        if evidence.get("identity_validation") == "catalog_only_user_exception":
+            if name not in {"tts-ryan", "tts-aiden", "stt-ryan", "stt-aiden"}:
+                raise ValueError("Audio identity exception cannot be applied to another probe")
+        else:
+            assert_model(model, {"model": evidence.get("returned_model")})
         if evidence.get("functional_pass", True) is not True:
             raise ValueError("Functional output check failed")
         result["status"] = "PASS"
@@ -304,9 +306,11 @@ def render_models(catalog: dict, public: dict, results: list[dict], run_id: str)
     lines += ["", "## Identity and interpretation", "",
               "Every configured model is checked against the live catalog before any model call.",
               "Every completion/decision response must return the exact requested model ID.",
-              "An omitted audio model ID fails the same assertion; a catalog entry or an echoed request",
-              "is not evidence of which model served an individual response. Functional audio results",
-              "are recorded separately and cannot turn an identity failure into a pass.", "",
+              "User-approved exception (2026-11-04): TTS/STT may pass functional checks using",
+              "live catalog validation when Vultr omits response model identity. Such results retain",
+              "`returned_model=null`, `model_id_verified=false`, and",
+              "`identity_validation=catalog_only_user_exception`. A returned mismatch still fails.",
+              "Catalog validation does not prove which model served an individual audio response.", "",
               "Moderation endpoint availability does not establish prompt-injection detection accuracy.",
               "No planner winner is claimed from a single tool/schema fixture. Compare successful",
               "checks and their measured latency before choosing the initial planner.", "",
@@ -356,6 +360,7 @@ async def main(args) -> int:
               "phase0_accepted": (not args.catalog_only and args.only is None
                                   and len(results) == 13
                                   and all(r["status"] == "PASS" for r in results)),
+              "audio_identity_policy": "catalog_only_user_exception_2026-11-04",
               "catalog_model_count": len(catalog["data"]), "results": results}
     write_json(ROOT / "docs/smoke" / f"{run_id}.json", report)
     write_json(ROOT / "docs/smoke/latest.json", report)
