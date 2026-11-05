@@ -42,7 +42,7 @@ def assert_model(requested: str, response: dict[str, Any]) -> None:
 
 
 class VultrInference:
-    def __init__(self, key: str, *, timeout: float = 90, retries: int = 2):
+    def __init__(self, key: str, *, timeout: float = 90, retries: int = 2, budget=None):
         self._client = httpx.AsyncClient(
             base_url=BASE_URL + "/",
             headers={"Authorization": f"Bearer {key}"} if key else {},
@@ -51,6 +51,8 @@ class VultrInference:
         )
         self._has_key = bool(key)
         self._retries = retries
+        self.budget = budget
+        self.usage_audit = []
         self.models: dict[str, dict[str, Any]] = {}
         self._limits: dict[str, asyncio.Semaphore] = defaultdict(lambda: asyncio.Semaphore(16))
 
@@ -101,7 +103,19 @@ class VultrInference:
             raise InferenceError("VULTR_INFERENCE_API_KEY is missing")
         async with self._limits[model]:
             for attempt in range(self._retries + 1):
-                response = await self._client.post(path, json=body)
+                reservation = await self.budget.reserve(self.models[model], body) if self.budget else None
+                try:
+                    response = await self._client.post(path, json=body)
+                except Exception:
+                    if reservation:
+                        await self.budget.settle(reservation, None)
+                    raise
+                if reservation:
+                    try:
+                        parsed = response.json()
+                    except ValueError:
+                        parsed = None
+                    self.usage_audit.append(await self.budget.settle(reservation, parsed))
                 if response.status_code in RETRYABLE and attempt < self._retries:
                     delay = response.headers.get("retry-after", "")
                     try:
@@ -124,6 +138,15 @@ class VultrInference:
                     )
                 return response
         raise InferenceError("Retry budget exhausted")
+
+    async def provider_usage(self):
+        response = await self._client.get("usage")
+        if not response.is_success:
+            raise InferenceError(f"Usage monitor: HTTP {response.status_code}")
+        data = response.json()
+        if not isinstance(data.get("usage", {}).get("current_month"), dict):
+            raise InferenceError("Unrecognized provider usage format")
+        return data
 
     async def json(self, path: str, *, model: str, **body: Any) -> dict[str, Any]:
         response = await self.request(path, model=model, body={"model": model, **body})
