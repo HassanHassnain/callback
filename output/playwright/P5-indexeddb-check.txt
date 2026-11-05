@@ -1,0 +1,17 @@
+### Result
+{
+  "test_role": "automated browser only; not the human approver; not pinned",
+  "private_key_non_extractable": true,
+  "private_key_algorithm": "ECDSA",
+  "persisted_enrollment_id": "fa31fad0bf023a6a887cf6dd0835e733cee07dc5e8389120859052624ad05bb3"
+}
+### Ran Playwright code
+```js
+await page.evaluate('async () => await new Promise((resolve,reject) => {const r=indexedDB.open("callback-device-keys",1);r.onsuccess=()=>{const db=r.result;const q=db.transaction("keys").objectStore("keys").get("acme:approver:hassan");q.onsuccess=()=>{const slot=q.result;resolve({test_role:"automated browser only; not the human approver; not pinned",private_key_non_extractable:slot.signing.privateKey.extractable===false,private_key_algorithm:slot.signing.privateKey.algorithm.name,persisted_enrollment_id:slot.enrollmentId});db.close();};q.onerror=()=>reject(q.error);};r.onerror=()=>reject(r.error);})');
+```
+### Page
+- Page URL: https://callback-45-63-34-5.sslip.io/enroll-approver
+- Page Title: Callback — identity change control
+- Console: 8 errors, 0 warnings
+### Events
+- New console entries: .playwright-cli/console-2026-11-05T17-47-57-023Z.log#L1-L8

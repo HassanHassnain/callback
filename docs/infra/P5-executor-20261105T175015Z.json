@@ -1,0 +1,362 @@
+{
+  "observed_at": "2026-11-05T17:48:34.167172+00:00",
+  "realm": "acme-guest",
+  "simulated": "device keys and proposals; real executor, signatures, REST mutations, storage, post-verify",
+  "checks": {
+    "sam_real_apply_postverified": true,
+    "signed_receipt": true,
+    "only_registered_key_decrypts": true,
+    "no_plaintext_in_response_or_receipt": true,
+    "idempotent_same_receipt": true,
+    "tamper_hash_mismatch": true,
+    "dana_signed_deny_unchanged": true,
+    "real_postverify_mismatch_alarms": false,
+    "real_email_rollback_restores_full_digest": false,
+    "real_drift_refused": true,
+    "main_realm_unchanged": true
+  },
+  "receipts": [
+    {
+      "payload": {
+        "receipt_id": "615bfc6a-93f9-42bd-9160-62d1cec17710",
+        "call_id": "55e76784-31b8-4e88-b58a-a56d50291ecf",
+        "realm": "acme-guest",
+        "created_at": "2026-11-05T17:48:47.872057+00:00",
+        "status": "APPLIED_VERIFIED",
+        "change_set_hash": "87ac02ff1b010bbae29cb3cec2338b38de6bfa78b0a0622b8eafffa1bc61f664",
+        "prod_state_digest_before": "b22ae6bdd31e0ce995fc61e50ecb4f1b7e10c28f7042938e62884145eea8f790",
+        "prod_state_digest_after": "bef469f1ed31c618e5c9412279dbb70a7fe794e96456fa6b44ee8c3e08534f60",
+        "reason": null,
+        "effects": [
+          {
+            "id": "8e78a078f11ed2342d548c5e",
+            "type": "user.password.reset",
+            "realm": "acme-guest",
+            "target": {
+              "user_id": "8c06ad36-aee2-5260-8446-345ec19b3652",
+              "username": "sam.rivera"
+            },
+            "before": {
+              "credentials": {
+                "b53fa497-d265-424f-a0a8-3f92021c356a": {
+                  "createdDate": 1793900758636,
+                  "id": "b53fa497-d265-424f-a0a8-3f92021c356a",
+                  "type": "password"
+                }
+              }
+            },
+            "after": {
+              "changed": true,
+              "temporary": true
+            },
+            "reversible": false,
+            "irreversible_reason": "Original credential material is never exported",
+            "evidence": {
+              "tool_call_ids": []
+            }
+          }
+        ],
+        "signatures": [
+          {
+            "kind": "device",
+            "payload": {
+              "change_set_hash": "87ac02ff1b010bbae29cb3cec2338b38de6bfa78b0a0622b8eafffa1bc61f664",
+              "decision": "approve",
+              "ts": "2026-11-05T17:48:40.635025+00:00",
+              "username": "sam.rivera"
+            },
+            "signature": "-4VphAp4fiFPsALhyc8PkZf7phGqfBtxCFLUGtxaI6JnpbcQEmIVT_3vaVLXMAC6DFGSQF2k48MwkoQm-LvEIQ"
+          }
+        ],
+        "actual_effects": [
+          {
+            "type": "user.password.reset",
+            "realm": "acme-guest",
+            "target": {
+              "user_id": "8c06ad36-aee2-5260-8446-345ec19b3652",
+              "username": "sam.rivera"
+            },
+            "before": {
+              "credentials": {
+                "b53fa497-d265-424f-a0a8-3f92021c356a": {
+                  "id": "b53fa497-d265-424f-a0a8-3f92021c356a",
+                  "type": "password",
+                  "createdDate": 1793900758636
+                }
+              }
+            },
+            "after": {
+              "changed": true,
+              "temporary": true
+            },
+            "reversible": false,
+            "evidence": {
+              "tool_call_ids": []
+            },
+            "irreversible_reason": "Original credential material is never exported",
+            "id": "8e78a078f11ed2342d548c5e"
+          }
+        ],
+        "rollback": [],
+        "verified": true,
+        "context": {
+          "simulation": "Executor integration test: simulated device and synthetic proposal; real guest Keycloak mutation",
+          "call_status": "AWAITING_DEVICE"
+        }
+      },
+      "signature": "1SC0B-PHwiWH4YGBK2Gz-JwtZ-XlA2WlSmNtsNA8d2rVow7VK9kjxsYQ33Dd1JTAJUBaBaYmVFIRWEUJF1dNhA",
+      "signer_public_key": {
+        "kty": "EC",
+        "crv": "P-256",
+        "x": "ADkko8mByEGaF4FKRSCG1Lwn0f80ItPEKl6q1ZYpG6w",
+        "y": "Uscqi97OU7ObRIpJ-U9VmyhRkQrvGZ5y7TvBfHZHpk4",
+        "ext": true,
+        "key_ops": [
+          "verify"
+        ]
+      }
+    },
+    {
+      "payload": {
+        "receipt_id": "867c1d0b-4612-4cd1-8533-45b9f2ec697e",
+        "call_id": "55e76784-31b8-4e88-b58a-a56d50291ecf",
+        "realm": "acme-guest",
+        "created_at": "2026-11-05T17:49:10.530863+00:00",
+        "status": "REFUSED",
+        "change_set_hash": "87ac02ff1b010bbae29cb3cec2338b38de6bfa78b0a0622b8eafffa1bc61f664",
+        "prod_state_digest_before": null,
+        "prod_state_digest_after": null,
+        "reason": {
+          "code": "HASH_MISMATCH",
+          "detail": "Canonical change-set hash differs from the submitted hash"
+        },
+        "effects": [],
+        "signatures": [],
+        "actual_effects": [],
+        "rollback": [],
+        "verified": false,
+        "context": {}
+      },
+      "signature": "A2MZjGUNq2Tk5-yE1unOWTlNhsiR3xG6GV8xxSEcBF7scztDhr0cOcRCNBfkwUum-yYAyUQq1Qdy89A2XV1Yqw",
+      "signer_public_key": {
+        "kty": "EC",
+        "crv": "P-256",
+        "x": "ADkko8mByEGaF4FKRSCG1Lwn0f80ItPEKl6q1ZYpG6w",
+        "y": "Uscqi97OU7ObRIpJ-U9VmyhRkQrvGZ5y7TvBfHZHpk4",
+        "ext": true,
+        "key_ops": [
+          "verify"
+        ]
+      }
+    },
+    {
+      "payload": {
+        "receipt_id": "b8153ec6-284a-4b13-8925-cb542f7692cd",
+        "call_id": "51483858-be0d-4b3a-abe8-8248681444f9",
+        "realm": "acme-guest",
+        "created_at": "2026-11-05T17:49:24.032138+00:00",
+        "status": "DENIED",
+        "change_set_hash": "272c47f3809198f2c4655acdbe5daf998b3dd0686d7023d6b5742134826afc57",
+        "prod_state_digest_before": "bef469f1ed31c618e5c9412279dbb70a7fe794e96456fa6b44ee8c3e08534f60",
+        "prod_state_digest_after": "bef469f1ed31c618e5c9412279dbb70a7fe794e96456fa6b44ee8c3e08534f60",
+        "reason": {
+          "code": "SIGNED_DENIAL",
+          "actors": [
+            {
+              "kind": "device",
+              "identity": "dana.whitfield"
+            }
+          ]
+        },
+        "effects": [
+          {
+            "id": "683ea93999f377dd20028f82",
+            "type": "credential.otp.removed",
+            "realm": "acme-guest",
+            "target": {
+              "user_id": "ebba3689-0063-5207-8225-dd3cbfd729f8",
+              "username": "dana.whitfield"
+            },
+            "before": {
+              "createdDate": 1793819198007,
+              "id": "c5941e8e-c11d-4473-bd41-38a939f25bd9",
+              "type": "otp",
+              "userLabel": "Registered authenticator (synthetic)"
+            },
+            "after": null,
+            "reversible": false,
+            "irreversible_reason": "Original credential material is never exported",
+            "evidence": {
+              "tool_call_ids": []
+            }
+          },
+          {
+            "id": "b23eba29633ae9888973e860",
+            "type": "user.required_action.added",
+            "realm": "acme-guest",
+            "target": {
+              "user_id": "ebba3689-0063-5207-8225-dd3cbfd729f8",
+              "username": "dana.whitfield"
+            },
+            "before": null,
+            "after": "CONFIGURE_TOTP",
+            "reversible": true,
+            "evidence": {
+              "tool_call_ids": []
+            }
+          }
+        ],
+        "signatures": [
+          {
+            "kind": "device",
+            "payload": {
+              "change_set_hash": "272c47f3809198f2c4655acdbe5daf998b3dd0686d7023d6b5742134826afc57",
+              "decision": "deny",
+              "ts": "2026-11-05T17:49:16.459583+00:00",
+              "username": "dana.whitfield"
+            },
+            "signature": "iXZjEoyoYI5nAYwiRZ0IbGOMd4vYGu4X813ndQMZEsVemd9uZK2iKY89P75la5KRorPzQFF86eycJ0wmyLEdeg"
+          }
+        ],
+        "actual_effects": [],
+        "rollback": [],
+        "verified": false,
+        "context": {
+          "simulation": "Executor integration test: simulated device and synthetic proposal; real guest Keycloak mutation",
+          "call_status": "AWAITING_DEVICE"
+        }
+      },
+      "signature": "TlKpJfUSfo8Dhc00jo4MCEdLnsDEbMegUnDBFXUqbA5BZDqW_hy3z0I4sGvCmaNM-oWYwd3xqnSSC0ixMpYz_g",
+      "signer_public_key": {
+        "kty": "EC",
+        "crv": "P-256",
+        "x": "ADkko8mByEGaF4FKRSCG1Lwn0f80ItPEKl6q1ZYpG6w",
+        "y": "Uscqi97OU7ObRIpJ-U9VmyhRkQrvGZ5y7TvBfHZHpk4",
+        "ext": true,
+        "key_ops": [
+          "verify"
+        ]
+      }
+    },
+    {
+      "payload": {
+        "receipt_id": "208e7b28-4859-47cd-a180-d9bb7866f795",
+        "call_id": "35c7a344-6dc5-489d-9c08-8b62053b57b9",
+        "realm": "acme-guest",
+        "created_at": "2026-11-05T17:49:38.346298+00:00",
+        "status": "APPLIED_VERIFIED",
+        "change_set_hash": "66fd8403f1ed7f5e5d2575f9ac81bea030cfc7ca3db2ca37877c2e53100d7c59",
+        "prod_state_digest_before": "bef469f1ed31c618e5c9412279dbb70a7fe794e96456fa6b44ee8c3e08534f60",
+        "prod_state_digest_after": "e0bcee88c8442ac5abe2cf1c67b55ec7e1090e38d61b77e6f927f64c3a9e8831",
+        "reason": null,
+        "effects": [
+          {
+            "id": "701ea95cd9b6e7c962f725e5",
+            "type": "user.email.changed",
+            "realm": "acme-guest",
+            "target": {
+              "user_id": "8c06ad36-aee2-5260-8446-345ec19b3652",
+              "username": "sam.rivera"
+            },
+            "before": null,
+            "after": "p5-rollback-probe@acme.test",
+            "reversible": true,
+            "evidence": {
+              "tool_call_ids": []
+            }
+          }
+        ],
+        "signatures": [
+          {
+            "kind": "device",
+            "payload": {
+              "change_set_hash": "66fd8403f1ed7f5e5d2575f9ac81bea030cfc7ca3db2ca37877c2e53100d7c59",
+              "decision": "approve",
+              "ts": "2026-11-05T17:49:32.546569+00:00",
+              "username": "sam.rivera"
+            },
+            "signature": "0vb871NqWCP97cCEFHUyjEfkdF-4dvRgHoja4RQrL-iX8S2c2AOwPxlCjCk79c1OVbJyhRzeecZ6mR8l4-sMyw"
+          },
+          {
+            "kind": "approver",
+            "payload": {
+              "change_set_hash": "66fd8403f1ed7f5e5d2575f9ac81bea030cfc7ca3db2ca37877c2e53100d7c59",
+              "decision": "approve",
+              "ts": "2026-11-05T17:49:32.546714+00:00",
+              "approver_id": "simulated-p5-approver"
+            },
+            "signature": "vl3ldEoIb2SNYnBLbb9d90VlhV28v5pCf3lgUEnw3STR2RSbAwmzkl-LRy_Qt4ZxmsbSh5FKJbWVl2NjvZzYzw"
+          }
+        ],
+        "actual_effects": [
+          {
+            "type": "user.email.changed",
+            "realm": "acme-guest",
+            "target": {
+              "user_id": "8c06ad36-aee2-5260-8446-345ec19b3652",
+              "username": "sam.rivera"
+            },
+            "before": null,
+            "after": "p5-rollback-probe@acme.test",
+            "reversible": true,
+            "evidence": {
+              "tool_call_ids": []
+            },
+            "id": "701ea95cd9b6e7c962f725e5"
+          }
+        ],
+        "rollback": [],
+        "verified": true,
+        "context": {
+          "simulation": "Executor integration test: simulated device and synthetic proposal; real guest Keycloak mutation",
+          "call_status": "AWAITING_DEVICE"
+        }
+      },
+      "signature": "VYdDDS2IuJSzNFfRTC8mUmE657uy1ONbJzaMOUv5ZPVTVkkXx8PwQ_VfmkpWOxNngZlPyQeT4hUE861UJ4YYsg",
+      "signer_public_key": {
+        "kty": "EC",
+        "crv": "P-256",
+        "x": "ADkko8mByEGaF4FKRSCG1Lwn0f80ItPEKl6q1ZYpG6w",
+        "y": "Uscqi97OU7ObRIpJ-U9VmyhRkQrvGZ5y7TvBfHZHpk4",
+        "ext": true,
+        "key_ops": [
+          "verify"
+        ]
+      }
+    },
+    {
+      "payload": {
+        "receipt_id": "687b2060-9128-49ba-8bbe-8f1dc40516a4",
+        "call_id": "f48129d9-3fc7-422c-8c73-c6846c0f3f43",
+        "realm": "acme-guest",
+        "created_at": "2026-11-05T17:49:54.010977+00:00",
+        "status": "REFUSED",
+        "change_set_hash": "19713cf2e1052a864e0947f36288dbcb30f343e6cba6863db47d1c8d5740324f",
+        "prod_state_digest_before": "f1b5aad49405c71cecb483d83236773196e9bfa5d312060491019b7b451e81f3",
+        "prod_state_digest_after": "f1b5aad49405c71cecb483d83236773196e9bfa5d312060491019b7b451e81f3",
+        "reason": {
+          "code": "DRIFT",
+          "detail": "Production state differs from the signed seed"
+        },
+        "effects": [],
+        "signatures": [],
+        "actual_effects": [],
+        "rollback": [],
+        "verified": false,
+        "context": {}
+      },
+      "signature": "YcbSeX5ZRo1bpO4R-zKQGZjyQihiaXHeuQ_xwGS8u7aIQI3yDdcQiKIAg4v1mRhh7DBQ42OCHfnK8fTxR99zqQ",
+      "signer_public_key": {
+        "kty": "EC",
+        "crv": "P-256",
+        "x": "ADkko8mByEGaF4FKRSCG1Lwn0f80ItPEKl6q1ZYpG6w",
+        "y": "Uscqi97OU7ObRIpJ-U9VmyhRkQrvGZ5y7TvBfHZHpk4",
+        "ext": true,
+        "key_ops": [
+          "verify"
+        ]
+      }
+    }
+  ],
+  "all_passed": false
+}

@@ -1,0 +1,547 @@
+{
+  "observed_at": "2026-11-05T17:46:01.271980+00:00",
+  "realm": "acme-guest",
+  "simulated": "device signer and decryptor; real public HTTPS, Vultr planner, twin, effects, executor and Keycloak",
+  "checks": {
+    "frozen_destroyed_proposal": true,
+    "one_sam_reset": true,
+    "r7_auto_eligible": true,
+    "exact_proposal_hash": true,
+    "actual_vultr_models": true,
+    "auto_applied_verified": true,
+    "receipt_signature": true,
+    "encrypted_public_delivery": true,
+    "public_tamper_refused": true
+  },
+  "all_passed": true,
+  "call": {
+    "call_id": "c237730d-c356-4a05-b049-fa7f8ae14403",
+    "realm": "acme-guest",
+    "status": "APPLIED_VERIFIED",
+    "effects": [
+      {
+        "type": "user.password.reset",
+        "realm": "acme-guest",
+        "target": {
+          "user_id": "8c06ad36-aee2-5260-8446-345ec19b3652",
+          "username": "sam.rivera"
+        },
+        "before": {
+          "credentials": {
+            "b53fa497-d265-424f-a0a8-3f92021c356a": {
+              "createdDate": 1793900231035,
+              "id": "b53fa497-d265-424f-a0a8-3f92021c356a",
+              "type": "password"
+            }
+          }
+        },
+        "after": {
+          "changed": true,
+          "temporary": true
+        },
+        "reversible": false,
+        "evidence": {
+          "tool_call_ids": [
+            "call_144096e612ca4ec54e1cfcba",
+            "call_1c3cd0a3e768334973a195d0",
+            "call_7f0f75e1d1de126a928e218a",
+            "call_c8a8a306ea4ff15cb96f5426",
+            "call_480944edb85ba96165b7a0f2"
+          ],
+          "screenshot_key": "279ec2ad-4577-43a5-9e3d-5f6a6b130ed4",
+          "vision_verdict": {
+            "verdict": "UNSURE",
+            "reason": "The screenshot shows the Keycloak user credentials page for sam.rivera with a 'Reset password' button and a 'Credential Reset' button, indicating the capability to reset a password. However, the screenshot does not show any evidence that a password reset has actually been performed (e.g., no confirmation dialog, no updated timestamp, no temporary password flag). The claim that the password was reset and is now temporary cannot be verified from this static image alone."
+          }
+        },
+        "irreversible_reason": "Original credential material is never exported",
+        "id": "b13ee35fe0a65d372f3dee9b"
+      }
+    ],
+    "policy": {
+      "outcome": "AUTO",
+      "auto_eligible": true,
+      "rule_ids": [
+        "R7"
+      ],
+      "requires_device": [
+        "sam.rivera"
+      ],
+      "requires_human": false
+    },
+    "model_calls": [
+      {
+        "requested_model": "clef-flash",
+        "returned_model": "clef-flash",
+        "model_id_verified": true,
+        "seconds": 0.4119203699956415,
+        "usage": {
+          "input_tokens": 358,
+          "output_tokens": 0
+        }
+      },
+      {
+        "requested_model": "nemotron-3.5-content-safety",
+        "returned_model": "nemotron-3.5-content-safety",
+        "model_id_verified": true,
+        "seconds": 1.3552957720094128,
+        "usage": {
+          "prompt_tokens": 501,
+          "completion_tokens": 28,
+          "total_tokens": 529,
+          "prompt_tokens_details": {
+            "cached_tokens": 352
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        }
+      },
+      {
+        "requested_model": "deepseek-v4.1-flash-1017",
+        "returned_model": "deepseek-v4.1-flash-1017",
+        "model_id_verified": true,
+        "seconds": 0.512883536008303,
+        "usage": {
+          "prompt_tokens": 1159,
+          "completion_tokens": 51,
+          "total_tokens": 1210,
+          "prompt_tokens_details": {
+            "cached_tokens": 1024
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        }
+      },
+      {
+        "requested_model": "deepseek-v4.1-flash-1017",
+        "returned_model": "deepseek-v4.1-flash-1017",
+        "model_id_verified": true,
+        "seconds": 0.5763421079900581,
+        "usage": {
+          "prompt_tokens": 1308,
+          "completion_tokens": 80,
+          "total_tokens": 1388,
+          "prompt_tokens_details": {
+            "cached_tokens": 1152
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        }
+      },
+      {
+        "requested_model": "deepseek-v4.1-flash-1017",
+        "returned_model": "deepseek-v4.1-flash-1017",
+        "model_id_verified": true,
+        "seconds": 0.8197152460052166,
+        "usage": {
+          "prompt_tokens": 1518,
+          "completion_tokens": 106,
+          "total_tokens": 1624,
+          "prompt_tokens_details": {
+            "cached_tokens": 1280
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        }
+      },
+      {
+        "requested_model": "deepseek-v4.1-flash-1017",
+        "returned_model": "deepseek-v4.1-flash-1017",
+        "model_id_verified": true,
+        "seconds": 0.7125359810015652,
+        "usage": {
+          "prompt_tokens": 1666,
+          "completion_tokens": 75,
+          "total_tokens": 1741,
+          "prompt_tokens_details": {
+            "cached_tokens": 1408
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        }
+      },
+      {
+        "requested_model": "deepseek-v4.1-flash-1017",
+        "returned_model": "deepseek-v4.1-flash-1017",
+        "model_id_verified": true,
+        "seconds": 0.6318259940017015,
+        "usage": {
+          "prompt_tokens": 1843,
+          "completion_tokens": 43,
+          "total_tokens": 1886,
+          "prompt_tokens_details": {
+            "cached_tokens": 1664
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        }
+      },
+      {
+        "requested_model": "mimo-v2.6-pro",
+        "returned_model": "mimo-v2.6-pro",
+        "model_id_verified": true,
+        "seconds": 2.117080594995059,
+        "usage": {
+          "prompt_tokens": 1788,
+          "completion_tokens": 102,
+          "total_tokens": 1890,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        }
+      },
+      {
+        "requested_model": "deepseek-v4.1-flash-1017",
+        "returned_model": "deepseek-v4.1-flash-1017",
+        "model_id_verified": true,
+        "seconds": 0.7169055839913199,
+        "usage": {
+          "prompt_tokens": 2006,
+          "completion_tokens": 170,
+          "total_tokens": 2176,
+          "prompt_tokens_details": {
+            "cached_tokens": 1792
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        }
+      }
+    ],
+    "change_set_hash": "663292530c365bd96089430d27f4bd71522cf2069ff775f7e271ea95af56a7ed",
+    "destroy_proof": {
+      "docker_inspect": "No such container",
+      "observed_at": "2026-11-05T17:45:55.586491+00:00",
+      "container_id": "69f09da86ee350482d592a3eef33e96f57d5b502df021e1c6de801756e08fabc"
+    },
+    "receipt": {
+      "payload": {
+        "receipt_id": "417e2bfd-554d-448f-847b-870b4600f616",
+        "call_id": "c237730d-c356-4a05-b049-fa7f8ae14403",
+        "realm": "acme-guest",
+        "created_at": "2026-11-05T17:45:59.078883+00:00",
+        "status": "APPLIED_VERIFIED",
+        "change_set_hash": "663292530c365bd96089430d27f4bd71522cf2069ff775f7e271ea95af56a7ed",
+        "prod_state_digest_before": "3c6bb7e4564d1a1783b37579ddd9967ca90d010265890346bb8e152feea72474",
+        "prod_state_digest_after": "f7272f5614cf21f31a3197d8963ac8873d60361161f025cfe5d0f58c832d6928",
+        "reason": null,
+        "effects": [
+          {
+            "id": "b13ee35fe0a65d372f3dee9b",
+            "type": "user.password.reset",
+            "realm": "acme-guest",
+            "target": {
+              "user_id": "8c06ad36-aee2-5260-8446-345ec19b3652",
+              "username": "sam.rivera"
+            },
+            "before": {
+              "credentials": {
+                "b53fa497-d265-424f-a0a8-3f92021c356a": {
+                  "createdDate": 1793900231035,
+                  "id": "b53fa497-d265-424f-a0a8-3f92021c356a",
+                  "type": "password"
+                }
+              }
+            },
+            "after": {
+              "changed": true,
+              "temporary": true
+            },
+            "reversible": false,
+            "irreversible_reason": "Original credential material is never exported",
+            "evidence": {
+              "tool_call_ids": [
+                "call_144096e612ca4ec54e1cfcba",
+                "call_1c3cd0a3e768334973a195d0",
+                "call_7f0f75e1d1de126a928e218a",
+                "call_c8a8a306ea4ff15cb96f5426",
+                "call_480944edb85ba96165b7a0f2"
+              ],
+              "screenshot_key": "279ec2ad-4577-43a5-9e3d-5f6a6b130ed4",
+              "vision_verdict": {
+                "verdict": "UNSURE",
+                "reason": "The screenshot shows the Keycloak user credentials page for sam.rivera with a 'Reset password' button and a 'Credential Reset' button, indicating the capability to reset a password. However, the screenshot does not show any evidence that a password reset has actually been performed (e.g., no confirmation dialog, no updated timestamp, no temporary password flag). The claim that the password was reset and is now temporary cannot be verified from this static image alone."
+              }
+            }
+          }
+        ],
+        "signatures": [
+          {
+            "kind": "device",
+            "payload": {
+              "change_set_hash": "663292530c365bd96089430d27f4bd71522cf2069ff775f7e271ea95af56a7ed",
+              "decision": "approve",
+              "ts": "2026-11-05T17:45:57.045054+00:00",
+              "username": "sam.rivera"
+            },
+            "signature": "llnOm6X1OCkzyKvw-1uzx0OVMH0wJQ5NDA3ooDFJ2ZoWc_2g6oRrr67cue_GLV63hwSqzWzVzpjyrCehgNMDlQ"
+          }
+        ],
+        "actual_effects": [
+          {
+            "type": "user.password.reset",
+            "realm": "acme-guest",
+            "target": {
+              "user_id": "8c06ad36-aee2-5260-8446-345ec19b3652",
+              "username": "sam.rivera"
+            },
+            "before": {
+              "credentials": {
+                "b53fa497-d265-424f-a0a8-3f92021c356a": {
+                  "id": "b53fa497-d265-424f-a0a8-3f92021c356a",
+                  "type": "password",
+                  "createdDate": 1793900231035
+                }
+              }
+            },
+            "after": {
+              "changed": true,
+              "temporary": true
+            },
+            "reversible": false,
+            "evidence": {
+              "tool_call_ids": []
+            },
+            "irreversible_reason": "Original credential material is never exported",
+            "id": "b13ee35fe0a65d372f3dee9b"
+          }
+        ],
+        "rollback": [],
+        "verified": true,
+        "context": {
+          "call_status": "SUBMITTING",
+          "twin": {
+            "twin_id": "6370e7cc-421b-4261-b723-4188bd272229",
+            "container_id": "69f09da86ee350482d592a3eef33e96f57d5b502df021e1c6de801756e08fabc",
+            "realm": "acme-guest",
+            "seed_version": "20261105T174328608491Z-3c6bb7e4564d",
+            "prod_state_digest": "3c6bb7e4564d1a1783b37579ddd9967ca90d010265890346bb8e152feea72474",
+            "created_at": "2026-11-05T17:44:42.411085+00:00",
+            "expires_monotonic": 84282.713895667,
+            "status": "READY",
+            "pooled": true,
+            "claimed": true,
+            "ip": "172.30.0.5",
+            "image_digest": "sha256:72ff271bf03dcbcee94f39bfc89a00d14dd80b7017b8cf86a7c7f2b40600869b",
+            "limits": {
+              "runtime": "runsc",
+              "memory_bytes": 1610612736,
+              "nano_cpus": 2000000000,
+              "pids_limit": 512,
+              "read_only_root": true,
+              "cap_drop": [
+                "ALL"
+              ],
+              "binds": null,
+              "ulimits": [
+                {
+                  "Name": "nproc",
+                  "Hard": 128,
+                  "Soft": 128
+                }
+              ]
+            },
+            "boot_seconds": 27.597245604993077,
+            "claimed_at": "2026-11-05T17:45:13.275935+00:00",
+            "running": true,
+            "container_state": {
+              "Running": true,
+              "OOMKilled": false,
+              "ExitCode": 0
+            },
+            "frozen": true
+          },
+          "destroy_proof": {
+            "docker_inspect": "No such container",
+            "observed_at": "2026-11-05T17:45:55.586491+00:00",
+            "container_id": "69f09da86ee350482d592a3eef33e96f57d5b502df021e1c6de801756e08fabc"
+          },
+          "transcript_sha256": "cdae88afe63c6cf468422bc760946825e958408e8206bdbc215fe3df7e646f4b",
+          "models": [
+            {
+              "requested_model": "clef-flash",
+              "returned_model": "clef-flash",
+              "model_id_verified": true,
+              "seconds": 0.4119203699956415,
+              "usage": {
+                "input_tokens": 358,
+                "output_tokens": 0
+              }
+            },
+            {
+              "requested_model": "nemotron-3.5-content-safety",
+              "returned_model": "nemotron-3.5-content-safety",
+              "model_id_verified": true,
+              "seconds": 1.3552957720094128,
+              "usage": {
+                "prompt_tokens": 501,
+                "completion_tokens": 28,
+                "total_tokens": 529,
+                "prompt_tokens_details": {
+                  "cached_tokens": 352
+                },
+                "completion_tokens_details": {
+                  "reasoning_tokens": 0
+                }
+              }
+            },
+            {
+              "requested_model": "deepseek-v4.1-flash-1017",
+              "returned_model": "deepseek-v4.1-flash-1017",
+              "model_id_verified": true,
+              "seconds": 0.512883536008303,
+              "usage": {
+                "prompt_tokens": 1159,
+                "completion_tokens": 51,
+                "total_tokens": 1210,
+                "prompt_tokens_details": {
+                  "cached_tokens": 1024
+                },
+                "completion_tokens_details": {
+                  "reasoning_tokens": 0
+                }
+              }
+            },
+            {
+              "requested_model": "deepseek-v4.1-flash-1017",
+              "returned_model": "deepseek-v4.1-flash-1017",
+              "model_id_verified": true,
+              "seconds": 0.5763421079900581,
+              "usage": {
+                "prompt_tokens": 1308,
+                "completion_tokens": 80,
+                "total_tokens": 1388,
+                "prompt_tokens_details": {
+                  "cached_tokens": 1152
+                },
+                "completion_tokens_details": {
+                  "reasoning_tokens": 0
+                }
+              }
+            },
+            {
+              "requested_model": "deepseek-v4.1-flash-1017",
+              "returned_model": "deepseek-v4.1-flash-1017",
+              "model_id_verified": true,
+              "seconds": 0.8197152460052166,
+              "usage": {
+                "prompt_tokens": 1518,
+                "completion_tokens": 106,
+                "total_tokens": 1624,
+                "prompt_tokens_details": {
+                  "cached_tokens": 1280
+                },
+                "completion_tokens_details": {
+                  "reasoning_tokens": 0
+                }
+              }
+            },
+            {
+              "requested_model": "deepseek-v4.1-flash-1017",
+              "returned_model": "deepseek-v4.1-flash-1017",
+              "model_id_verified": true,
+              "seconds": 0.7125359810015652,
+              "usage": {
+                "prompt_tokens": 1666,
+                "completion_tokens": 75,
+                "total_tokens": 1741,
+                "prompt_tokens_details": {
+                  "cached_tokens": 1408
+                },
+                "completion_tokens_details": {
+                  "reasoning_tokens": 0
+                }
+              }
+            },
+            {
+              "requested_model": "deepseek-v4.1-flash-1017",
+              "returned_model": "deepseek-v4.1-flash-1017",
+              "model_id_verified": true,
+              "seconds": 0.6318259940017015,
+              "usage": {
+                "prompt_tokens": 1843,
+                "completion_tokens": 43,
+                "total_tokens": 1886,
+                "prompt_tokens_details": {
+                  "cached_tokens": 1664
+                },
+                "completion_tokens_details": {
+                  "reasoning_tokens": 0
+                }
+              }
+            },
+            {
+              "requested_model": "mimo-v2.6-pro",
+              "returned_model": "mimo-v2.6-pro",
+              "model_id_verified": true,
+              "seconds": 2.117080594995059,
+              "usage": {
+                "prompt_tokens": 1788,
+                "completion_tokens": 102,
+                "total_tokens": 1890,
+                "prompt_tokens_details": {
+                  "cached_tokens": 0
+                },
+                "completion_tokens_details": {
+                  "reasoning_tokens": 0
+                }
+              }
+            },
+            {
+              "requested_model": "deepseek-v4.1-flash-1017",
+              "returned_model": "deepseek-v4.1-flash-1017",
+              "model_id_verified": true,
+              "seconds": 0.7169055839913199,
+              "usage": {
+                "prompt_tokens": 2006,
+                "completion_tokens": 170,
+                "total_tokens": 2176,
+                "prompt_tokens_details": {
+                  "cached_tokens": 1792
+                },
+                "completion_tokens_details": {
+                  "reasoning_tokens": 0
+                }
+              }
+            }
+          ],
+          "egress_events": [],
+          "policy": {
+            "outcome": "AUTO",
+            "auto_eligible": true,
+            "rule_ids": [
+              "R7"
+            ],
+            "requires_device": [
+              "sam.rivera"
+            ],
+            "requires_human": false
+          },
+          "workload_origin": "live_planner",
+          "simulated_device": true
+        }
+      },
+      "signature": "u_k3jOo8Y1WavGLRpqiCmAoIxOsqKBeA1a8SzHpLPghM9Qw_eNYgfUwSTriORv1SXjK760jv7hYb0-cYCXmIVQ",
+      "signer_public_key": {
+        "kty": "EC",
+        "crv": "P-256",
+        "x": "ADkko8mByEGaF4FKRSCG1Lwn0f80ItPEKl6q1ZYpG6w",
+        "y": "Uscqi97OU7ObRIpJ-U9VmyhRkQrvGZ5y7TvBfHZHpk4",
+        "ext": true,
+        "key_ops": [
+          "verify"
+        ]
+      }
+    },
+    "simulated_device": true
+  }
+}

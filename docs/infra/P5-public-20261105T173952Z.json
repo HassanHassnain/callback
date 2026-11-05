@@ -1,0 +1,109 @@
+{
+  "observed_at": "2026-11-05T17:39:52.619292+00:00",
+  "realm": "acme-guest",
+  "simulated": "device signer and decryptor; real public HTTPS, Vultr planner, twin, effects, executor and Keycloak",
+  "checks": {
+    "frozen_destroyed_proposal": false,
+    "one_sam_reset": false,
+    "r7_auto_eligible": false,
+    "exact_proposal_hash": false,
+    "actual_vultr_models": true
+  },
+  "all_passed": false,
+  "call": {
+    "call_id": "fa5f152b-8732-4975-82ba-2f4fdb837515",
+    "realm": "acme-guest",
+    "status": "ACTIVE",
+    "effects": [],
+    "policy": {
+      "outcome": "NO_CHANGE",
+      "rule_ids": [],
+      "requires_device": [],
+      "requires_human": false
+    },
+    "model_calls": [
+      {
+        "requested_model": "clef-flash",
+        "returned_model": "clef-flash",
+        "model_id_verified": true,
+        "seconds": 0.41086808100226335,
+        "usage": {
+          "input_tokens": 356,
+          "output_tokens": 0
+        }
+      },
+      {
+        "requested_model": "nemotron-3.5-content-safety",
+        "returned_model": "nemotron-3.5-content-safety",
+        "model_id_verified": true,
+        "seconds": 1.3133613749960205,
+        "usage": {
+          "prompt_tokens": 499,
+          "completion_tokens": 27,
+          "total_tokens": 526,
+          "prompt_tokens_details": {
+            "cached_tokens": 336
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        }
+      },
+      {
+        "requested_model": "deepseek-v4.1-flash-1017",
+        "returned_model": "deepseek-v4.1-flash-1017",
+        "model_id_verified": true,
+        "seconds": 0.7726063589943806,
+        "usage": {
+          "prompt_tokens": 1157,
+          "completion_tokens": 59,
+          "total_tokens": 1216,
+          "prompt_tokens_details": {
+            "cached_tokens": 256
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        }
+      },
+      {
+        "requested_model": "deepseek-v4.1-flash-1017",
+        "returned_model": "deepseek-v4.1-flash-1017",
+        "model_id_verified": true,
+        "seconds": 0.5694013419997646,
+        "usage": {
+          "prompt_tokens": 1314,
+          "completion_tokens": 80,
+          "total_tokens": 1394,
+          "prompt_tokens_details": {
+            "cached_tokens": 1152
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        }
+      },
+      {
+        "requested_model": "deepseek-v4.1-flash-1017",
+        "returned_model": "deepseek-v4.1-flash-1017",
+        "model_id_verified": true,
+        "seconds": 1.1775384149950696,
+        "usage": {
+          "prompt_tokens": 1505,
+          "completion_tokens": 224,
+          "total_tokens": 1729,
+          "prompt_tokens_details": {
+            "cached_tokens": 1280
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        }
+      }
+    ],
+    "change_set_hash": null,
+    "destroy_proof": null,
+    "receipt": null,
+    "simulated_device": true
+  }
+}
