@@ -182,6 +182,8 @@ def ensure_firewall(api, state, role, mac_ip):
         source_ip = state["resources"].get(source_role, {}).get("vpc_ip")
         if source_ip:
             desired.append((port, source_ip, 32))
+    if role == "sandbox" and state["resources"].get("control", {}).get("vpc_ip"):
+        desired.append(("8082", state["resources"]["control"]["vpc_ip"], 32))
     for port, subnet, mask in desired:
         if any(r.get("protocol", "").lower() == "tcp" and r.get("port") == port
                and r.get("subnet") == subnet and r.get("subnet_size") == mask for r in rules):

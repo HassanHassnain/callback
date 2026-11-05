@@ -33,6 +33,11 @@ def firewall(state, role):
     forward = []
     if role == "control":
         rules += ["tcp dport {80, 443} accept"]
+    if role == "sandbox":
+        rules += [f"ip saddr {vpc_ip(state, 'control')} tcp dport 8082 accept",
+                  "ip saddr 172.30.0.0/24 ip daddr 172.30.0.1 tcp dport {53, 3128} accept",
+                  "ip saddr 172.30.0.0/24 ip daddr 172.30.0.1 udp dport 53 accept"]
+        forward += ["ip saddr 172.30.0.0/24 drop"]
     for target_role, port, source_role in [("prod-idp", 8080, "executor"),
                                            ("executor", 8081, "control")]:
         if role == target_role:
@@ -65,6 +70,11 @@ def configure_host(state, role):
         source_role, port = ("executor", 8080) if role == "prod-idp" else ("control", 8081)
         ufw_rules.append(f"ufw allow in proto tcp from {vpc_ip(state, source_role)} "
                          f"to {vpc_ip(state, role)} port {port} comment 'Callback VPC boundary'")
+    if role == "sandbox":
+        ufw_rules += [f"ufw allow in proto tcp from {vpc_ip(state, 'control')} to {vpc_ip(state, role)} port 8082",
+                      "ufw allow in proto tcp from 172.30.0.0/24 to 172.30.0.1 port 3128",
+                      "ufw allow in proto udp from 172.30.0.0/24 to 172.30.0.1 port 53",
+                      "ufw allow in proto tcp from 172.30.0.0/24 to 172.30.0.1 port 53"]
     ufw_commands = "\n".join(ufw_rules) or ":"
     script = f"""set -euo pipefail
 install -d -m 0755 /etc/callback
@@ -125,6 +135,16 @@ def deploy(state):
                "volumes": {"caddy_data": {}, "caddy_config": {}}}
     if state.get("executor_public_key"):
         compose["services"]["caddy"]["volumes"].append("./executor-pubkey.json:/srv/executor-pubkey.json:ro")
+    if state.get("attacker_domain"):
+        content = (staging / "Caddyfile").read_text()
+        content += "\nhttp://" + state["attacker_domain"] + " {\n root * /srv/attacker\n try_files {path} /index.html\n file_server\n}\n"
+        (staging / "Caddyfile").write_text(content)
+        compose["services"]["caddy"]["volumes"].append("./attacker-site:/srv/attacker:ro")
+        attacker = staging / "attacker-site"
+        attacker.mkdir(exist_ok=True)
+        attacker.joinpath("index.html").write_text((ROOT / "web/attacker-site/index.html").read_text()
+            .replace("ATTACKER_DOMAIN", state["attacker_domain"]))
+        upload(state, "control", [attacker])
     (staging / "compose.yaml").write_text(yaml.safe_dump(compose))
     upload(state, "control", [staging / "Caddyfile", staging / "compose.yaml"])
     ssh(state, "control", "set -e\ncd /opt/callback\ndocker compose up -d\n", timeout=60)

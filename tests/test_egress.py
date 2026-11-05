@@ -63,7 +63,7 @@ def test_proxy_allows_only_exact_get_and_checks_encoded_canary():
             assert writer.output.startswith(f"HTTP/1.1 {status}".encode())
         assert len(forwarded) == 2
         assert leaks == ["http"]
-        assert len(events) == 6
+        assert len(events) == 7
         await guard.client.aclose()
 
     asyncio.run(run())

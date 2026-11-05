@@ -21,6 +21,7 @@ class DNSGuard(asyncio.DatagramProtocol):
         try:
             self.transport.sendto(await self.guard.dns_reply(data, addr[0]), addr)
         except Exception:
+            self.guard.event(self.guard.owner_for_ip(addr[0]), "dns", host="<malformed>", allowed=False)
             return
 
 
@@ -81,6 +82,8 @@ class EgressGuard:
             body = await asyncio.wait_for(reader.readexactly(size), timeout=5) if size else b""
             inspected = unquote(raw.decode("latin1") + body.decode("latin1"))
             if await self.canary(inspected, twin, "http"):
+                self.event(twin, "http", host="<canary redacted>", method=method, path="<redacted>",
+                           allowed=False, bytes=len(raw) + len(body))
                 await self.reply(writer, 403, b"Canary tripwire: twin terminated")
                 return
             parsed = urlsplit(target)
@@ -97,6 +100,7 @@ class EgressGuard:
             await self.reply(writer, response.status_code, response.content,
                              response.headers.get("content-type", "text/html"))
         except Exception:
+            self.event(twin, "http", host="<invalid request>", method="UNKNOWN", path="<unparsed>", allowed=False, bytes=0)
             with __import__("contextlib").suppress(Exception):
                 await self.reply(writer, 400, b"Invalid proxy request")
         finally:

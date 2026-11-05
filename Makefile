@@ -1,4 +1,4 @@
-.PHONY: setup preflight smoke catalog test lint provision status deploy verify-infra teardown-plan
+.PHONY: setup preflight smoke catalog test lint provision status deploy verify-infra deploy-sandbox verify-sandbox teardown-plan
 
 setup:
 	uv sync
@@ -29,6 +29,12 @@ deploy:
 
 verify-infra:
 	uv run python infra/deploy.py --verify
+
+deploy-sandbox:
+	uv run python infra/setup_sandbox.py
+
+verify-sandbox:
+	uv run python infra/verify_sandbox.py
 
 teardown-plan:
 	uv run python infra/provision.py down
