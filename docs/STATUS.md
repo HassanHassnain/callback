@@ -65,8 +65,10 @@ remain mandatory for every other route. See `docs/account-setup.md` for setup.
 P4–P10 are not completed. State-diff and policy modules have initial unit coverage;
 the public React text call/console preview and agent loop are live. A real Sam
 reset reached R7 / DEVICE_REQUIRED, with actual visual evidence and twin destruction.
-P4 scripted acceptance is still in progress; no device enrollment, production apply
-or benchmark is available yet. Production apply still returns 501.
+P4 text cases and the separately labelled operator containment replay pass.
+P5 signatures, encrypted delivery and executor apply are under construction.
+No device enrollment, production apply or benchmark is available yet; apply
+still returns 501 on the deployed executor.
 
 ## Known limits
 

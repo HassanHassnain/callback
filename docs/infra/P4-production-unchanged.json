@@ -1,0 +1,39 @@
+{
+  "observed_at": "2026-11-05T17:08:31.163280+00:00",
+  "current_signed_seed": "seed-acme-20261105T170729225760Z-f265ac026859.json",
+  "cases": {
+    "dana-lost-phone": {
+      "baseline_seed_version": "20261105T132755380253Z-8bfcaf7bf15b",
+      "user_state_before": "71d61e224ea727e8f30fd5100e6f1bb9a85409d20e33e8b921480a6c4005866b",
+      "user_state_after": "71d61e224ea727e8f30fd5100e6f1bb9a85409d20e33e8b921480a6c4005866b",
+      "identity_unchanged": true,
+      "normalized_full_state_unchanged": true,
+      "signed_seeds_verified": true
+    },
+    "hostile-link": {
+      "baseline_seed_version": "20261105T132755380253Z-8bfcaf7bf15b",
+      "user_state_before": "71d61e224ea727e8f30fd5100e6f1bb9a85409d20e33e8b921480a6c4005866b",
+      "user_state_after": "71d61e224ea727e8f30fd5100e6f1bb9a85409d20e33e8b921480a6c4005866b",
+      "identity_unchanged": true,
+      "normalized_full_state_unchanged": true,
+      "signed_seeds_verified": true
+    },
+    "sam-reset": {
+      "baseline_seed_version": "20261105T165521654559Z-f265ac026859",
+      "user_state_before": "71d61e224ea727e8f30fd5100e6f1bb9a85409d20e33e8b921480a6c4005866b",
+      "user_state_after": "71d61e224ea727e8f30fd5100e6f1bb9a85409d20e33e8b921480a6c4005866b",
+      "identity_unchanged": true,
+      "normalized_full_state_unchanged": true,
+      "signed_seeds_verified": true
+    },
+    "operator-scripted-fault": {
+      "baseline_seed_version": "20261105T170326726012Z-f265ac026859",
+      "user_state_before": "71d61e224ea727e8f30fd5100e6f1bb9a85409d20e33e8b921480a6c4005866b",
+      "user_state_after": "71d61e224ea727e8f30fd5100e6f1bb9a85409d20e33e8b921480a6c4005866b",
+      "identity_unchanged": true,
+      "normalized_full_state_unchanged": true,
+      "signed_seeds_verified": true
+    }
+  },
+  "all_identity_checks_passed": true
+}

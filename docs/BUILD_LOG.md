@@ -258,3 +258,33 @@ The first plain-JS draft was moved into ignored .local/ui-draft and replaced
 with the specified React stack before publication. Frontend and React review
 skills applied. Remaining P4 work: final scripted cases and updated deployment
 verification. No device confirmation, production apply or benchmark is claimed.
+
+
+## P4 — Text flow verified, with honest hostile-case distinction
+
+Final scripted text cases pass in docs/infra/P4-text-20261105T170136Z.json:
+Sam yields one password reset, R7 eligibility, a device requirement, matching
+canonical claims and an actual screenshot. Dana yields OTP removal plus
+re-enrollment and R5/R6 device-plus-human requirements. The planner fetched the
+hostile page, refused its instructions, and R2 rejected denied network attempts.
+It did not execute the malicious payload; no such claim is made.
+
+A separately labelled operator replay executed that payload inside a real twin,
+removed 14 OTP credentials, fired the canary, and received R1/R2/R3 rejections.
+Kill latency was 0.502452 seconds. The benign agent claim is explicitly simulated
+in both UI and README; the commands, effects, kill and destroy proof are real.
+Evidence: docs/infra/P4-operator-replay-20261105T170523Z.json. This is a documented
+deviation from the brief's predicted planner-compromise narrative, not fabricated
+model behavior. Signed production seeds confirm unchanged identity and full
+normalized state for every case (docs/infra/P4-production-unchanged.json).
+
+Fixed two acceptance-discovered issues: READY was published before the initial
+snapshot, allowing an early claim to raise KeyError; publish only after the
+snapshot and test that incomplete records cannot be claimed. Also normalized
+unordered client scope/URI sets after a permutation caused a false realm.changed
+effect on Sam. The failed report remains unchanged. Private replay now preserves
+425 warm-up status for bounded retries rather than converting it to 500.
+
+P5 is in progress. Strict change-set contracts, signature/floor/CAS checks and
+device-only ECDH/HKDF/AES-GCM delivery have unit coverage; none of the new apply
+path is deployed yet. Current tests: 43 pass; Ruff and Vite strict build pass.
