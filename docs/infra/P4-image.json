@@ -1,0 +1,7 @@
+{
+  "observed_at": "2026-11-05T17:37:14.120030+00:00",
+  "registry": "sjc.vultrcr.com/callbackfec1ca39/twin:p4",
+  "digest": "sha256:72ff271bf03dcbcee94f39bfc89a00d14dd80b7017b8cf86a7c7f2b40600869b",
+  "source_tag": "callback/twin:p4",
+  "push_verified": true
+}

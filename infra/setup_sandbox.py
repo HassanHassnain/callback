@@ -45,8 +45,8 @@ def main():
     config = json.loads(config_path.read_text()) if config_path.exists() else {"api_secret": secrets.token_urlsafe(48)}
     state["attacker_domain"] = "it-diagnostics-" + state["resources"]["control"]["main_ip"].replace(".", "-") + ".sslip.io"
     config.update({"owner_id": state["owner_id"], "executor_public_key": state["executor_public_key"],
-        "image": "callback/twin:p3", "control_ip": state["resources"]["control"]["main_ip"],
-        "attacker_domain": state["attacker_domain"], "pool_per_realm": {"acme": 2, "acme-guest": 0}})
+        "image": state.get("twin_image", "callback/twin:p4"), "control_ip": state["resources"]["control"]["main_ip"],
+        "attacker_domain": state["attacker_domain"], "pool_per_realm": config.get("pool_per_realm", {"acme": 2, "acme-guest": 0})})
     config_path.write_text(json.dumps(config))
     config_path.chmod(0o600)
     control = staging / "sandbox.json"
