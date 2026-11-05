@@ -3,7 +3,7 @@ import {api} from './api';
 import {createSlot,decrypt,enrollment,fingerprint,loadSlot,saveSlot,signed,verifyReceipt} from './crypto';
 import type {Box,Envelope,KeySlot} from './crypto';
 import type {Call} from './types';
-import {EffectCard,Json,Status} from './components';
+import {describeEffect,EffectCard,Json,Status} from './components';
 
 type Notice=(message:string)=>void;
 const message=(e:unknown)=>e instanceof Error?e.message:'Request failed';
@@ -44,5 +44,5 @@ export function DevicePage({notify}:{notify:Notice}){
 export function ReceiptPage({notify}:{notify:Notice}){
  const [receipt,setReceipt]=useState<Envelope>();const [verification,setVerification]=useState('Checking executor signature…');const [valid,setValid]=useState(false);const id=location.pathname.split('/').pop();
  useEffect(()=>{let live=true;(async()=>{try{const value=await api<Envelope>('/api/receipts/'+id);if(!live)return;setReceipt(value);const fp=await verifyReceipt(value);if(live){setValid(true);setVerification('Verified in this browser · executor key '+fp);}}catch(e){if(live){setVerification('Verification failed: '+message(e));notify(message(e));}}})();return()=>{live=false;};},[id,notify]);
- return <section className="workspace"><div className="eyebrow">INDEPENDENT EVIDENCE</div><h1>Signed receipt.</h1><p className={valid?'receipt-valid':'denied'} role="status">{verification}</p>{receipt&&<><Status value={String(receipt.payload.status)}/><p>Call {String(receipt.payload.call_id)}</p><p className="breakable">SHA-256 {String(receipt.payload.change_set_hash)}</p><Json value={receipt}/></>}</section>;
+ return <section className="workspace receipt-workspace"><div className="eyebrow">INDEPENDENT EVIDENCE</div><h1>Signed receipt.</h1>{receipt?.payload.realm==='acme-guest'&&<p className="preview">Guest test · simulated device signatures. Executor checks and identity changes are real.</p>}<p className={valid?'receipt-valid':verification.startsWith('Verification failed')?'denied':'subtle'} role="status">{verification}</p>{receipt&&<>{valid?<><Status value={String(receipt.payload.status)}/><dl className="receipt-facts"><div><dt>Call</dt><dd>{String(receipt.payload.call_id)}</dd></div><div><dt>Created</dt><dd>{String(receipt.payload.created_at)}</dd></div><div><dt>Exact change-set SHA-256</dt><dd>{String(receipt.payload.change_set_hash)}</dd></div><div><dt>Production before</dt><dd>{String(receipt.payload.prod_state_digest_before)}</dd></div><div><dt>Production after</dt><dd>{String(receipt.payload.prod_state_digest_after)}</dd></div></dl><div className="receipt-effects">{Array.isArray(receipt.payload.effects)&&receipt.payload.effects.map((effect,index)=><div key={index}><code>{(effect as Call['effects'][number]).target.username}</code><p>{describeEffect(effect as Call['effects'][number])}</p></div>)}</div></>:<p>Receipt content is unverified until the executor signature passes.</p>}<details className="receipt-raw"><summary>Inspect the complete signed receipt</summary><Json value={receipt}/></details></>}</section>;
 }
