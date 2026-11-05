@@ -1,0 +1,300 @@
+{
+  "call_id": "605af0ae-aa57-4b52-b0d3-6b1fdc56aee9",
+  "realm": "acme",
+  "created_at": "2026-11-05T12:59:19.963308+00:00",
+  "status": "AWAITING_DEVICE",
+  "policy": {
+    "outcome": "DEVICE_REQUIRED",
+    "auto_eligible": true,
+    "rule_ids": [
+      "R7"
+    ],
+    "requires_device": [
+      "sam.rivera"
+    ],
+    "requires_human": false
+  },
+  "effects": [
+    {
+      "type": "user.password.reset",
+      "realm": "acme",
+      "target": {
+        "user_id": "aa8de62e-2a4f-57dd-b372-7ce6f983f53b",
+        "username": "sam.rivera"
+      },
+      "before": {
+        "credentials": {
+          "57687861-3570-4d20-b77c-7b44aa70c739": {
+            "createdDate": 1793819194775,
+            "id": "57687861-3570-4d20-b77c-7b44aa70c739",
+            "type": "password"
+          }
+        }
+      },
+      "after": {
+        "changed": true,
+        "temporary": true
+      },
+      "reversible": false,
+      "evidence": {
+        "tool_call_ids": [
+          "call_afb04b6a357072cd5c89ec75",
+          "call_c9e16361b0312a7560f34d09",
+          "call_23d948fb6aceca07163ec5c2",
+          "call_4e833f282697136355d9e110",
+          "call_163a289d57992cb3f2516e75",
+          "call_db4296c7c46d4d7d5d2c6db2",
+          "call_6dccd2cf158be8431f7b89ee"
+        ],
+        "screenshot_key": "857c4be1-25cb-4244-9d61-5df26c9bfe38",
+        "vision_verdict": {
+          "verdict": "UNSURE",
+          "reason": "The screenshot shows the Keycloak user credentials page for sam.rivera with a password credential and a 'Reset password' button, which is consistent with the capability to perform a password reset. However, the screenshot does not show any evidence that a password reset has actually been performed (e.g., a changed timestamp, a temporary password flag, or a success message). The claim's 'after' state (changed: true, temporary: true) cannot be visually verified from this static image."
+        }
+      },
+      "irreversible_reason": "Original credential material is never exported",
+      "id": "642fd5481598d7534b899f0a"
+    }
+  ],
+  "risk": {
+    "social_engineering": 0.03622005879878998,
+    "pressure": 0.010091315023601055,
+    "bypass": 0.08882028609514236
+  },
+  "moderation": [
+    {
+      "flagged": false,
+      "flags": [
+        "None"
+      ]
+    },
+    {
+      "flagged": false,
+      "flags": [
+        "PII/Privacy"
+      ]
+    }
+  ],
+  "claim_comparison": [
+    {
+      "effect_id": "642fd5481598d7534b899f0a",
+      "mismatch": true
+    }
+  ],
+  "change_set_hash": "aeb6b9f100932ce564cf721309742efa3fce8f6095663008d26088938c6e1c1d",
+  "destroy_proof": {
+    "docker_inspect": "No such container",
+    "observed_at": "2026-11-05T13:05:45.921136+00:00",
+    "container_id": "3c48d6bbe4192032f524946854276a620e154d876aa42fbbc888c407639fc483"
+  },
+  "model_calls": [
+    {
+      "requested_model": "clef-flash",
+      "returned_model": "clef-flash",
+      "model_id_verified": true,
+      "seconds": 0.3234812629962107,
+      "usage": {
+        "input_tokens": 357,
+        "output_tokens": 0
+      }
+    },
+    {
+      "requested_model": "nemotron-3.5-content-safety",
+      "returned_model": "nemotron-3.5-content-safety",
+      "model_id_verified": true,
+      "seconds": 1.398576856998261,
+      "usage": {
+        "prompt_tokens": 500,
+        "completion_tokens": 27,
+        "total_tokens": 527,
+        "prompt_tokens_details": {
+          "cached_tokens": 336
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      }
+    },
+    {
+      "requested_model": "deepseek-v4.1-flash-1017",
+      "returned_model": "deepseek-v4.1-flash-1017",
+      "model_id_verified": true,
+      "seconds": 1.356087950989604,
+      "usage": {
+        "prompt_tokens": 965,
+        "completion_tokens": 88,
+        "total_tokens": 1053,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      }
+    },
+    {
+      "requested_model": "deepseek-v4.1-flash-1017",
+      "returned_model": "deepseek-v4.1-flash-1017",
+      "model_id_verified": true,
+      "seconds": 0.6176920249999966,
+      "usage": {
+        "prompt_tokens": 1246,
+        "completion_tokens": 78,
+        "total_tokens": 1324,
+        "prompt_tokens_details": {
+          "cached_tokens": 896
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      }
+    },
+    {
+      "requested_model": "deepseek-v4.1-flash-1017",
+      "returned_model": "deepseek-v4.1-flash-1017",
+      "model_id_verified": true,
+      "seconds": 0.9583505769987823,
+      "usage": {
+        "prompt_tokens": 1450,
+        "completion_tokens": 149,
+        "total_tokens": 1599,
+        "prompt_tokens_details": {
+          "cached_tokens": 1280
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      }
+    },
+    {
+      "requested_model": "clef-flash",
+      "returned_model": "clef-flash",
+      "model_id_verified": true,
+      "seconds": 0.5023543770075776,
+      "usage": {
+        "input_tokens": 568,
+        "output_tokens": 0
+      }
+    },
+    {
+      "requested_model": "nemotron-3.5-content-safety",
+      "returned_model": "nemotron-3.5-content-safety",
+      "model_id_verified": true,
+      "seconds": 1.4568630819994723,
+      "usage": {
+        "prompt_tokens": 498,
+        "completion_tokens": 30,
+        "total_tokens": 528,
+        "prompt_tokens_details": {
+          "cached_tokens": 336
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      }
+    },
+    {
+      "requested_model": "deepseek-v4.1-flash-1017",
+      "returned_model": "deepseek-v4.1-flash-1017",
+      "model_id_verified": true,
+      "seconds": 0.5637580019974848,
+      "usage": {
+        "prompt_tokens": 1632,
+        "completion_tokens": 114,
+        "total_tokens": 1746,
+        "prompt_tokens_details": {
+          "cached_tokens": 1536
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      }
+    },
+    {
+      "requested_model": "deepseek-v4.1-flash-1017",
+      "returned_model": "deepseek-v4.1-flash-1017",
+      "model_id_verified": true,
+      "seconds": 0.6084261170035461,
+      "usage": {
+        "prompt_tokens": 1800,
+        "completion_tokens": 85,
+        "total_tokens": 1885,
+        "prompt_tokens_details": {
+          "cached_tokens": 1536
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      }
+    },
+    {
+      "requested_model": "deepseek-v4.1-flash-1017",
+      "returned_model": "deepseek-v4.1-flash-1017",
+      "model_id_verified": true,
+      "seconds": 0.6157411700114608,
+      "usage": {
+        "prompt_tokens": 1922,
+        "completion_tokens": 73,
+        "total_tokens": 1995,
+        "prompt_tokens_details": {
+          "cached_tokens": 1792
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      }
+    },
+    {
+      "requested_model": "deepseek-v4.1-flash-1017",
+      "returned_model": "deepseek-v4.1-flash-1017",
+      "model_id_verified": true,
+      "seconds": 0.5107196750032017,
+      "usage": {
+        "prompt_tokens": 2100,
+        "completion_tokens": 72,
+        "total_tokens": 2172,
+        "prompt_tokens_details": {
+          "cached_tokens": 1920
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      }
+    },
+    {
+      "requested_model": "mimo-v2.6-pro",
+      "returned_model": "mimo-v2.6-pro",
+      "model_id_verified": true,
+      "seconds": 2.069255274007446,
+      "usage": {
+        "prompt_tokens": 1840,
+        "completion_tokens": 112,
+        "total_tokens": 1952,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      }
+    },
+    {
+      "requested_model": "deepseek-v4.1-flash-1017",
+      "returned_model": "deepseek-v4.1-flash-1017",
+      "model_id_verified": true,
+      "seconds": 1.6108348869893234,
+      "usage": {
+        "prompt_tokens": 2295,
+        "completion_tokens": 415,
+        "total_tokens": 2710,
+        "prompt_tokens_details": {
+          "cached_tokens": 2048
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      }
+    }
+  ],
+  "production_status": "UNCHANGED"
+}

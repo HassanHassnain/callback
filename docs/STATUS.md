@@ -63,8 +63,10 @@ remain mandatory for every other route. See `docs/account-setup.md` for setup.
 ## Not done
 
 P4–P10 are not completed. State-diff and policy modules have initial unit coverage;
-no call UI, agent loop, device enrollment, production apply path or benchmark
-is available yet. Production apply still returns 501.
+the public React text call/console preview and agent loop are live. A real Sam
+reset reached R7 / DEVICE_REQUIRED, with actual visual evidence and twin destruction.
+P4 scripted acceptance is still in progress; no device enrollment, production apply
+or benchmark is available yet. Production apply still returns 501.
 
 ## Known limits
 
@@ -94,9 +96,12 @@ is available yet. Production apply still returns 501.
 
 ## URLs and demo
 
-Infrastructure health (application not ready): https://callback-45-63-34-5.sslip.io/health
+Application health (text preview, production apply disabled): https://callback-45-63-34-5.sslip.io/health
 Executor public key: https://callback-45-63-34-5.sslip.io/executor-pubkey.json
 Source: https://github.com/HassanHassnain/callback
 
 Run `make setup`, `make preflight`, `make test`, `make lint`, and `make smoke`.
 `make smoke` applies the documented audio-only exception and checks functional output.
+
+Text preview: https://callback-45-63-34-5.sslip.io/call
+Operator console: https://callback-45-63-34-5.sslip.io/console

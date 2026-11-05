@@ -220,3 +220,41 @@ Post-restart checks also passed: a twin could not connect to a peer's Keycloak
 listener, and a canary in an HTTP header triggered a real kill, denied-egress
 event and destruction proof (`docs/infra/P3-post-restart.json`). The final
 image registry digest is in `docs/infra/P3-image.json`.
+
+
+## P4 — In progress: live text preview and helper hardening (2026-11-05)
+
+Implemented Vultr-only function orchestration, risk/moderation and tool-less
+vision, state effects, policy, a persistent daily budget, SQLite call storage
+with JSON audit archives, and a React/TypeScript/Tailwind Vite UI. Control runs
+as an unprivileged systemd service with a read-only system and no Docker group.
+Caddy serves the compiled UI and proxies localhost. Production apply is disabled.
+
+A real browser conversation staged Sam's temporary password reset, derived one
+user.password.reset effect, reached R7 / DEVICE_REQUIRED / auto_eligible, and
+destroyed the twin. The independent vision model returned UNSURE with a real
+Keycloak screenshot, correctly avoiding a claim that pixels establish password
+material. Evidence: docs/infra/P4-Sam-first.json. The first planner invented
+claim-type aliases, causing a false MISMATCH; narrowed end_call to the canonical
+effect enum and will rerun. Do not count that first result as perfect acceptance.
+
+Fixed seed fidelity: preserve the production user-profile configuration and
+bearer-only client metadata. Hash client-secret values inside trusted snapshot
+helpers for rotation detection, never export their plaintext. Clone password
+rehashing can change createdDate; effect CAS references signed production
+credential metadata while detecting the observed twin delta.
+
+Hardened fixed helpers with Python isolated mode and read-only source paths.
+A real regression planted a hostile user-site hook, started background work,
+froze the twin, verified work stopped and later exec returned 409, captured a
+real admin screenshot, and destroyed the twin. The trusted PID-1 anchor uses a
+different UID and reaps children. Evidence: docs/infra/P4-helper-regression.json.
+
+Current local verification: 35 Python tests and Ruff pass; npm run build passes
+with strict TypeScript. Published static bundle has zero configured-secret
+matches. Playwright exercised the real /call → /console flow; one transient
+ERR_NETWORK_CHANGED recovered. Desktop screenshot is in output/playwright/.
+The first plain-JS draft was moved into ignored .local/ui-draft and replaced
+with the specified React stack before publication. Frontend and React review
+skills applied. Remaining P4 work: final scripted cases and updated deployment
+verification. No device confirmation, production apply or benchmark is claimed.
