@@ -9,6 +9,7 @@ export interface Policy {outcome:string;rule_ids:string[];auto_eligible?:boolean
 export interface CallSummary {call_id:string;realm:string;status:string;created_at:string;production_status:string}
 export interface Call extends CallSummary {
  busy?:boolean; error?:string; change_set_hash?:string; snapshot_quality?:{quality:string;complete:boolean};
+ workload_origin?:string; simulated_claims?:boolean;
  transcript:{role:string;text:string;ts:string}[]; effects:Effect[]; egress:Event[];
  tool_log:{id:string;name:string;arguments:unknown;result?:unknown;started_at:string;finished_at?:string}[];
  moderation:{flagged:boolean;flags:string[]}[];risk:Record<string,number|string>;policy?:Policy;

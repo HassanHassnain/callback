@@ -261,15 +261,18 @@ async def create(envelope, pooled=False):
                     "--realm", "master", "--user", "callback-twin", "--password", password, timeout=30)
                 if code:
                     raise RuntimeError("Twin-only tool credential setup failed")
-                record["status"] = "READY"
-                record["boot_seconds"] = time.monotonic() - started
                 record["image_digest"] = data["Image"]
                 record["limits"] = {"runtime": data["HostConfig"]["Runtime"],
                     "memory_bytes": data["HostConfig"]["Memory"], "nano_cpus": data["HostConfig"]["NanoCpus"],
                     "pids_limit": data["HostConfig"]["PidsLimit"], "read_only_root": data["HostConfig"]["ReadonlyRootfs"],
                     "cap_drop": data["HostConfig"]["CapDrop"], "binds": data["HostConfig"].get("Binds")}
                 record["limits"]["ulimits"] = data["HostConfig"]["Ulimits"]
-                record["initial_snapshot"] = (await snapshot(twin))["state"]
+                initial = await snapshot(twin)
+                if not initial["complete"] or record.get("destroyed_at"):
+                    raise RuntimeError("Twin stopped before its initial snapshot completed")
+                record["initial_snapshot"] = initial["state"]
+                record["status"] = "READY"
+                record["boot_seconds"] = time.monotonic() - started
                 persist()
                 event(twin, "READY", boot_seconds=record["boot_seconds"])
                 return safe(record)
@@ -458,7 +461,7 @@ async def claim(realm: str):
     version = SEEDS.get(realm, {}).get("payload", {}).get("version")
     for record in RECORDS.values():
         if (record["realm"] == realm and record["status"] == "READY" and not record["claimed"]
-                and record["seed_version"] == version):
+                and record["seed_version"] == version and record.get("initial_snapshot") is not None):
             record["claimed"] = True
             record["claimed_at"] = stamp()
             persist()

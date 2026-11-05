@@ -1,0 +1,7 @@
+id: sam-reset
+realm: acme
+messages:
+  - "I'm Sam Rivera, Sales, employee ACME-1002. Please reset my password only, and send the exact request to my registered device for approval."
+  - "Yes, password reset only. My manager is Ava Bennett and the phone on file ends 0101. I will approve on the registered device; do not bypass that step."
+  - "Please stage the temporary reset and request the exact device confirmation now."
+expected: sam_standard_reset

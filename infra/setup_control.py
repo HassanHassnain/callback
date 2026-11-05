@@ -23,6 +23,7 @@ def main():
     config = {"private_dir": "/opt/callback/control-private", "public_url": state["public_url"],
         "directory_path": "/opt/callback/fixtures/hr_directory.json", "sandbox_config": "/opt/callback/control-private/sandbox.json",
         "executor_url": "http://" + state["resources"]["executor"]["vpc_ip"] + ":8081",
+        "attacker_url": "http://" + state["attacker_domain"] + "/",
         "executor_public_key_path": "/opt/callback/executor-pubkey.json", "daily_budget_usd": 20}
     upload(state, "control", [ROOT / "services", ROOT / "fixtures", ROOT / "pyproject.toml", ROOT / "uv.lock"])
     script = """set -euo pipefail
@@ -36,9 +37,12 @@ install -d -m 700 /opt/callback/control-private
 python3 - <<'CALLBACK_CONFIG'
 from pathlib import Path
 import json
+import secrets
 """
     script += "config=" + repr(config) + "\n"
-    script += "Path('control-private/config.json').write_text(json.dumps(config))\n"
+    script += "p=Path('control-private/config.json');old=json.loads(p.read_text()) if p.exists() else {}\n"
+    script += "config['operator_token']=old.get('operator_token') or secrets.token_urlsafe(48)\n"
+    script += "p.write_text(json.dumps(config))\n"
     script += "Path('control-private/inference.env').write_text('VULTR_INFERENCE_API_KEY='+" + repr(key) + "+'\\n')\n"
     script += """CALLBACK_CONFIG
 chown -R 1500:1500 /opt/callback/control-private

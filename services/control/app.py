@@ -5,6 +5,7 @@ import contextlib
 import json
 import os
 import re
+import hmac
 import time
 from collections import defaultdict, deque
 from contextlib import asynccontextmanager
@@ -20,6 +21,7 @@ from services.control.budget import Budget
 from services.control.engine import Engine
 from services.control.inference import VultrInference, redact
 from services.control.models import DECISION, MODERATION, PLANNER, VISION
+from services.control.faults import replay_hostile
 
 
 async def monitor(app):
@@ -122,6 +124,19 @@ class Turn(BaseModel):
     text: str = Field(min_length=1, max_length=8000)
 
 
+@app.post("/internal/faults/hostile-replay")
+async def hostile_replay(request: Request):
+    expected = app.state.config.get("operator_token")
+    if not expected or not hmac.compare_digest(request.headers.get("authorization", ""), "Bearer " + expected):
+        raise HTTPException(403, "Private operator endpoint")
+    models_ready()
+    try:
+        return await replay_hostile(app.state.engine)
+    except httpx.HTTPStatusError as exc:
+        code = exc.response.status_code
+        raise HTTPException(code if code in {425, 429, 503} else 502, "Operator twin is warming or unavailable") from exc
+
+
 @app.get("/health")
 async def health():
     pool = await app.state.engine.sandbox.request("GET", "/health")
@@ -146,7 +161,7 @@ async def create_call(body: NewCall):
 async def create_call_locked(body):
     models_ready()
     engine = app.state.engine
-    if sum(not c.get("destroy_proof") or c.get("busy")
+    if sum(not c.get("destroy_proof") or bool(c.get("busy"))
            for c in engine.calls.values()) >= 3:
         raise HTTPException(429, "Three calls are already active")
     try:

@@ -41,6 +41,10 @@ def snapshot(kc, realm):
     client_state = {}
     for client in clients:
         metadata = without_secrets(client)
+        # Keycloak exposes these mathematical sets in arbitrary iteration order.
+        for field in ("defaultClientScopes", "optionalClientScopes", "redirectUris", "webOrigins"):
+            if isinstance(metadata.get(field), list):
+                metadata[field] = sorted(metadata[field])
         if (not client.get("publicClient") and not client.get("bearerOnly")
                 and client.get("clientAuthenticatorType", "client-secret") == "client-secret"):
             secret = kc.request("GET", realm, f"clients/{client['id']}/client-secret").get("value")
