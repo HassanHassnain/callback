@@ -1,0 +1,38 @@
+[
+  {
+    "twin_id": "c7bc3be1-3c73-48b0-a293-4863ecf92612",
+    "status": "READY",
+    "boot_seconds": 24.409491946003982,
+    "image_digest": "sha256:d8f3882671f89069b90473724d23631571ac914b46d6ab019b123d491a0f1b80",
+    "limits": {
+      "runtime": "runsc",
+      "memory_bytes": 1610612736,
+      "nano_cpus": 2000000000,
+      "pids_limit": 512,
+      "read_only_root": true,
+      "cap_drop": [
+        "ALL"
+      ],
+      "binds": null
+    },
+    "seed_version": "20261105T112314476035Z-5ad67c09f3b6"
+  },
+  {
+    "twin_id": "2061ffca-0f60-4281-b59e-d198779fbb25",
+    "status": "READY",
+    "boot_seconds": 24.244168861005164,
+    "image_digest": "sha256:d8f3882671f89069b90473724d23631571ac914b46d6ab019b123d491a0f1b80",
+    "limits": {
+      "runtime": "runsc",
+      "memory_bytes": 1610612736,
+      "nano_cpus": 2000000000,
+      "pids_limit": 512,
+      "read_only_root": true,
+      "cap_drop": [
+        "ALL"
+      ],
+      "binds": null
+    },
+    "seed_version": "20261105T112314476035Z-5ad67c09f3b6"
+  }
+]

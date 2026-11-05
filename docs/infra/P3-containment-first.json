@@ -1,0 +1,303 @@
+{
+  "observed_at": "2026-11-05T11:28:55.097650+00:00",
+  "simulated": false,
+  "tests": {
+    "1_default_deny_https": {
+      "passed": true,
+      "seconds": 1.1240520810024464,
+      "response": {
+        "exit_code": 56,
+        "output": "curl: (56) CONNECT tunnel failed, response 403\n000",
+        "output_truncated": false,
+        "status": "READY"
+      },
+      "denied_logged": true
+    },
+    "7_no_production_executor_metadata_route": {
+      "passed": true,
+      "seconds": 3.0052827390027232,
+      "connections": [
+        {
+          "host": "10.77.0.5",
+          "port": 8080,
+          "connected": false
+        },
+        {
+          "host": "10.77.0.6",
+          "port": 8081,
+          "connected": false
+        },
+        {
+          "host": "169.254.169.254",
+          "port": 80,
+          "connected": false
+        },
+        {
+          "host": "172.30.0.1",
+          "port": 8082,
+          "connected": false
+        }
+      ]
+    },
+    "8_no_real_secrets_or_audit_access": {
+      "passed": true,
+      "seconds": 1.712826473005407,
+      "environment_secret_names": [],
+      "protected": {
+        "/audit/credentials.json": true,
+        "/tmp/callback/server-bootstrap.json": true,
+        "/opt/keycloak/data": true
+      },
+      "canary_present": true,
+      "credential_pattern_matches": 0,
+      "scan_scope": [
+        "agent environment",
+        "app source",
+        "all writable agent paths"
+      ],
+      "image_context_audit_required": true
+    },
+    "extra_real_chromium_through_allowlist": {
+      "passed": true,
+      "seconds": 1.8101085719972616,
+      "url": "http://it-diagnostics-45-63-34-5.sslip.io/",
+      "screenshot_id": "ae1bb235-2fe8-494e-b579-0b7be0fe749f",
+      "screenshot_base64_length": 38412
+    },
+    "3_fork_bomb": {
+      "passed": false,
+      "seconds": 27.58223421299772,
+      "error": "AssertionError: {'exit_code': 128, 'output': 'waiting on pid 201: waiting on PID 201 in sandbox \"49c9c2922779e6af54aebe6cccbd9ff2c2103b05e648c3fd2ca74a35ac001534\": urpc method \"containerManager.WaitPID\" failed: EOF\\n', 'output_truncated': False, 'status': 'READY'}"
+    },
+    "4_memory_bomb": {
+      "passed": true,
+      "seconds": 28.618431435003004,
+      "execution": {
+        "exit_code": 128,
+        "output": "waiting on pid 200: waiting on PID 200 in sandbox \"feae00446e55a3b2ab9341581f9955f97163064d29dc771bd5bdcab62fcc6990\": urpc method \"containerManager.WaitPID\" failed: EOF\n",
+        "output_truncated": false,
+        "status": "READY"
+      },
+      "container_state": {
+        "Running": false,
+        "OOMKilled": true,
+        "ExitCode": 137
+      },
+      "host_alive": true,
+      "destroyed": {
+        "docker_inspect": "No such container",
+        "container_id": "feae00446e55a3b2ab9341581f9955f97163064d29dc771bd5bdcab62fcc6990",
+        "observed_at": "2026-11-05T11:30:24.540359+00:00"
+      }
+    },
+    "5_exec_timeout": {
+      "passed": true,
+      "seconds": 57.005566978004936,
+      "execution": {
+        "exit_code": 124,
+        "output": "30-second exec timeout; twin killed",
+        "status": "EXEC_TIMEOUT"
+      },
+      "elapsed_seconds": 30.173840067996935,
+      "destroyed": {
+        "docker_inspect": "No such container",
+        "container_id": "650aacda47cb95edd62979486249a4ca9c980f71e6070650119bf96f184d1fd9",
+        "observed_at": "2026-11-05T11:31:21.546282+00:00"
+      }
+    },
+    "6_rm_root_only_twin": {
+      "passed": true,
+      "seconds": 28.8787698619999,
+      "execution": {
+        "exit_code": 1,
+        "output": "",
+        "output_truncated": false,
+        "status": "READY"
+      },
+      "host_alive": true,
+      "peer_twin_alive": true,
+      "destroyed": {
+        "docker_inspect": "No such container",
+        "container_id": "d3523661aac0f1adaaf7aa91d0b00053d1304e7c086ba5aaef5e54a4bd41668d",
+        "observed_at": "2026-11-05T11:31:50.425515+00:00"
+      }
+    },
+    "2_dns_canary_tripwire": {
+      "passed": false,
+      "seconds": 26.575338857001043,
+      "error": "StopIteration: "
+    }
+  },
+  "twins": [
+    {
+      "twin_id": "3d646d2a-a5c2-41d7-8e64-77c6c93eef39",
+      "container_id": "492adfd217e7bc5538ad3abfc15d29c79326b0db2601a2d0a3272616d896882d",
+      "realm": "acme",
+      "seed_version": "20261105T112314476035Z-5ad67c09f3b6",
+      "prod_state_digest": "5ad67c09f3b6eb24c0d9b8928e12ffb92532973f5fe7aef637817cd1f5348f3f",
+      "created_at": "2026-11-05T11:28:55.226357+00:00",
+      "expires_monotonic": 61735.529167013,
+      "status": "READY",
+      "pooled": false,
+      "claimed": true,
+      "ip": "172.30.0.2",
+      "boot_seconds": 23.616752863003057,
+      "image_digest": "sha256:d8f3882671f89069b90473724d23631571ac914b46d6ab019b123d491a0f1b80",
+      "limits": {
+        "runtime": "runsc",
+        "memory_bytes": 1610612736,
+        "nano_cpus": 2000000000,
+        "pids_limit": 512,
+        "read_only_root": true,
+        "cap_drop": [
+          "ALL"
+        ],
+        "binds": null
+      }
+    },
+    {
+      "twin_id": "05f35e11-82e6-43d1-a1bd-216839c45f94",
+      "container_id": "49c9c2922779e6af54aebe6cccbd9ff2c2103b05e648c3fd2ca74a35ac001534",
+      "realm": "acme",
+      "seed_version": "20261105T112314476035Z-5ad67c09f3b6",
+      "prod_state_digest": "5ad67c09f3b6eb24c0d9b8928e12ffb92532973f5fe7aef637817cd1f5348f3f",
+      "created_at": "2026-11-05T11:29:28.455888+00:00",
+      "expires_monotonic": 61768.75869839,
+      "status": "READY",
+      "pooled": false,
+      "claimed": true,
+      "ip": "172.30.0.3",
+      "boot_seconds": 24.31132217299455,
+      "image_digest": "sha256:d8f3882671f89069b90473724d23631571ac914b46d6ab019b123d491a0f1b80",
+      "limits": {
+        "runtime": "runsc",
+        "memory_bytes": 1610612736,
+        "nano_cpus": 2000000000,
+        "pids_limit": 512,
+        "read_only_root": true,
+        "cap_drop": [
+          "ALL"
+        ],
+        "binds": null
+      }
+    },
+    {
+      "twin_id": "f6a8defc-bc03-48f7-ad2b-d3408056b57d",
+      "container_id": "feae00446e55a3b2ab9341581f9955f97163064d29dc771bd5bdcab62fcc6990",
+      "realm": "acme",
+      "seed_version": "20261105T112314476035Z-5ad67c09f3b6",
+      "prod_state_digest": "5ad67c09f3b6eb24c0d9b8928e12ffb92532973f5fe7aef637817cd1f5348f3f",
+      "created_at": "2026-11-05T11:29:56.044712+00:00",
+      "expires_monotonic": 61796.347522416,
+      "status": "READY",
+      "pooled": false,
+      "claimed": true,
+      "ip": "172.30.0.3",
+      "boot_seconds": 24.512174207004136,
+      "image_digest": "sha256:d8f3882671f89069b90473724d23631571ac914b46d6ab019b123d491a0f1b80",
+      "limits": {
+        "runtime": "runsc",
+        "memory_bytes": 1610612736,
+        "nano_cpus": 2000000000,
+        "pids_limit": 512,
+        "read_only_root": true,
+        "cap_drop": [
+          "ALL"
+        ],
+        "binds": null
+      }
+    },
+    {
+      "twin_id": "c6ab724b-4978-4756-9d42-b42aebd216ff",
+      "container_id": "650aacda47cb95edd62979486249a4ca9c980f71e6070650119bf96f184d1fd9",
+      "realm": "acme",
+      "seed_version": "20261105T112314476035Z-5ad67c09f3b6",
+      "prod_state_digest": "5ad67c09f3b6eb24c0d9b8928e12ffb92532973f5fe7aef637817cd1f5348f3f",
+      "created_at": "2026-11-05T11:30:24.658076+00:00",
+      "expires_monotonic": 61824.960886017,
+      "status": "READY",
+      "pooled": false,
+      "claimed": true,
+      "ip": "172.30.0.3",
+      "boot_seconds": 24.4722609370001,
+      "image_digest": "sha256:d8f3882671f89069b90473724d23631571ac914b46d6ab019b123d491a0f1b80",
+      "limits": {
+        "runtime": "runsc",
+        "memory_bytes": 1610612736,
+        "nano_cpus": 2000000000,
+        "pids_limit": 512,
+        "read_only_root": true,
+        "cap_drop": [
+          "ALL"
+        ],
+        "binds": null
+      }
+    },
+    {
+      "twin_id": "ccc7914f-b297-4386-96c2-51869d94b839",
+      "container_id": "d3523661aac0f1adaaf7aa91d0b00053d1304e7c086ba5aaef5e54a4bd41668d",
+      "realm": "acme",
+      "seed_version": "20261105T112314476035Z-5ad67c09f3b6",
+      "prod_state_digest": "5ad67c09f3b6eb24c0d9b8928e12ffb92532973f5fe7aef637817cd1f5348f3f",
+      "created_at": "2026-11-05T11:31:21.666632+00:00",
+      "expires_monotonic": 61881.969442576,
+      "status": "READY",
+      "pooled": false,
+      "claimed": true,
+      "ip": "172.30.0.3",
+      "boot_seconds": 24.35806107999815,
+      "image_digest": "sha256:d8f3882671f89069b90473724d23631571ac914b46d6ab019b123d491a0f1b80",
+      "limits": {
+        "runtime": "runsc",
+        "memory_bytes": 1610612736,
+        "nano_cpus": 2000000000,
+        "pids_limit": 512,
+        "read_only_root": true,
+        "cap_drop": [
+          "ALL"
+        ],
+        "binds": null
+      }
+    },
+    {
+      "twin_id": "e92b4bed-529d-43ee-9a79-e930df4998dd",
+      "container_id": "54adb4afe370f3597616b04db3ac0dfa0899749e9bbf29c16cbafa346b05feba",
+      "realm": "acme",
+      "seed_version": "20261105T112314476035Z-5ad67c09f3b6",
+      "prod_state_digest": "5ad67c09f3b6eb24c0d9b8928e12ffb92532973f5fe7aef637817cd1f5348f3f",
+      "created_at": "2026-11-05T11:31:50.538749+00:00",
+      "expires_monotonic": 61910.841556108,
+      "status": "READY",
+      "pooled": false,
+      "claimed": true,
+      "ip": "172.30.0.3",
+      "boot_seconds": 24.423883071998716,
+      "image_digest": "sha256:d8f3882671f89069b90473724d23631571ac914b46d6ab019b123d491a0f1b80",
+      "limits": {
+        "runtime": "runsc",
+        "memory_bytes": 1610612736,
+        "nano_cpus": 2000000000,
+        "pids_limit": 512,
+        "read_only_root": true,
+        "cap_drop": [
+          "ALL"
+        ],
+        "binds": null
+      }
+    }
+  ],
+  "host_health": {
+    "before": {
+      "uptime_seconds": 60835.41,
+      "memory_available_kib": 15686108,
+      "driver_alive": true
+    },
+    "after": {
+      "uptime_seconds": 61037.68,
+      "memory_available_kib": 15648288,
+      "driver_alive": true
+    },
+    "not_rebooted": true
+  },
+  "all_passed": false
+}

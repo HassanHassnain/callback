@@ -174,3 +174,49 @@ locally pinned and requires managed rotation for a longer-lived deployment.
 Public verification key:
 https://callback-45-63-34-5.sslip.io/executor-pubkey.json
 Next: P3 real twin, egress/DNS tripwire, warm pool, and containment tests.
+
+
+## P3 — Real twin containment accepted (2026-11-05)
+
+Built Keycloak/Chromium image on the sandbox VM and pushed it to the private
+Vultr registry. Twin tools (UID 1100), Keycloak (1000), and audit credentials
+(0) are separate. Added signed-seed validation, bounded tool execution,
+freeze, snapshots, screenshot retrieval, 15-minute lifetime, warm pool,
+restart cleanup with persisted ownership/creation intents, and destroy proof.
+Added source-restricted broker, internal network/peer restrictions, HTTP and
+UDP/TCP DNS guard, canaries, and the explicitly hostile diagnostics fixture.
+No agent code executes on control or the host.
+
+Verification: `make lint` and `make test` pass (29 tests including initial P4
+effects/policy tests). The explicit real-host containment runner in
+`tests/containment/run.py` passed all eight required checks, plus Chromium
+through the allowlist. `infra/verify_sandbox.py` accepted the actual warm
+pool of two twins. Timings, limits, fork EAGAIN, OOM result, host uptime,
+tripwire kill and teardown proofs are in `docs/infra/P3-acceptance.json`;
+`docs/threat-model.md` is generated from it. `infra/audit_twin_image.py`
+compared the full exported image filesystem and environment locally against
+configured credentials: zero matches; keys were not sent to the sandbox host.
+
+Failures retained: first bootstrap attempted to write Docker's read-only
+resolver file; fixed delivery with UID-owned tmpfs paths. The first fork
+workload ended the guest before reporting EAGAIN; tightened NPROC from 512
+to 128 while retaining Docker's 512 PID ceiling, then reran all eight. Fixed
+stale IP attribution, a terminal event race, and Docker's lowercase missing-
+object error handling. The first failed containment report remains unchanged.
+
+Decisions/limits: no encrypted CONNECT tunnel; only the demo's exact HTTP GET
+route is forwarded, so all forwarded bytes remain inspectable. Chromium's
+inner sandbox is disabled because it executes inside gVisor. Read-only root
+and distinct UIDs are retained. Cached post-kill snapshots are marked
+incomplete and cannot authorize confirmation. Public site still advertises
+infrastructure readiness only; production apply remains disabled until P5.
+
+Next: P4 agent loop, complete effect derivation, policy, visual evidence and
+minimal text UI. Agent-framework skill guidance was reviewed; this established
+Python stack and the brief's Vultr-only constraint take precedence over a
+new framework/provider scaffold. Frontend skill applies to the control-room UI.
+
+Post-restart checks also passed: a twin could not connect to a peer's Keycloak
+listener, and a canary in an HTTP header triggered a real kill, denied-egress
+event and destruction proof (`docs/infra/P3-post-restart.json`). The final
+image registry digest is in `docs/infra/P3-image.json`.

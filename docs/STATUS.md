@@ -1,7 +1,7 @@
 # Callback status
 
-Updated: 2026-11-04. P0 complete under the explicit user-approved audio
-identity exception. P1 infrastructure checks pass; P2 identity and seed-export acceptance checks pass; P3 containment is next.
+Updated: 2026-11-05. P0 complete under the explicit user-approved audio
+identity exception. P1 infrastructure checks pass; P2 identity/seed-export and P3 real containment acceptance checks pass; P4 is in progress.
 
 ## Done
 
@@ -38,6 +38,12 @@ identity exception. P1 infrastructure checks pass; P2 identity and seed-export a
 - Real production credential-ID/secret-data-hash audit passes for 68 credentials
   per realm. No production OTP/hash data reused in seeds.
 
+- P3: real Keycloak + Chromium gVisor twins; eight real containment tests pass,
+  two-twin warm pool, default-deny HTTP/DNS, canary kill and destroy proof.
+  Evidence and measured timings: `docs/infra/P3-acceptance.json` and
+  `docs/threat-model.md`. Full 2.9-GB image export/local secret comparison has
+  zero configured-key matches. Earlier failed tests remain in evidence.
+
 ## P0 checkpoint
 
 The latest full run is `docs/smoke/20261104T182519488993Z.json`: **13 PASS**,
@@ -56,10 +62,18 @@ remain mandatory for every other route. See `docs/account-setup.md` for setup.
 
 ## Not done
 
-P3–P10 are not completed. No call UI, twin, containment proof, device
-enrollment, production apply path, or benchmark is available yet.
+P4–P10 are not completed. State-diff and policy modules have initial unit coverage;
+no call UI, agent loop, device enrollment, production apply path or benchmark
+is available yet. Production apply still returns 501.
 
 ## Known limits
+
+- The demo proxy permits exact-domain HTTP GET only; HTTPS CONNECT is denied.
+- Agent NPROC is capped at 128, in addition to Docker's 512 PID ceiling, after
+  the initial fork workload ended the guest before reporting its limit.
+- Snapshots after a kill are explicitly incomplete cached observations.
+- Broker authentication uses source-restricted VPC HTTP with a shared secret.
+  Managed mTLS and independent penetration testing are not implemented.
 
 - P1 port evidence used a labelled listener. P2 now verifies real Keycloak over
   pinned TLS, with control still blocked by host/Docker network rules.

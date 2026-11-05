@@ -1,0 +1,7 @@
+{
+  "registry_image": "sjc.vultrcr.com/callbackfec1ca39/callback/twin:p3",
+  "digests": [
+    "callback/twin@sha256:d8f3882671f89069b90473724d23631571ac914b46d6ab019b123d491a0f1b80",
+    "sjc.vultrcr.com/callbackfec1ca39/callback/twin@sha256:d8f3882671f89069b90473724d23631571ac914b46d6ab019b123d491a0f1b80"
+  ]
+}

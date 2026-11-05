@@ -6,10 +6,11 @@ Approval prompts show what the agent says it will do. Callback shows what it
 actually did — in a twin — and only that can reach production.
 
 Callback is being built for Vultr: Agent Rush, Challenge 1, Blast Radius Zero.
-P0 model, P1 infrastructure, and P2 identity/seed checks pass. Both synthetic
+P0 model, P1 infrastructure, P2 identity/seed, and P3 containment checks pass. Both synthetic
 realms have 40 employees and 14 admins. Signed, scrubbed twin seeds are exported
-every two minutes. There is no call UI, containment proof, production apply path,
-or benchmark result yet. Infrastructure-only [health](https://callback-45-63-34-5.sslip.io/health)
+every two minutes. Real gVisor/Chromium twins and containment tests are documented
+in [the threat model](docs/threat-model.md), with raw measured evidence. There is
+no call UI, production apply path or benchmark result yet. Infrastructure-only [health](https://callback-45-63-34-5.sslip.io/health)
 explicitly reports `application_ready=false`. See [build status](docs/STATUS.md) and the [complete brief](docs/BRIEF.md).
 
 The intended production boundary is a disposable Keycloak twin, typed effects

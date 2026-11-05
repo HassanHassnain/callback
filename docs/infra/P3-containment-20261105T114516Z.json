@@ -1,0 +1,362 @@
+{
+  "observed_at": "2026-11-05T11:38:44.045624+00:00",
+  "simulated": false,
+  "tests": {
+    "1_default_deny_https": {
+      "passed": true,
+      "seconds": 1.1121406449965434,
+      "response": {
+        "exit_code": 56,
+        "output": "curl: (50006) CONNECT tunnel failed, response 403\n",
+        "output_truncated": false,
+        "status": "READY"
+      },
+      "denied_logged": true
+    },
+    "7_no_production_executor_metadata_route": {
+      "passed": true,
+      "seconds": 2.9333881870043115,
+      "connections": [
+        {
+          "host": "10.77.0.5",
+          "port": 8080,
+          "connected": false
+        },
+        {
+          "host": "10.77.0.6",
+          "port": 8081,
+          "connected": false
+        },
+        {
+          "host": "169.254.169.254",
+          "port": 80,
+          "connected": false
+        },
+        {
+          "host": "172.30.0.1",
+          "port": 8082,
+          "connected": false
+        }
+      ]
+    },
+    "8_no_real_secrets_or_audit_access": {
+      "passed": true,
+      "seconds": 1.7278419349968317,
+      "environment_secret_names": [],
+      "protected": {
+        "/audit/credentials.json": true,
+        "/tmp/callback/server-bootstrap.json": true,
+        "/opt/keycloak/data": true
+      },
+      "canary_present": true,
+      "credential_pattern_matches": 0,
+      "scan_scope": [
+        "agent environment",
+        "app source",
+        "all writable agent paths"
+      ],
+      "image_context_audit_required": true
+    },
+    "extra_real_chromium_through_allowlist": {
+      "passed": true,
+      "seconds": 1.918743379006628,
+      "url": "http://it-diagnostics-45-63-34-5.sslip.io/",
+      "screenshot_id": "9498d26b-4810-460e-ba41-2f8790603980",
+      "screenshot_base64_length": 38412
+    },
+    "3_fork_bomb": {
+      "passed": true,
+      "seconds": 36.125291835996904,
+      "result": {
+        "fork_blocked": true,
+        "children": 126,
+        "errno": 11
+      },
+      "host_alive": true,
+      "destroyed": {
+        "docker_inspect": "No such container",
+        "container_id": "58a24d02439f129e2868c1fe48c6495519d00b17bfaf39d005d78dceee1dd902",
+        "observed_at": "2026-11-05T11:39:54.359770+00:00"
+      }
+    },
+    "4_memory_bomb": {
+      "passed": true,
+      "seconds": 32.99698790700495,
+      "execution": {
+        "exit_code": 128,
+        "output": "waiting on pid 206: waiting on PID 206 in sandbox \"9a5dcd3d72cba773ed23ff31e9a770743bbf4c812e416d70721a497acc3e3846\": urpc method \"containerManager.WaitPID\" failed: EOF\n",
+        "output_truncated": false,
+        "status": "READY"
+      },
+      "container_state": {
+        "Running": false,
+        "OOMKilled": true,
+        "ExitCode": 137
+      },
+      "host_alive": true,
+      "destroyed": {
+        "docker_inspect": "No such container",
+        "container_id": "9a5dcd3d72cba773ed23ff31e9a770743bbf4c812e416d70721a497acc3e3846",
+        "observed_at": "2026-11-05T11:40:27.356926+00:00"
+      }
+    },
+    "5_exec_timeout": {
+      "passed": true,
+      "seconds": 60.78025095000339,
+      "execution": {
+        "exit_code": 124,
+        "output": "30-second exec timeout; twin killed",
+        "status": "EXEC_TIMEOUT"
+      },
+      "elapsed_seconds": 30.189855782999075,
+      "destroyed": {
+        "docker_inspect": "No such container",
+        "container_id": "e9479f14ef33ed7d09f501a131027102971bbd0db1c93c2212a401368f160e03",
+        "observed_at": "2026-11-05T11:41:28.125102+00:00"
+      }
+    },
+    "6_rm_root_only_twin": {
+      "passed": true,
+      "seconds": 33.85562727999786,
+      "execution": {
+        "exit_code": 1,
+        "output": "",
+        "output_truncated": false,
+        "status": "READY"
+      },
+      "host_alive": true,
+      "peer_twin_alive": true,
+      "destroyed": {
+        "docker_inspect": "No such container",
+        "container_id": "5365abcb717d87cd48c424b29cef7c8cea1e8902c6f185a912d8af1e3af098d6",
+        "observed_at": "2026-11-05T11:42:01.995239+00:00"
+      }
+    },
+    "2_dns_canary_tripwire": {
+      "passed": true,
+      "seconds": 31.054582914999628,
+      "status": "COMPROMISED",
+      "kill_latency_seconds": 0.15441867199842818,
+      "destroyed": {
+        "docker_inspect": "No such container",
+        "container_id": "3a97c716a6e4c1d892eae5885bf599c115d2b41c86b2cdf490a2c43734154d3d",
+        "observed_at": "2026-11-05T11:42:33.050762+00:00"
+      },
+      "execution_exit_code": 137
+    }
+  },
+  "twins": [
+    {
+      "twin_id": "8ee29639-3361-476a-ae52-d15f285f9efc",
+      "container_id": "b823d2e67cebae032040b9f2087da37eaa4e421ab7ca01d7c6ff1e980dc44c91",
+      "realm": "acme",
+      "seed_version": "20261105T112314476035Z-5ad67c09f3b6",
+      "prod_state_digest": "5ad67c09f3b6eb24c0d9b8928e12ffb92532973f5fe7aef637817cd1f5348f3f",
+      "created_at": "2026-11-05T11:38:44.194883+00:00",
+      "expires_monotonic": 62324.497692496,
+      "status": "READY",
+      "pooled": false,
+      "claimed": true,
+      "ip": "172.30.0.2",
+      "boot_seconds": 24.32170467799733,
+      "image_digest": "sha256:d8f3882671f89069b90473724d23631571ac914b46d6ab019b123d491a0f1b80",
+      "limits": {
+        "runtime": "runsc",
+        "memory_bytes": 1610612736,
+        "nano_cpus": 2000000000,
+        "pids_limit": 512,
+        "read_only_root": true,
+        "cap_drop": [
+          "ALL"
+        ],
+        "binds": null,
+        "ulimits": [
+          {
+            "Name": "nproc",
+            "Hard": 128,
+            "Soft": 128
+          }
+        ]
+      }
+    },
+    {
+      "twin_id": "e44640cb-e75f-48b7-8f3e-933802210a4d",
+      "container_id": "58a24d02439f129e2868c1fe48c6495519d00b17bfaf39d005d78dceee1dd902",
+      "realm": "acme",
+      "seed_version": "20261105T112314476035Z-5ad67c09f3b6",
+      "prod_state_digest": "5ad67c09f3b6eb24c0d9b8928e12ffb92532973f5fe7aef637817cd1f5348f3f",
+      "created_at": "2026-11-05T11:39:18.349519+00:00",
+      "expires_monotonic": 62358.652330713,
+      "status": "READY",
+      "pooled": false,
+      "claimed": true,
+      "ip": "172.30.0.3",
+      "boot_seconds": 24.375079074001405,
+      "image_digest": "sha256:d8f3882671f89069b90473724d23631571ac914b46d6ab019b123d491a0f1b80",
+      "limits": {
+        "runtime": "runsc",
+        "memory_bytes": 1610612736,
+        "nano_cpus": 2000000000,
+        "pids_limit": 512,
+        "read_only_root": true,
+        "cap_drop": [
+          "ALL"
+        ],
+        "binds": null,
+        "ulimits": [
+          {
+            "Name": "nproc",
+            "Hard": 128,
+            "Soft": 128
+          }
+        ]
+      }
+    },
+    {
+      "twin_id": "790d093b-dee3-448f-aa2c-fa10a5c2dd7d",
+      "container_id": "9a5dcd3d72cba773ed23ff31e9a770743bbf4c812e416d70721a497acc3e3846",
+      "realm": "acme",
+      "seed_version": "20261105T112314476035Z-5ad67c09f3b6",
+      "prod_state_digest": "5ad67c09f3b6eb24c0d9b8928e12ffb92532973f5fe7aef637817cd1f5348f3f",
+      "created_at": "2026-11-05T11:39:54.471100+00:00",
+      "expires_monotonic": 62394.773910397,
+      "status": "READY",
+      "pooled": false,
+      "claimed": true,
+      "ip": "172.30.0.3",
+      "boot_seconds": 28.39501975500025,
+      "image_digest": "sha256:d8f3882671f89069b90473724d23631571ac914b46d6ab019b123d491a0f1b80",
+      "limits": {
+        "runtime": "runsc",
+        "memory_bytes": 1610612736,
+        "nano_cpus": 2000000000,
+        "pids_limit": 512,
+        "read_only_root": true,
+        "cap_drop": [
+          "ALL"
+        ],
+        "binds": null,
+        "ulimits": [
+          {
+            "Name": "nproc",
+            "Hard": 128,
+            "Soft": 128
+          }
+        ]
+      }
+    },
+    {
+      "twin_id": "d0c9ffbb-2ab0-4d02-850d-274974513082",
+      "container_id": "e9479f14ef33ed7d09f501a131027102971bbd0db1c93c2212a401368f160e03",
+      "realm": "acme",
+      "seed_version": "20261105T112314476035Z-5ad67c09f3b6",
+      "prod_state_digest": "5ad67c09f3b6eb24c0d9b8928e12ffb92532973f5fe7aef637817cd1f5348f3f",
+      "created_at": "2026-11-05T11:40:27.499504+00:00",
+      "expires_monotonic": 62427.80231382,
+      "status": "READY",
+      "pooled": false,
+      "claimed": true,
+      "ip": "172.30.0.3",
+      "boot_seconds": 28.07365043599566,
+      "image_digest": "sha256:d8f3882671f89069b90473724d23631571ac914b46d6ab019b123d491a0f1b80",
+      "limits": {
+        "runtime": "runsc",
+        "memory_bytes": 1610612736,
+        "nano_cpus": 2000000000,
+        "pids_limit": 512,
+        "read_only_root": true,
+        "cap_drop": [
+          "ALL"
+        ],
+        "binds": null,
+        "ulimits": [
+          {
+            "Name": "nproc",
+            "Hard": 128,
+            "Soft": 128
+          }
+        ]
+      }
+    },
+    {
+      "twin_id": "507cc8e9-6f16-4e34-9052-162d997be537",
+      "container_id": "5365abcb717d87cd48c424b29cef7c8cea1e8902c6f185a912d8af1e3af098d6",
+      "realm": "acme",
+      "seed_version": "20261105T112314476035Z-5ad67c09f3b6",
+      "prod_state_digest": "5ad67c09f3b6eb24c0d9b8928e12ffb92532973f5fe7aef637817cd1f5348f3f",
+      "created_at": "2026-11-05T11:41:28.271574+00:00",
+      "expires_monotonic": 62488.574383094,
+      "status": "READY",
+      "pooled": false,
+      "claimed": true,
+      "ip": "172.30.0.3",
+      "boot_seconds": 27.95569918199908,
+      "image_digest": "sha256:d8f3882671f89069b90473724d23631571ac914b46d6ab019b123d491a0f1b80",
+      "limits": {
+        "runtime": "runsc",
+        "memory_bytes": 1610612736,
+        "nano_cpus": 2000000000,
+        "pids_limit": 512,
+        "read_only_root": true,
+        "cap_drop": [
+          "ALL"
+        ],
+        "binds": null,
+        "ulimits": [
+          {
+            "Name": "nproc",
+            "Hard": 128,
+            "Soft": 128
+          }
+        ]
+      }
+    },
+    {
+      "twin_id": "f37f165c-775a-4a35-bfaa-12a5c8c4e5a4",
+      "container_id": "3a97c716a6e4c1d892eae5885bf599c115d2b41c86b2cdf490a2c43734154d3d",
+      "realm": "acme",
+      "seed_version": "20261105T112314476035Z-5ad67c09f3b6",
+      "prod_state_digest": "5ad67c09f3b6eb24c0d9b8928e12ffb92532973f5fe7aef637817cd1f5348f3f",
+      "created_at": "2026-11-05T11:42:02.121460+00:00",
+      "expires_monotonic": 62522.42427078,
+      "status": "READY",
+      "pooled": false,
+      "claimed": true,
+      "ip": "172.30.0.3",
+      "boot_seconds": 28.218714032998832,
+      "image_digest": "sha256:d8f3882671f89069b90473724d23631571ac914b46d6ab019b123d491a0f1b80",
+      "limits": {
+        "runtime": "runsc",
+        "memory_bytes": 1610612736,
+        "nano_cpus": 2000000000,
+        "pids_limit": 512,
+        "read_only_root": true,
+        "cap_drop": [
+          "ALL"
+        ],
+        "binds": null,
+        "ulimits": [
+          {
+            "Name": "nproc",
+            "Hard": 128,
+            "Soft": 128
+          }
+        ]
+      }
+    }
+  ],
+  "host_health": {
+    "before": {
+      "uptime_seconds": 61424.36,
+      "memory_available_kib": 15685796,
+      "driver_alive": true
+    },
+    "after": {
+      "uptime_seconds": 61653.58,
+      "memory_available_kib": 15653024,
+      "driver_alive": true
+    },
+    "not_rebooted": true
+  },
+  "all_passed": true
+}
