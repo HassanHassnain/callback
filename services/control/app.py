@@ -166,6 +166,7 @@ async def create_call_locked(body):
            for c in engine.calls.values()) >= 3:
         raise HTTPException(429, "Three calls are already active")
     try:
+        await engine.sync_seeds()
         result = await engine.create(body.realm)
         call = get_call(result["call_id"])
         call["created_epoch"] = time.time()
@@ -173,6 +174,8 @@ async def create_call_locked(body):
         return engine.public(call)
     except httpx.HTTPStatusError as exc:
         raise HTTPException(exc.response.status_code, "Twin is warming; retry shortly") from exc
+    except httpx.TransportError as exc:
+        raise HTTPException(503, "Identity services are reconnecting; retry shortly") from exc
     except RuntimeError as exc:
         raise HTTPException(503, redact(str(exc))) from exc
 
@@ -258,7 +261,10 @@ def read_enrollment(identifier: str):
 
 @app.get("/api/enrollments/{identifier}/status")
 async def enrollment_status(identifier: str):
-    response = await app.state.engine.executor.post("/enrollment/status", json=enrollment_bundle(identifier))
+    try:
+        response = await app.state.engine.executor.post("/enrollment/status", json=enrollment_bundle(identifier))
+    except httpx.TransportError as exc:
+        raise HTTPException(503, "Executor is reconnecting; enrollment request is preserved") from exc
     if response.is_error:
         raise HTTPException(502, "Executor enrollment check is unavailable")
     return response.json()

@@ -12,7 +12,8 @@ def request_for(call, signatures=None):
     context = {"call_status": call["status"], "twin": call["twin"], "destroy_proof": call.get("destroy_proof"),
         "transcript_sha256": hashlib.sha256(json.dumps(call["transcript"], sort_keys=True).encode()).hexdigest(),
         "models": call["model_calls"], "egress_events": call["egress"], "policy": call["policy"],
-        "workload_origin": call.get("workload_origin", "live_planner")}
+        "workload_origin": call.get("workload_origin", "live_planner"),
+        "simulated_device": call["realm"] == "acme-guest"}
     return original(ApplyRequest.model_validate({"change_set": call["change_set"], "change_set_hash": call["change_set_hash"],
         "signatures": call.get("signatures", []) if signatures is None else signatures, "context": context}))
 

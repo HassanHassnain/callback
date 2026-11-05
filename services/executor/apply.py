@@ -15,7 +15,7 @@ from services.common.crypto import canonical, digest, public_jwk, sign, verify
 from services.common.sealed import seal
 from services.common.state import snapshot
 from services.control.effects import derive
-from services.executor.keycloak import Keycloak
+from services.executor.keycloak import Keycloak, update_user
 from services.executor.seed_export import EXPORT_LOCK, export_all, s3_client
 from services.executor.verify import Refusal, cas, policy_floor, registered, require, validate_hash, verify_decisions, effect_value, fresh
 
@@ -104,18 +104,21 @@ def mutate(kc, realm, effect, current, temporary=None):
             actions.add(after)
         else:
             actions.discard(effect["before"])
-        kc.request("PUT", realm, path, body={"requiredActions": sorted(actions)})
+        update_user(kc, realm, uid, {"requiredActions": sorted(actions)})
     elif kind == "user.email.changed":
-        kc.request("PUT", realm, path, body={"email": after})
+        body = {"email": after}
+        if "_restore_email_verified" in effect:
+            body["emailVerified"] = effect["_restore_email_verified"]
+        update_user(kc, realm, uid, body)
     elif kind == "user.enabled.changed":
-        kc.request("PUT", realm, path, body={"enabled": after})
+        update_user(kc, realm, uid, {"enabled": after})
     elif kind == "user.attribute.changed":
         attributes = kc.request("GET", realm, path).get("attributes", {})
         if after["value"] is None:
             attributes.pop(after["attribute"], None)
         else:
             attributes[after["attribute"]] = after["value"]
-        kc.request("PUT", realm, path, body={"attributes": attributes})
+        update_user(kc, realm, uid, {"attributes": attributes})
     elif kind == "user.unlocked":
         kc.request("DELETE", realm, "attack-detection/brute-force/users/" + uid)
     elif kind.startswith("group.member."):
@@ -227,6 +230,8 @@ class ApplyService:
                             inverse["before"], inverse["after"] = effect["after"], effect["before"]
                             if effect["type"].startswith("user.required_action."):
                                 inverse["type"] = "user.required_action.removed" if effect["type"].endswith("added") else "user.required_action.added"
+                            if effect["type"] == "user.email.changed":
+                                inverse["_restore_email_verified"] = before["users"][effect["target"]["user_id"]]["emailVerified"]
                             try:
                                 observed = snapshot(kc, change_set["realm"])
                                 # Never overwrite an unrelated concurrent field change.
@@ -267,6 +272,10 @@ class ApplyService:
                 Body=canonical(result["receipt"]), ContentType="application/json")
         except Exception:
             result["storage_pending"] = True
+            rid = result["receipt"]["payload"]["receipt_id"]
+            pending = self.receipts / (rid + ".alias-pending")
+            pending.write_text(change_set["call_id"])
+            pending.chmod(0o600)
 
     def delivery(self, proof):
         payload, signature = proof["payload"], proof["signature"]
@@ -278,7 +287,10 @@ class ApplyService:
         try:
             users = kc.request("GET", payload["realm"], "users", params={"username": payload["username"], "exact": "true"})
             require(len(users) == 1, "UNENROLLED_DEVICE", "Registered employee not found")
-            verify(registered(users[0], "device_pubkey_jwk"), payload, signature)
+            try:
+                verify(registered(users[0], "device_pubkey_jwk"), payload, signature)
+            except Exception as exc:
+                raise Refusal("INVALID_SIGNATURE", "Registered device proof did not verify") from exc
         finally:
             kc.client.close()
         with closing(self.db()) as db:
@@ -292,6 +304,15 @@ class ApplyService:
         # Content-addressed sync markers avoid repeated uploads while retaining
         # every local receipt and retrying failures after service restart.
         client = s3_client(self.config)
+        for pending in self.receipts.glob("*.alias-pending"):
+            synced = pending.with_suffix(".alias-synced")
+            if synced.exists():
+                continue
+            data = pending.with_suffix(".json").read_bytes()
+            client.put_object(Bucket=self.config["receipts_bucket"], Key=pending.read_text() + ".json",
+                              Body=data, ContentType="application/json")
+            synced.write_text(timestamp())
+            synced.chmod(0o600)
         for path in self.receipts.glob("*.json"):
             marker = path.with_suffix(".synced")
             if marker.exists():

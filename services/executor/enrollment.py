@@ -7,7 +7,7 @@ from pathlib import Path
 
 from services.common.crypto import canonical, digest, verify
 from services.common.sealed import public_key
-from services.executor.keycloak import Keycloak, config_from_file
+from services.executor.keycloak import Keycloak, config_from_file, update_user
 from services.executor.seed_export import EXPORT_LOCK, export_all
 from services.executor.verify import fresh, require
 
@@ -67,7 +67,7 @@ def pin(bundle, config):
                     require(not attrs.get(attr) or attrs[attr] == [value], "KEY_ALREADY_PINNED",
                             "Existing device key is preserved; replacement requires a separate reviewed ceremony")
                     attrs[attr] = [value]
-                kc.request("PUT", realm, "users/" + user["id"], body={"attributes": attrs})
+                update_user(kc, realm, user["id"], {"attributes": attrs})
                 updated = kc.request("GET", realm, "users/" + user["id"])
                 require(all(updated["attributes"].get(a) == attrs[a] for a in ["device_pubkey_jwk", "device_encryption_pubkey_jwk"]),
                         "ENROLLMENT_VERIFY", "Production public-key readback failed")

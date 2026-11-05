@@ -17,6 +17,7 @@ from test_executor_verification import UID, request_fixture
 def setup_service(tmp_path, monkeypatch, *, email=False, fail_verify=False):
     import services.executor.apply as module
     raw, state, key = request_fixture()
+    state["users"][UID]["emailVerified"] = True
     encryption = ec.generate_private_key(ec.SECP256R1())
     state["users"][UID]["attributes"]["device_encryption_pubkey_jwk"] = [json.dumps(public_jwk(encryption))]
     target = copy.deepcopy(state)
@@ -46,6 +47,7 @@ def setup_service(tmp_path, monkeypatch, *, email=False, fail_verify=False):
             state["users"][UID]["requiredActions"] = ["UPDATE_PASSWORD"]
         else:
             state["users"][UID]["email"] = effect["after"]
+            state["users"][UID]["emailVerified"] = effect.get("_restore_email_verified", False)
     monkeypatch.setattr(module, "mutate", mutate)
     if fail_verify:
         monkeypatch.setattr(module, "same_effects", lambda *args: False)
@@ -76,6 +78,8 @@ def test_failed_postverify_reverts_and_verifies_reversible_field(tmp_path, monke
     assert state["users"][UID]["email"] == "sam@acme.test"
     assert result["rollback"] == [{"effect_id": request.change_set.effects[0].id, "reverted": True}]
     assert len(calls) == 2
+    assert state["users"][UID]["emailVerified"] is True
+    assert result["prod_state_digest_before"] == result["prod_state_digest_after"]
 
 
 def test_started_execution_is_never_repeated(tmp_path, monkeypatch):

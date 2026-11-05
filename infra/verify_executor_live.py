@@ -99,16 +99,48 @@ def main():
     denied = rpc(state, "/apply", deny)["receipt"]
     report["checks"]["dana_signed_deny_unchanged"] = denied["payload"]["status"] == "DENIED" and denied["payload"]["prod_state_digest_before"] == denied["payload"]["prod_state_digest_after"] == digest(before)
     report["receipts"].append(denied)
+    # Deliberate operator fault: after the approved email write, a separate
+    # real REST update disables the guest account. Post-verify must observe
+    # that extra effect, restore its own reversible email change, and avoid
+    # overwriting the unrelated concurrent field. No result is simulated.
+    approver = load_or_create_key(root / "approver-sign.pem")
+    public = {"kind": "approver", "realm": "acme-guest", "identity": "simulated-p5-approver",
+        "public_key": public_jwk(approver), "nonce": str(uuid.uuid4()), "ts": datetime.now(UTC).isoformat()}
+    bundle = root / "approver-bundle.json"
+    bundle.write_text(json.dumps({"payload": public, "signature": sign(approver, public)}))
+    subprocess.run(["uv", "run", "python", "infra/enroll_approver.py", "--realm", "acme-guest", "--approver",
+        "simulated-p5-approver", "--bundle", str(bundle)], cwd=ROOT, check=True)
+    email_after = copy.deepcopy(before)
+    email_after["users"][sam["id"]]["email"] = "p5-rollback-probe@acme.test"
+    email_body = proposal(seed, email_after, keys["sam.rivera"][0], "sam.rivera")
+    approval = {"change_set_hash": email_body["change_set_hash"], "decision": "approve", "approver_id": "simulated-p5-approver",
+        "ts": datetime.now(UTC).isoformat()}
+    email_body["signatures"].append({"kind": "approver", "payload": approval, "signature": sign(approver, approval)})
+    script = "cd /opt/callback\ndocker compose exec -T executor /opt/callback/.venv/bin/python - <<'ROLLBACK_TEST'\n"
+    script += "import json\nfrom pathlib import Path\nimport services.executor.apply as module\nfrom services.executor.keycloak import Keycloak,config_from_file,update_user\nfrom services.common.contracts import ApplyRequest\nfrom services.common.crypto import load_or_create_key\nfrom services.executor.app import export_once\n"
+    script += "body=json.loads(" + repr(json.dumps(email_body)) + ")\n"
+    script += "assert body['change_set']['realm']=='acme-guest'\nc=config_from_file();real_mutate=module.mutate\n"
+    script += "uid=" + repr(sam["id"]) + "\n"
+    script += "def with_fault(kc,realm,effect,current,temporary=None):\n assert realm=='acme-guest'\n real_mutate(kc,realm,effect,current,temporary)\n if effect['type']=='user.email.changed' and effect['after']=='p5-rollback-probe@acme.test':\n  update_user(kc,realm,uid,{'enabled':False})\n"
+    script += "module.mutate=with_fault\nservice=module.ApplyService(c,load_or_create_key(Path(c['signing_key_path'])))\ntry:\n result=service.apply(ApplyRequest.model_validate(body))\n print(json.dumps(result))\nfinally:\n k=Keycloak(c)\n update_user(k,'acme-guest',uid,{'enabled':True})\n k.client.close()\n export_once(c)\nROLLBACK_TEST\n"
+    response = ssh(state,"executor",script,timeout=120,check=False)
+    if response.returncode:
+        raise RuntimeError("Guest operator rollback test failed: " + response.stderr[-400:])
+    rollback = json.loads(response.stdout)["receipt"]
+    report["postverify_fault_origin"] = "Operator-scripted real guest REST enabled change; simulated device/approver signatures"
+    report["checks"]["real_postverify_mismatch_alarms"] = rollback["payload"]["status"] == "FAILED_VERIFY" and rollback["payload"]["reason"]["alarm"]
+    report["checks"]["real_email_rollback_verified"] = bool(rollback["payload"]["rollback"]) and all(r["reverted"] for r in rollback["payload"]["rollback"]) and all(e["type"] != "user.email.changed" for e in rollback["payload"]["actual_effects"])
+    report["checks"]["concurrent_change_not_overwritten"] = any(e["type"] == "user.enabled.changed" and e["after"] is False for e in rollback["payload"]["actual_effects"])
+    report["receipts"].append(rollback)
     # Exercise CAS against a real, narrowly scoped synthetic fixture change.
     uid = sam["id"]
-    drift_body = proposal(seed, {**copy.deepcopy(before)}, keys["sam.rivera"][0], "sam.rivera")
     drift_after = copy.deepcopy(before)
     drift_after["users"][uid]["credentials"][next(k for k,v in drift_after["users"][uid]["credentials"].items() if v["type"] == "password")]["createdDate"] += 1
     drift_after["users"][uid]["requiredActions"] = sorted(set(drift_after["users"][uid]["requiredActions"]) | {"UPDATE_PASSWORD"})
     drift_body = proposal(seed, drift_after, keys["sam.rivera"][0], "sam.rivera")
     prior_email = before["users"][uid]["email"]
     def set_email(value):
-        script = "cd /opt/callback\ndocker compose exec -T executor /opt/callback/.venv/bin/python - <<'DRIFT'\nfrom services.executor.keycloak import Keycloak,config_from_file\nk=Keycloak(config_from_file())\nk.request('PUT','acme-guest','users/" + uid + "',body={'email':" + repr(value) + "})\nk.client.close()\nDRIFT\n"
+        script = "cd /opt/callback\ndocker compose exec -T executor /opt/callback/.venv/bin/python - <<'DRIFT'\nfrom services.executor.keycloak import Keycloak,config_from_file,update_user\nk=Keycloak(config_from_file())\nupdate_user(k,'acme-guest','" + uid + "',{'email':" + repr(value) + ",\"emailVerified\":" + repr(before["users"][uid]["emailVerified"]) + "})\nk.client.close()\nDRIFT\n"
         ssh(state, "executor", script)
     try:
         set_email("p5-drift-probe@acme.test")
@@ -117,6 +149,7 @@ def main():
         report["receipts"].append(drift)
     finally:
         set_email(prior_email)
+    ssh(state, "executor", "cd /opt/callback\ndocker compose exec -T executor /opt/callback/.venv/bin/python - <<'EXPORT'\nfrom services.executor.app import export_once\nfrom services.executor.keycloak import config_from_file\nexport_once(config_from_file())\nEXPORT\n", timeout=120)
     report["checks"]["main_realm_unchanged"] = rpc(state, "/seeds/latest/acme")["payload"]["prod_state_digest"] == original_main
     report["all_passed"] = all(report["checks"].values())
     destination = ROOT / "docs/infra" / ("P5-executor-" + datetime.now(UTC).strftime("%Y%m%dT%H%M%SZ") + ".json")

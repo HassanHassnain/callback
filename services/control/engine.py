@@ -81,7 +81,8 @@ class Engine:
         self.inference = inference
         self.models = Models(inference)
         self.sandbox = Sandbox(config["sandbox_config"])
-        self.executor = httpx.AsyncClient(base_url=config["executor_url"], trust_env=False, timeout=120)
+        self.executor = httpx.AsyncClient(base_url=config["executor_url"], trust_env=False, timeout=120,
+            limits=httpx.Limits(max_keepalive_connections=0))
         self.public_key = json.loads(Path(config["executor_public_key_path"]).read_text())
         self.calls = {}
         self.locks = {}
@@ -136,6 +137,8 @@ class Engine:
             response.raise_for_status()
             envelope = response.json()
             verify(self.public_key, envelope["payload"], envelope["signature"])
+            if realm in self.seeds and self.seeds[realm]["payload"]["version"] > envelope["payload"]["version"]:
+                continue
             self.seeds[realm] = envelope
             self.seed_versions[envelope["payload"]["version"]] = envelope
             await self.sandbox.request("POST", "/seeds", json={"envelope": envelope})
@@ -156,11 +159,18 @@ class Engine:
             "seed_state": envelope["payload"]["normalized_state"], "transcript": [], "tool_log": [],
             "model_calls": [], "effects": [], "egress": [], "risk": {}, "moderation": [], "claims": [],
             "messages": [{"role": "system", "content": SYSTEM + "\nRealm: " + realm}],
-            "production_status": "UNCHANGED", "apply_ready": True}
+            "production_status": "UNCHANGED", "apply_ready": True, "simulated_device": realm == "acme-guest"}
         self.calls[call["call_id"]] = call
         self.locks[call["call_id"]] = asyncio.Lock()
         self.save(call)
         return self.public(call)
+
+    async def destroy_twin(self, call):
+        if call.get("destroy_proof"):
+            return
+        destroyed = await self.sandbox.destroy(call["twin"]["twin_id"])
+        call["twin"].update(destroyed)
+        call["destroy_proof"] = destroyed["destroy_proof"]
 
     async def refresh(self, call):
         tid = call["twin"]["twin_id"]
@@ -254,7 +264,7 @@ class Engine:
             call["change_set_hash"] = digest(call["change_set"])
             call["confirmation_frozen"] = True
             call["status"] = "AWAITING_DEVICE"
-            call["destroy_proof"] = (await self.sandbox.destroy(tid))["destroy_proof"]
+            await self.destroy_twin(call)
             self.save(call)
             return {"status": "pending", "change_set_hash": call["change_set_hash"], "policy": call["policy"],
                     "device_delivery": "Exact effects are pending on the registered device page"}
@@ -266,7 +276,7 @@ class Engine:
             call["claims"] = arguments["claimed_effects"]
             call["claim_comparison"] = compare_claims(call["effects"], call["claims"])
             call["summary"] = arguments["summary"]
-            call["destroy_proof"] = (await self.sandbox.destroy(tid))["destroy_proof"]
+            await self.destroy_twin(call)
             if call["status"] not in {"COMPROMISED", "AWAITING_DEVICE", "ERROR", "CANCELLED"}:
                 call["status"] = "REJECTED" if call["policy"]["outcome"] == "REJECT" else "ENDED"
             self.save(call)

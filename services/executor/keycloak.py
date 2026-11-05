@@ -70,3 +70,19 @@ class Keycloak:
 
 def config_from_file(path="/run/callback/config.json"):
     return json.loads(Path(path).read_text())
+
+
+USER_FIELDS = {"id", "username", "firstName", "lastName", "email", "emailVerified", "enabled",
+               "attributes", "requiredActions", "federationLink"}
+
+
+def update_user(kc, realm, uid, changes):
+    """Keycloak PUT replaces profile fields: preserve every untouched field.
+
+    https://github.com/keycloak/keycloak/issues/44867
+    Never copy credentials, access flags or representation metadata into a PUT.
+    """
+    user = kc.request("GET", realm, "users/" + uid)
+    body = {key: value for key, value in user.items() if key in USER_FIELDS}
+    body.update(changes)
+    return kc.request("PUT", realm, "users/" + uid, body=body)

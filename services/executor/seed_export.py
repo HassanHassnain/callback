@@ -107,7 +107,11 @@ def export_realm(kc, config, realm):
                "prod_state_digest": seed["prod_state_digest"], "created_at": seed["created_at"]}
     storage.put_object(Bucket=config["seeds_bucket"], Key=f"latest/{realm}.json",
                        Body=canonical(pointer), ContentType="application/json")
-    Path(f"/run/callback/latest-{realm}.json").write_bytes(canonical(envelope))
+    pointer_path = Path(f"/run/callback/latest-{realm}.json")
+    temporary = pointer_path.with_suffix(".tmp-" + secrets.token_hex(6))
+    temporary.write_bytes(canonical(envelope))
+    temporary.chmod(0o600)
+    temporary.replace(pointer_path)
     return {"realm": realm, "employees": len(normalized["users"]),
             "admins": sum("/admins" in u["groups"] for u in normalized["users"].values()),
             "version": seed["version"], "object_key": object_key, "signature_verified": True, **checks}
