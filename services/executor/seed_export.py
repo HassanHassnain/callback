@@ -14,7 +14,7 @@ from services.common.crypto import canonical, digest, load_or_create_key, public
 from services.common.state import snapshot, without_secrets  # noqa: F401
 from services.executor.bootstrap import otp_credential
 
-EXPORT_LOCK = threading.Lock()
+EXPORT_LOCK = threading.RLock()
 
 
 def build_seed(normalized):
