@@ -108,3 +108,17 @@ def original(model):
     # The signature covers fields actually supplied; do not inject optional
     # defaults while re-serializing a parsed, already-signed object.
     return model.model_dump(exclude_unset=True)
+
+
+class OperatorAction(Strict):
+    purpose: Literal["operator_test"]
+    action: Literal["hostile_replay", "fork_limit", "memory_limit", "filesystem"]
+    realm: Literal["acme", "acme-guest"]
+    approver_id: str = Field(min_length=1, max_length=128)
+    nonce: str = Field(pattern=r"^[a-f0-9-]{36}$")
+    ts: str = Field(max_length=64)
+
+
+class OperatorProof(Strict):
+    payload: OperatorAction
+    signature: str = Field(min_length=80, max_length=100)

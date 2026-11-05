@@ -10,6 +10,7 @@ import time
 from collections import defaultdict, deque
 from contextlib import asynccontextmanager
 from pathlib import Path
+from datetime import UTC, datetime
 from typing import Literal
 
 import httpx
@@ -17,7 +18,7 @@ from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import FileResponse, JSONResponse
 from pydantic import BaseModel, ConfigDict, Field
 
-from services.common.contracts import SignedDecision
+from services.common.contracts import SignedDecision, OperatorProof
 from services.control.budget import Budget
 from services.control.engine import Engine
 from services.control.inference import VultrInference, redact
@@ -38,12 +39,21 @@ async def monitor(app):
         except Exception as exc:
             app.state.monitor_error = type(exc).__name__
         for call in list(app.state.engine.calls.values()):
-            if call["status"] in {"ACTIVE", "AWAITING_DEVICE", "AWAITING_APPROVER"} and time.time() - call["created_epoch"] > 900:
+            if call["status"] == "ACTIVE" and time.time() - call["created_epoch"] > 900:
+                call["status"] = "EXPIRED"
+            elif call["status"] in {"AWAITING_DEVICE", "AWAITING_APPROVER"} and time.time() - call.get("approval_requested_epoch", call["created_epoch"]) > 3600:
                 call["status"] = "EXPIRED"
             if call["status"] in {"ERROR", "CANCELLED", "EXPIRED", "ABORTED_RESTART"} and not call.get("destroy_proof"):
                 with contextlib.suppress(httpx.HTTPError):
                     call["destroy_proof"] = (await app.state.engine.sandbox.destroy(call["twin"]["twin_id"]))["destroy_proof"]
                 app.state.engine.save(call)
+        # Bound archival work: a single closed-call receipt per monitor cycle.
+        for closed in app.state.engine.calls.values():
+            if closed.get("destroy_proof") and not closed.get("receipt") and closed["status"] in {
+                "COMPROMISED", "REJECTED", "CANCELLED", "ERROR", "EXPIRED", "ABORTED_RESTART",
+                "CONTAINMENT_VERIFIED", "CONTAINMENT_FAILED", "ENDED"}:
+                await app.state.engine.record_closed_call(closed)
+                break
         await asyncio.sleep(45)
 
 
@@ -63,6 +73,12 @@ async def lifespan(app):
     app.state.monitor_error = "initializing"
     app.state.tasks = set()
     app.state.creation_lock = asyncio.Lock()
+    for path in (app.state.engine.root / "operator-jobs").glob("*.json"):
+        job = json.loads(path.read_text())
+        if job["status"] == "RUNNING":
+            job["status"] = "INTERRUPTED_RESTART"
+            path.write_text(json.dumps(job))
+            path.chmod(0o600)
     app.state.rates = defaultdict(deque)
     await app.state.engine.sync_seeds()
     task = asyncio.create_task(monitor(app))
@@ -318,12 +334,117 @@ async def tamper(call_id: str):
     if not call.get("signatures"):
         raise HTTPException(409, "A signed change set is required for this tamper test")
     body = deepcopy(request_for(call))
-    # Keep the signed hash while changing the actual data.
-    body["change_set"]["seed_version"] += "-tampered"
+    # Preserve the signed original and store a separate retargeted variant.
+    target = next(u for u in call["seed_state"]["users"].values() if u["username"] == "dana.whitfield")
+    old_target = deepcopy(body["change_set"]["effects"][0]["target"])
+    body["change_set"]["effects"][0]["target"] = {"user_id": target["id"], "username": target["username"]}
+    if old_target == body["change_set"]["effects"][0]["target"]:
+        body["change_set"]["seed_version"] += "-tampered"
+    call["tampered_change_set"] = deepcopy(body["change_set"])
+    demonstration = {"field": "effects[0].target", "before": old_target,
+        "after": body["change_set"]["effects"][0]["target"], "signed_hash_unchanged": True}
     response = await app.state.engine.executor.post("/apply", json=body)
     response.raise_for_status()
     result = response.json()
     verify(app.state.engine.public_key, result["receipt"]["payload"], result["receipt"]["signature"])
+    result["demonstration"] = demonstration
     call.setdefault("tamper_results", []).append(result["receipt"])
     app.state.engine.save(call)
     return result
+
+
+@app.post("/api/operator/jobs", status_code=202)
+async def operator_job(body: OperatorProof):
+    from services.common.contracts import original
+    from services.common.crypto import digest
+    from services.control.containment import run_containment
+    engine = app.state.engine
+    proof = original(body)
+    response = await engine.executor.post("/operator/verify", json=proof)
+    if response.is_error:
+        raise HTTPException(403, "Pinned operator signature and realm scope are required")
+    payload = proof["payload"]
+    root = engine.root / "operator-jobs"
+    root.mkdir(exist_ok=True)
+    path = root / (payload["nonce"] + ".json")
+    async with app.state.creation_lock:
+        if path.exists():
+            existing = json.loads(path.read_text())
+            if existing["request_hash"] != digest(payload):
+                raise HTTPException(409, "This operator nonce belongs to another request")
+            return existing
+        jobs = [json.loads(p.read_text()) for p in root.glob("*.json")]
+        if any(j["status"] == "RUNNING" for j in jobs):
+            raise HTTPException(409, "An operator containment test is already running")
+        if sum(not c.get("destroy_proof") or bool(c.get("busy")) for c in engine.calls.values()) >= 3:
+            raise HTTPException(429, "Three calls are already active")
+        if payload["action"] == "hostile_replay":
+            models_ready()
+        job = {"job_id": payload["nonce"], "action": payload["action"], "realm": payload["realm"],
+            "operator": payload["approver_id"], "status": "RUNNING", "call_id": None,
+            "request_hash": digest(payload), "created_at": datetime.now(UTC).isoformat(),
+            "workload_origin": "operator_scripted_fault", "planner_generated": False, "signed_request": proof,
+            "stage": "WAITING_FOR_TWIN"}
+        def save_job():
+            temporary = path.with_suffix(".tmp")
+            temporary.write_text(json.dumps(job))
+            temporary.chmod(0o600)
+            temporary.replace(path)
+        save_job()
+    def progress(identifier):
+        job["stage"] = "EXECUTING"
+        job["call_id"] = identifier
+        save_job()
+    async def execute_job():
+        try:
+            for attempt in range(51):
+                try:
+                    if payload["action"] == "hostile_replay":
+                        result = await replay_hostile(engine, payload["realm"], on_created=progress)
+                    else:
+                        result = await run_containment(engine, payload["action"], payload["realm"], progress)
+                    break
+                except httpx.HTTPStatusError as exc:
+                    if job["call_id"] is not None or exc.response.status_code not in {425, 503} or attempt == 50:
+                        raise
+                    await asyncio.sleep(3)
+            job["result_status"] = result["status"]
+            job["status"] = "FINISHED"
+        except Exception as exc:
+            job["status"] = "FAILED"
+            job["error"] = "Operator workload failed: " + type(exc).__name__
+        finally:
+            save_job()
+    task = asyncio.create_task(execute_job())
+    app.state.tasks.add(task)
+    task.add_done_callback(app.state.tasks.discard)
+    return job
+
+
+@app.get("/api/operator/jobs/{identifier}")
+def read_operator_job(identifier: str):
+    if not re.fullmatch(r"[a-f0-9-]{36}", identifier):
+        raise HTTPException(404)
+    path = app.state.engine.root / "operator-jobs" / (identifier + ".json")
+    if not path.exists():
+        raise HTTPException(404)
+    return json.loads(path.read_text())
+
+
+@app.get("/api/demo")
+def demo_manifest():
+    path = Path(app.state.config["directory_path"]).parent / "demo_manifest.json"
+    if not path.exists():
+        raise HTTPException(503, "Verified demo executions have not been selected yet")
+    manifest = json.loads(path.read_text())
+    if any(beat["call_id"] not in app.state.engine.calls for beat in manifest["beats"]):
+        raise HTTPException(503, "Recorded demo evidence is unavailable")
+    return manifest
+
+
+@app.get("/api/benchmark/latest")
+def benchmark_latest():
+    path = Path(app.state.config["directory_path"]).parent.parent / "bench/results/latest.json"
+    if not path.exists():
+        raise HTTPException(404, "No completed benchmark has been published")
+    return json.loads(path.read_text())

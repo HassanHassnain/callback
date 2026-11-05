@@ -120,3 +120,19 @@ def test_noncanonical_context_is_refused_before_any_mutation(tmp_path, monkeypat
     assert result["receipt"]["payload"]["status"] == "REFUSED"
     assert result["receipt"]["payload"]["reason"]["code"] == "NON_CANONICAL_REQUEST"
     assert not calls
+
+
+def test_record_only_signs_observation_without_dispatching_mutation(tmp_path, monkeypatch):
+    from services.common.contracts import original
+    service, request, _, calls, _, signing = setup_service(tmp_path, monkeypatch)
+    body = original(request)
+    body["context"] = {"call_status": "COMPROMISED", "simulation": "unit fixture"}
+    result = service.record_only(ApplyRequest.model_validate(body))
+    payload = result["receipt"]["payload"]
+    verify(public_jwk(signing), payload, result["receipt"]["signature"])
+    assert payload["status"] == "BLOCKED" and payload["reason"]["record_only"]
+    assert not payload["verified"] and not payload["authorization_verified"]
+    assert payload["context_provenance"] == "control_reported"
+    assert payload["prod_state_digest_before"] == payload["prod_state_digest_after"]
+    assert not calls
+    assert service.record_only(ApplyRequest.model_validate(body))["idempotent"]

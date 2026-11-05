@@ -172,6 +172,27 @@ class Engine:
         call["twin"].update(destroyed)
         call["destroy_proof"] = destroyed["destroy_proof"]
 
+    async def record_closed_call(self, call):
+        from services.control.approvals import request_for
+        if call.get("receipt"):
+            return
+        if not call.get("change_set"):
+            call["change_set"] = change_set(call, call["effects"])
+            call["change_set_hash"] = digest(call["change_set"])
+        try:
+            response = await self.executor.post("/record", json=request_for(call))
+            response.raise_for_status()
+            receipt = response.json()["receipt"]
+            verify(self.public_key, receipt["payload"], receipt["signature"])
+            if receipt["payload"]["call_id"] != call["call_id"] or receipt["payload"]["change_set_hash"] != call["change_set_hash"]:
+                raise ValueError("Recorded receipt binding differs from the call")
+            call["receipt"] = receipt
+            call["production_status"] = receipt["payload"]["status"]
+            call.pop("receipt_pending", None)
+        except (httpx.HTTPError, ValueError):
+            call["receipt_pending"] = True
+        self.save(call)
+
     async def refresh(self, call):
         tid = call["twin"]["twin_id"]
         state = await self.sandbox.snapshot(tid)
@@ -264,6 +285,7 @@ class Engine:
             call["change_set_hash"] = digest(call["change_set"])
             call["confirmation_frozen"] = True
             call["status"] = "AWAITING_DEVICE"
+            call["approval_requested_epoch"] = time.time()
             await self.destroy_twin(call)
             self.save(call)
             return {"status": "pending", "change_set_hash": call["change_set_hash"], "policy": call["policy"],
@@ -279,6 +301,8 @@ class Engine:
             await self.destroy_twin(call)
             if call["status"] not in {"COMPROMISED", "AWAITING_DEVICE", "ERROR", "CANCELLED"}:
                 call["status"] = "REJECTED" if call["policy"]["outcome"] == "REJECT" else "ENDED"
+            if call["status"] in {"COMPROMISED", "REJECTED", "ENDED", "ERROR"}:
+                await self.record_closed_call(call)
             self.save(call)
             return {"status": call["status"], "production": "unchanged", "destroy_proof": call["destroy_proof"]}
         raise ValueError("Unknown tool")

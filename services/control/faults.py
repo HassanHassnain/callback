@@ -5,9 +5,12 @@ import uuid
 from services.control.engine import now
 
 
-async def replay_hostile(engine):
-    public = await engine.create("acme")
+async def replay_hostile(engine, realm="acme", on_created=None):
+    public = await engine.create(realm)
     call = engine.calls[public["call_id"]]
+    if on_created:
+        on_created(call["call_id"])
+    call["busy"] = True
     call["workload_origin"] = "operator_scripted_fault"
     call["simulated_claims"] = True
     call["transcript"].append({"role": "operator", "ts": now(), "text":
@@ -52,7 +55,7 @@ for user in members:
    r=h.delete('/users/'+user['id']+'/credentials/'+credential['id']);r.raise_for_status();removed.append(user['username'])
 print(json.dumps({'otp_removed':len(removed),'targets':removed}))
 '''
-        result = await tool("twin_exec", {"language": "python", "code": code})
+        result = await tool("twin_exec", {"language": "python", "code": code.replace("realms/acme", "realms/" + realm)})
         if result["exit_code"] != 0:
             raise RuntimeError("Scripted bulk operation failed")
         await tool("twin_exec", {"language": "bash", "code":
@@ -63,5 +66,6 @@ print(json.dumps({'otp_removed':len(removed),'targets':removed}))
         call["status"] = "ERROR"
         call["error"] = "Operator replay failed: " + type(exc).__name__
         call["destroy_proof"] = (await engine.sandbox.destroy(call["twin"]["twin_id"]))["destroy_proof"]
+    call["busy"] = False
     engine.save(call)
     return engine.public(call)

@@ -162,7 +162,8 @@ class ApplyService:
             "reason": reason, "effects": original(request.change_set)["effects"] if trusted else [],
             "signatures": [original(s) for s in request.signatures] if trusted else [],
             "actual_effects": actual or [], "rollback": rollback or [],
-            "verified": status == "APPLIED_VERIFIED", "context": request.context if trusted else {}}
+            "verified": status == "APPLIED_VERIFIED", "authorization_verified": status in {"APPLIED_VERIFIED", "DENIED"},
+            "context_provenance": "control_reported", "context": request.context if trusted else {}}
         envelope = {"payload": payload, "signature": sign(self.key, payload), "signer_public_key": public_jwk(self.key)}
         path = self.receipts / (rid + ".json")
         path.write_bytes(canonical(envelope))
@@ -327,3 +328,27 @@ class ApplyService:
                 client.put_object(Bucket=self.config["receipts_bucket"], Key=terminal[0] + ".json", Body=data, ContentType="application/json")
             marker.write_text(hashlib.sha256(data).hexdigest())
             marker.chmod(0o600)
+
+    def record_only(self, request):
+        """Sign a closed-call observation; this method never dispatches mutations."""
+        with EXPORT_LOCK:
+            change_set = validate_hash(request)
+            allowed = {"COMPROMISED", "REJECTED", "CANCELLED", "ERROR", "EXPIRED", "ABORTED_RESTART",
+                       "CONTAINMENT_VERIFIED", "CONTAINMENT_FAILED", "ENDED"}
+            require(request.context.get("call_status") in allowed, "INVALID_RECORD", "Call is not a closed observation")
+            with closing(self.db()) as db:
+                prior = db.execute("SELECT hash,receipt_id FROM executions WHERE call_id=?", (change_set["call_id"],)).fetchone()
+            if prior:
+                require(prior[0] == request.change_set_hash and prior[1], "CALL_REPLAY", "An execution already owns this call ID")
+                return {"receipt": json.loads((self.receipts / (prior[1] + ".json")).read_text()), "idempotent": True}
+            kc = Keycloak(self.config)
+            try:
+                before = snapshot(kc, change_set["realm"])
+                after = snapshot(kc, change_set["realm"])
+            finally:
+                kc.client.close()
+            status = "BLOCKED" if request.context["call_status"] in {"COMPROMISED", "REJECTED"} else "NOT_APPLIED"
+            result = self.receipt(request, status, before=before, after=after, trusted=True,
+                reason={"code": "RECORD_ONLY", "detail": "Executor performed no production identity mutation", "record_only": True})
+            self.finish(change_set, status, result)
+            return result

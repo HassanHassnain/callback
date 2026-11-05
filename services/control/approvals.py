@@ -2,6 +2,7 @@
 
 import hashlib
 import json
+import time
 
 from services.common.contracts import ApplyRequest, original
 from services.common.crypto import verify
@@ -13,7 +14,8 @@ def request_for(call, signatures=None):
         "transcript_sha256": hashlib.sha256(json.dumps(call["transcript"], sort_keys=True).encode()).hexdigest(),
         "models": call["model_calls"], "egress_events": call["egress"], "policy": call["policy"],
         "workload_origin": call.get("workload_origin", "live_planner"),
-        "simulated_device": call["realm"] == "acme-guest"}
+        "simulated_device": call["realm"] == "acme-guest",
+        "snapshot_quality": call.get("snapshot_quality", {"complete": False, "quality": "unreported"})}
     return original(ApplyRequest.model_validate({"change_set": call["change_set"], "change_set_hash": call["change_set_hash"],
         "signatures": call.get("signatures", []) if signatures is None else signatures, "context": context}))
 
@@ -21,6 +23,8 @@ def request_for(call, signatures=None):
 async def decide(engine, call, signed):
     if call["status"] not in {"AWAITING_DEVICE", "AWAITING_APPROVER"} or not call.get("destroy_proof"):
         raise ValueError("This call has no frozen, destroyed proposal awaiting a decision")
+    if time.time() - call.get("approval_requested_epoch", call["created_epoch"]) > 3600:
+        raise ValueError("This frozen proposal has expired; start a fresh request")
     if call["policy"]["outcome"] == "REJECT":
         raise ValueError("Rejected changes cannot be approved")
     decision = original(signed)

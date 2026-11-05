@@ -14,7 +14,7 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, ConfigDict
 
-from services.common.contracts import ApplyRequest
+from services.common.contracts import ApplyRequest, OperatorProof
 from services.executor.apply import ApplyService
 from services.executor.enrollment import validate_bundle
 from services.executor.verify import Refusal, registered
@@ -178,3 +178,14 @@ def decisions_verify(body: ApplyRequest):
         return {"devices": sorted(devices), "approvers": sorted(operators), "denials": denials}
     finally:
         kc.client.close()
+
+
+@app.post("/operator/verify")
+def operator_verify(body: OperatorProof):
+    from services.executor.operator import verify_operator
+    return verify_operator(body, Path(app.state.config["signing_key_path"]).parent)
+
+
+@app.post("/record")
+def record_closed_call(body: ApplyRequest):
+    return app.state.apply.record_only(body)
