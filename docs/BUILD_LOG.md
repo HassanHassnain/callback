@@ -134,3 +134,43 @@ from the recorded pending request; no duplicate registry was created.
 Live health: https://callback-45-63-34-5.sslip.io/health
 Remaining: P2 identity provider, fixtures, executor signing key and signed
 scrubbed seed export. No containment or production-apply claim yet.
+
+## 2026-11-04 — P2 real identity world and signed seeds complete
+
+Deployed Keycloak 26.8.1 and PostgreSQL 17 on the IdP VM. Executor-to-Keycloak
+uses HTTPS with a pinned private certificate. The signing key was generated on
+the executor and never exported; only its P-256 public JWK is published.
+Created `acme` and `acme-guest` through executor-side bootstrap code, each with
+40 synthetic employees, 14 admins, and Dana with OTP. Realm-scoped confidential
+service accounts hold realm-admin; their secret remains executor-local except
+for its normal authenticated exchange with Keycloak. The transient bootstrap
+password was removed from the IdP host env and running container after setup.
+
+Built normalized metadata export, fresh twin-only password/OTP/client
+credentials, RFC 8785 hashing, WebCrypto-compatible P-256 signatures, private S3
+uploads, and the 120-second export worker. The worker is healthy and continues
+to export both realms; `/apply` explicitly returns 501 until P5.
+
+Verification: `make lint` passed; `make test` 22 passed, including native Node
+WebCrypto interoperability, signature tamper rejection, secret scrub checks,
+and preservation of password-policy fields for diffs. `infra/verify_identity.py`
+passed against real services: 40 employees/14 admins per realm, Dana OTP and
+privileged tier, signed bucket objects, public-key pin match, normalized-state
+digests, 68 credential-ID/production secret-data-hash comparisons per realm,
+and no production hash/OTP data reused. Evidence:
+`docs/infra/P2-20261104T191152Z.json`. Control cannot reach real Docker-published
+Keycloak; the executor can authenticate over pinned TLS. Re-running bootstrap
+preserved existing employee accounts and credentials.
+
+Fixes: matched Keycloak's UID for its TLS key, and restricted nftables Docker
+port guards to the connection's original direction so return traffic is
+allowed. The guard matches original port 8080 even after DNAT to 8443.
+Earlier failed probes were treated as failures and fixed before acceptance.
+
+Known limits: no UI, twin, containment proof, device enrollment, or apply path
+yet. All people/identity data are synthetic. The private TLS certificate is
+locally pinned and requires managed rotation for a longer-lived deployment.
+
+Public verification key:
+https://callback-45-63-34-5.sslip.io/executor-pubkey.json
+Next: P3 real twin, egress/DNS tripwire, warm pool, and containment tests.

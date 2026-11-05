@@ -172,7 +172,8 @@ def audit_database_hashes(seed, production_metadata):
                     raise RuntimeError("Seed contains password hash data")
             else:
                 hashed = hashlib.sha256(credential["secretData"].encode()).hexdigest()
-                if hashed == item["secret_data_sha256"]:
+                value_hash = hashlib.sha256(json.loads(credential["secretData"])["value"].encode()).hexdigest()
+                if hashed == item["secret_data_sha256"] or value_hash == item.get("secret_value_sha256"):
                     raise RuntimeError("Seed contains a production OTP secret-data value")
             checked += 1
     return {"production_credential_hash_comparisons": checked, "production_secret_data_reused": False}

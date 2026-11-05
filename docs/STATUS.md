@@ -1,7 +1,7 @@
 # Callback status
 
 Updated: 2026-11-04. P0 complete under the explicit user-approved audio
-identity exception. P1 infrastructure checks pass; P2 identity setup is next.
+identity exception. P1 infrastructure checks pass; P2 identity and seed-export acceptance checks pass; P3 containment is next.
 
 ## Done
 
@@ -32,6 +32,12 @@ identity exception. P1 infrastructure checks pass; P2 identity setup is next.
 - Network verification: executor can connect to the IdP port; control cannot.
 - Provisioning rerun created no duplicates; both bucket ACLs are private.
 
+- P2: real Keycloak 26.8.1 + PostgreSQL, two realms with 40 employees and
+  14 admins each, Dana OTP, executor-local signing key, signed scrubbed seeds
+  in Object Storage, healthy 120-second exporter, and public verification JWK.
+- Real production credential-ID/secret-data-hash audit passes for 68 credentials
+  per realm. No production OTP/hash data reused in seeds.
+
 ## P0 checkpoint
 
 The latest full run is `docs/smoke/20261104T182519488993Z.json`: **13 PASS**,
@@ -50,12 +56,13 @@ remain mandatory for every other route. See `docs/account-setup.md` for setup.
 
 ## Not done
 
-P2–P10 not completed. No deployed application, production identity realm, benchmark,
-phone enrollment, or submission assets have been deployed yet.
+P3–P10 are not completed. No call UI, twin, containment proof, device
+enrollment, production apply path, or benchmark is available yet.
 
 ## Known limits
 
-- P1 port verification used a labelled listener, not Keycloak; P2 replaces it.
+- P1 port evidence used a labelled listener. P2 now verifies real Keycloak over
+  pinned TLS, with control still blocked by host/Docker network rules.
 - Sandbox uses the brief's 2-core/16-GB fallback to fit the account fee limit.
 - Container Registry is in SJC because Seattle is absent from its region list.
 - SSH host keys use trust on first use, pinned in a dedicated local known_hosts.
@@ -74,6 +81,7 @@ phone enrollment, or submission assets have been deployed yet.
 ## URLs and demo
 
 Infrastructure health (application not ready): https://callback-45-63-34-5.sslip.io/health
+Executor public key: https://callback-45-63-34-5.sslip.io/executor-pubkey.json
 Source: https://github.com/HassanHassnain/callback
 
 Run `make setup`, `make preflight`, `make test`, `make lint`, and `make smoke`.

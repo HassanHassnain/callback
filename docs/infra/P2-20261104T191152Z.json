@@ -1,0 +1,41 @@
+{
+  "observed_at": "2026-11-04T19:11:31.194629+00:00",
+  "checks": {
+    "published_public_key": {
+      "passed": true,
+      "fingerprint_sha256": "608d83bde0fe54ac901994732fb8e6e1870d7e8bee66414f7b73b8fa534c3c5a"
+    },
+    "acme": {
+      "passed": true,
+      "employees": 40,
+      "admins": 14,
+      "dana_otp_present": true,
+      "dana_tier": "privileged",
+      "seed_signature_valid": true,
+      "seed_key": "seed-acme-20261104T191109786727Z-5ad67c09f3b6.json",
+      "version": "20261104T191109786727Z-5ad67c09f3b6",
+      "production_credential_hash_comparisons": 68,
+      "production_secret_data_reused": false
+    },
+    "acme-guest": {
+      "passed": true,
+      "employees": 40,
+      "admins": 14,
+      "dana_otp_present": true,
+      "dana_tier": "privileged",
+      "seed_signature_valid": true,
+      "seed_key": "seed-acme-guest-20261104T191110831080Z-81847ad86ea8.json",
+      "version": "20261104T191110831080Z-81847ad86ea8",
+      "production_credential_hash_comparisons": 68,
+      "production_secret_data_reused": false
+    },
+    "control_isolated_from_real_keycloak": {
+      "passed": true
+    },
+    "bootstrap_env_removed": {
+      "passed": true,
+      "observation": "Bootstrap credential removed from IdP host env and container"
+    }
+  },
+  "all_passed": true
+}

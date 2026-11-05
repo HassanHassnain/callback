@@ -41,7 +41,7 @@ def firewall(state, role):
             # Docker-published ports pass through FORWARD instead of INPUT.
             # Match the original published port, including after Docker DNAT
             # maps prod 8080 to Keycloak's TLS listener on container port 8443.
-            forward.append(f"meta l4proto tcp ct original proto-dst {port} ip saddr != {allowed} drop")
+            forward.append(f"ct direction original meta l4proto tcp ct original proto-dst {port} ip saddr != {allowed} drop")
     return ("table inet callback {\n chain input {\n type filter hook input priority -50; policy drop;\n"
             + "\n".join("  " + line + ";" for line in rules) + "\n }\n chain forward {\n"
             + " type filter hook forward priority -50; policy accept;\n"
