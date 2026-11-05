@@ -7,7 +7,7 @@ export function useCall(listCalls=false){
  const [call,setCall]=useState<Call|null>(null);
  const [calls,setCalls]=useState<CallSummary[]>([]);
  const [error,setError]=useState('');
- const choose=useCallback((next:string|null)=>{setId(next);setCall(null);try{if(next)localStorage.setItem('callback:v1:call',next);else localStorage.removeItem('callback:v1:call');}catch{/* Storage is optional; the call URL remains shareable. */}history.replaceState(null,'',location.pathname+(next?'?call='+encodeURIComponent(next):''));},[]);
+ const choose=useCallback((next:string|null)=>{setId(next);setCall(null);try{if(next)localStorage.setItem('callback:v1:call',next);else localStorage.removeItem('callback:v1:call');}catch{/* Storage is optional; the call URL remains shareable. */}const params=new URLSearchParams(location.search);if(next)params.set('call',next);else params.delete('call');history.replaceState(null,'',location.pathname+(params.size?'?'+params.toString():''));},[]);
  useEffect(()=>{
   let active=true;let timer:ReturnType<typeof setTimeout>;
   async function poll(){
