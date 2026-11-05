@@ -30,7 +30,7 @@ def evaluate(effects, seed_state, *, compromised=False, device_users=(), risk=0,
             device.add(username)
             human = True
         sensitive = (kind in {"credential.otp.removed", "user.email.changed"}
-            or (kind == "user.attribute.changed" and effect["after"]["attribute"] in {"phone", "device_pubkey_jwk", "tier"})
+            or (kind == "user.attribute.changed" and effect["after"]["attribute"] in {"phone", "device_pubkey_jwk", "device_encryption_pubkey_jwk", "tier"})
             or (kind == "group.member.added" and effect["after"]["group"] in {"/admins", "/executives"}))
         if sensitive:
             rules.append("R6")

@@ -81,7 +81,7 @@ class Engine:
         self.inference = inference
         self.models = Models(inference)
         self.sandbox = Sandbox(config["sandbox_config"])
-        self.executor = httpx.AsyncClient(base_url=config["executor_url"], trust_env=False, timeout=30)
+        self.executor = httpx.AsyncClient(base_url=config["executor_url"], trust_env=False, timeout=120)
         self.public_key = json.loads(Path(config["executor_public_key_path"]).read_text())
         self.calls = {}
         self.locks = {}
@@ -100,6 +100,15 @@ class Engine:
 
     async def recover_calls(self):
         for call in self.calls.values():
+            if call.get("confirmation_frozen") and call.get("destroy_proof") and call["status"] in {"AWAITING_DEVICE", "AWAITING_APPROVER"}:
+                call["busy"] = False
+                self.save(call)
+                continue
+            if call["status"] == "SUBMITTING":
+                call["status"] = "RECONCILE_REQUIRED"
+                call["busy"] = False
+                self.save(call)
+                continue
             if call["status"] in {"ACTIVE", "AWAITING_DEVICE"} or call.get("busy"):
                 call["status"] = "ABORTED_RESTART"
                 call["busy"] = False
@@ -147,7 +156,7 @@ class Engine:
             "seed_state": envelope["payload"]["normalized_state"], "transcript": [], "tool_log": [],
             "model_calls": [], "effects": [], "egress": [], "risk": {}, "moderation": [], "claims": [],
             "messages": [{"role": "system", "content": SYSTEM + "\nRealm: " + realm}],
-            "production_status": "UNCHANGED", "apply_ready": False}
+            "production_status": "UNCHANGED", "apply_ready": True}
         self.calls[call["call_id"]] = call
         self.locks[call["call_id"]] = asyncio.Lock()
         self.save(call)
@@ -208,6 +217,8 @@ class Engine:
         if name == "lookup_employee":
             query = arguments["query"].casefold()
             return [e for e in self.directory if query in json.dumps(e).casefold()][:5]
+        if name in {"twin_admin", "twin_exec", "open_url"} and call.get("confirmation_frozen"):
+            raise ValueError("Proposal is frozen and its twin destroyed; no more tool actions")
         if name in {"twin_admin", "twin_exec"}:
             language = arguments.get("language", "bash")
             code = arguments.get("code") if name == "twin_exec" else shlex.join(["kcadm.sh", *arguments["args"]])
@@ -243,9 +254,10 @@ class Engine:
             call["change_set_hash"] = digest(call["change_set"])
             call["confirmation_frozen"] = True
             call["status"] = "AWAITING_DEVICE"
+            call["destroy_proof"] = (await self.sandbox.destroy(tid))["destroy_proof"]
             self.save(call)
             return {"status": "pending", "change_set_hash": call["change_set_hash"], "policy": call["policy"],
-                    "device_delivery": "not implemented until P5; production apply disabled"}
+                    "device_delivery": "Exact effects are pending on the registered device page"}
         if name == "end_call":
             if not call.get("change_set"):
                 await self.refresh(call)

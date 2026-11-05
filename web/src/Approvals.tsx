@@ -1,0 +1,48 @@
+import {useEffect,useState} from 'react';
+import {api} from './api';
+import {createSlot,decrypt,enrollment,fingerprint,loadSlot,saveSlot,signed,verifyReceipt} from './crypto';
+import type {Box,Envelope,KeySlot} from './crypto';
+import type {Call} from './types';
+import {EffectCard,Json,Status} from './components';
+
+type Notice=(message:string)=>void;
+const message=(e:unknown)=>e instanceof Error?e.message:'Request failed';
+export function Enrollment({kind,identity,notify,onSlot}:{kind:'device'|'approver';identity:string;notify:Notice;onSlot?:(slot:KeySlot)=>void}){
+ const [slot,setSlot]=useState<KeySlot>();const [fp,setFp]=useState('');const [pinned,setPinned]=useState(false);const [busy,setBusy]=useState(false);
+ const id=`acme:${kind}:${identity}`;
+ useEffect(()=>{let live=true;setSlot(undefined);setPinned(false);setFp('');loadSlot(id).then(value=>{if(live)setSlot(value);}).catch(e=>notify(message(e)));return()=>{live=false;};},[id,notify]);
+ useEffect(()=>{if(!slot)return;onSlot?.(slot);fingerprint(slot.publicKey).then(setFp).catch(e=>notify(message(e)));},[slot,onSlot,notify]);
+ useEffect(()=>{if(!slot?.enrollmentId)return;let live=true;async function check(){try{const r=await api<{pinned:boolean}>(`/api/enrollments/${slot!.enrollmentId}/status`);if(live)setPinned(r.pinned);}catch(e){if(live)notify(message(e));}}void check();const timer=setInterval(check,5000);return()=>{live=false;clearInterval(timer);};},[slot,notify]);
+ async function begin(){setBusy(true);try{const value=await createSlot(kind,identity);const bundle=await enrollment(value);const r=await api<{enrollment_id:string}>('/api/enrollments',{method:'POST',body:JSON.stringify(bundle)});value.enrollmentId=r.enrollment_id;value.bundle=bundle;await saveSlot(value);setSlot({...value});}catch(e){notify(message(e));}finally{setBusy(false);}}
+ return <section className="key-enrollment"><div className="eyebrow">{kind==='device'?'REGISTERED PHONE':'OPERATOR KEY CEREMONY'}</div><h2>{kind==='device'?(identity.startsWith('dana')?'Dana Whitfield':'Sam Rivera'):'Hassan · approver'}</h2><p>{kind==='device'?'This browser holds the signing and decryption keys for this employee.':'This browser holds the operator signing key.'} Private keys stay non-extractable in this browser’s IndexedDB.</p><Status value={pinned?'KEY_PINNED':slot?.enrollmentId?'AWAITING_PIN':'NOT_ENROLLED'}/>{!pinned&&<button className="primary" disabled={busy} onClick={begin}>{busy?'Creating request…':slot?.enrollmentId?'Refresh enrollment request':'Create enrollment request'}</button>}{slot?.enrollmentId&&<><p className="note">{pinned?'The executor confirms this exact public key is pinned.':'Keep this page open. Send the enrollment ID and fingerprint to Hassan for the executor key ceremony.'}</p><label className="eyebrow">ENROLLMENT ID</label><code className="breakable">{slot.enrollmentId}</code><label className="eyebrow">SIGNING KEY SHA-256</label><code className="breakable">{fp}</code><details><summary>Public enrollment bundle</summary><Json value={slot.bundle}/></details></>}</section>;
+}
+export function DecisionButtons({call,slot,notify,onDone}:{call:Call;slot?:KeySlot;notify:Notice;onDone?:(call:Call)=>void}){
+ const [busy,setBusy]=useState(false);
+ async function decide(decision:'approve'|'deny'){
+  if(!slot||!call.change_set_hash||!call.change_set)return;
+  setBusy(true);try{
+   if(await fingerprint(call.change_set)!==call.change_set_hash)throw Error('Displayed change set hash differs; decision refused');
+   const payload={change_set_hash:call.change_set_hash,decision,ts:new Date().toISOString(),...(slot.kind==='device'?{username:slot.identity}:{approver_id:slot.identity})};
+   const proof=await signed(slot,payload);const next=await api<Call>(`/api/calls/${call.call_id}/decisions`,{method:'POST',body:JSON.stringify({kind:slot.kind,...proof})});onDone?.(next);
+  }catch(e){notify(message(e));}finally{setBusy(false);}
+ }
+ const pending=['AWAITING_DEVICE','AWAITING_APPROVER'].includes(call.status);
+ return <div className="decision-actions"><button className="primary" disabled={!slot||busy||!pending} onClick={()=>decide('approve')}>{busy?'Verifying…':'Approve exact changes'}</button><button className="danger" disabled={!slot||busy||!pending} onClick={()=>decide('deny')}>Deny</button></div>;
+}
+export function DevicePage({notify}:{notify:Notice}){
+ const initial=new URLSearchParams(location.search).get('user');
+ const [identity,setIdentity]=useState(initial==='sam.rivera'?'sam.rivera':'dana.whitfield');const [slot,setSlot]=useState<KeySlot>();const [calls,setCalls]=useState<Call[]>([]);const [secret,setSecret]=useState<{callId:string;password:string}>();
+ useEffect(()=>{setSlot(undefined);setCalls([]);setSecret(undefined);},[identity]);
+ useEffect(()=>{let live=true;async function refresh(){try{const r=await api<Call[]>(`/api/device/requests?realm=acme&username=${encodeURIComponent(identity)}`);if(live)setCalls(r);}catch(e){if(live)notify(message(e));}}void refresh();const timer=setInterval(refresh,2500);return()=>{live=false;clearInterval(timer);};},[identity,notify]);
+ useEffect(()=>{if(!secret)return;const timer=setTimeout(()=>setSecret(undefined),60000);return()=>clearTimeout(timer);},[secret]);
+ async function reveal(call:Call){if(!slot||!call.change_set_hash)return;try{
+  const binding={call_id:call.call_id,realm:call.realm,username:identity,change_set_hash:call.change_set_hash};const proof=await signed(slot,{...binding,purpose:'delivery',ts:new Date().toISOString()});
+  const r=await api<{box:Box}>('/api/device/delivery',{method:'POST',body:JSON.stringify(proof)});const opened=await decrypt(slot,r.box,binding);setSecret({callId:call.call_id,password:opened.temporary_password});
+ }catch(e){notify(message(e));}}
+ return <section className="workspace device-workspace"><div className="eyebrow">EXACT CONSENT / REGISTERED DEVICE</div><h1>Your account.<br/>Your decision.</h1><p>Review the changes observed in the isolated twin. Approve only requests you initiated.</p><label htmlFor="device-persona">Device slot</label><select id="device-persona" value={identity} onChange={e=>setIdentity(e.target.value)}><option value="dana.whitfield">Dana Whitfield · CFO</option><option value="sam.rivera">Sam Rivera · Sales</option></select><Enrollment key={identity} kind="device" identity={identity} notify={notify} onSlot={setSlot}/><h2>Requests for this device</h2>{!calls.length&&<p className="empty">No confirmation requests. This page checks for new requests automatically.</p>}{calls.map(call=><article className="device-request" key={call.call_id}><div className="panel-heading"><Status value={call.status}/><code>{call.call_id.slice(0,8)}</code></div><p className="note">Actual effects · {call.effects.length} change{call.effects.length===1?'':'s'}</p>{call.effects.map(e=><EffectCard key={e.id} effect={e} call={call}/>)}<label className="eyebrow">EXACT CHANGE-SET HASH</label><code className="breakable">{call.change_set_hash}</code><details><summary>Canonical proposal</summary><Json value={call.change_set}/></details><DecisionButtons call={call} slot={slot?.id===`acme:device:${identity}`?slot:undefined} notify={notify}/>{call.status==='APPLIED_VERIFIED'&&call.effects.some(e=>e.type==='user.password.reset'&&e.target.username===identity)&&<div className="device-secret"><p>Verified reset. Only this device can decrypt the temporary password.</p>{secret?.callId===call.call_id?<><code>{secret.password}</code><p>Change this password at next sign-in. Hidden after one minute.</p><button onClick={()=>setSecret(undefined)}>Hide password</button></>:<button onClick={()=>reveal(call)}>Reveal temporary password on this device</button>}</div>}{Boolean(call.receipt)&&<a className="button" href={'/receipts/'+call.call_id}>Verify signed receipt ↗</a>}</article>)}</section>;
+}
+export function ReceiptPage({notify}:{notify:Notice}){
+ const [receipt,setReceipt]=useState<Envelope>();const [verification,setVerification]=useState('Checking executor signature…');const [valid,setValid]=useState(false);const id=location.pathname.split('/').pop();
+ useEffect(()=>{let live=true;(async()=>{try{const value=await api<Envelope>('/api/receipts/'+id);if(!live)return;setReceipt(value);const fp=await verifyReceipt(value);if(live){setValid(true);setVerification('Verified in this browser · executor key '+fp);}}catch(e){if(live){setVerification('Verification failed: '+message(e));notify(message(e));}}})();return()=>{live=false;};},[id,notify]);
+ return <section className="workspace"><div className="eyebrow">INDEPENDENT EVIDENCE</div><h1>Signed receipt.</h1><p className={valid?'receipt-valid':'denied'} role="status">{verification}</p>{receipt&&<><Status value={String(receipt.payload.status)}/><p>Call {String(receipt.payload.call_id)}</p><p className="breakable">SHA-256 {String(receipt.payload.change_set_hash)}</p><Json value={receipt}/></>}</section>;
+}

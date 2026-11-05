@@ -17,6 +17,7 @@ from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import FileResponse, JSONResponse
 from pydantic import BaseModel, ConfigDict, Field
 
+from services.common.contracts import SignedDecision
 from services.control.budget import Budget
 from services.control.engine import Engine
 from services.control.inference import VultrInference, redact
@@ -37,7 +38,7 @@ async def monitor(app):
         except Exception as exc:
             app.state.monitor_error = type(exc).__name__
         for call in list(app.state.engine.calls.values()):
-            if call["status"] in {"ACTIVE", "AWAITING_DEVICE"} and time.time() - call["created_epoch"] > 900:
+            if call["status"] in {"ACTIVE", "AWAITING_DEVICE", "AWAITING_APPROVER"} and time.time() - call["created_epoch"] > 900:
                 call["status"] = "EXPIRED"
             if call["status"] in {"ERROR", "CANCELLED", "EXPIRED", "ABORTED_RESTART"} and not call.get("destroy_proof"):
                 with contextlib.suppress(httpx.HTTPError):
@@ -140,8 +141,8 @@ async def hostile_replay(request: Request):
 @app.get("/health")
 async def health():
     pool = await app.state.engine.sandbox.request("GET", "/health")
-    return {"status": "ok" if not app.state.monitor_error else "initializing", "phase": "P4",
-            "application_ready": not app.state.monitor_error, "apply_ready": False,
+    return {"status": "ok" if not app.state.monitor_error else "initializing", "phase": "P5",
+            "application_ready": not app.state.monitor_error, "apply_ready": True,
             "warm_twins": pool["ready"], "monitor_error": app.state.monitor_error,
             "budget": app.state.budget.data, "synthetic_identities": True}
 
@@ -220,3 +221,103 @@ def screenshot(identifier: str):
     if not path.is_file():
         raise HTTPException(404)
     return FileResponse(path, media_type="image/png")
+
+
+@app.post("/api/enrollments")
+async def enroll(body: dict):
+    from services.executor.enrollment import validate_bundle
+    from services.common.crypto import digest
+    try:
+        payload = validate_bundle(body)
+    except Exception as exc:
+        raise HTTPException(400, "Enrollment proof did not verify") from exc
+    root = app.state.engine.root / "enrollments"
+    root.mkdir(exist_ok=True)
+    identifier = digest(payload)
+    path = root / (identifier + ".json")
+    if not path.exists() and len(list(root.glob("*.json"))) >= 300:
+        raise HTTPException(429, "Enrollment queue is full")
+    path.write_text(json.dumps(body))
+    path.chmod(0o600)
+    return {"enrollment_id": identifier, "fingerprint": digest(payload["public_key"]), "pinned": False}
+
+
+def enrollment_bundle(identifier):
+    if not re.fullmatch(r"[a-f0-9]{64}", identifier):
+        raise HTTPException(404)
+    path = app.state.engine.root / "enrollments" / (identifier + ".json")
+    if not path.is_file():
+        raise HTTPException(404, "Enrollment not found")
+    return json.loads(path.read_text())
+
+
+@app.get("/api/enrollments/{identifier}")
+def read_enrollment(identifier: str):
+    return enrollment_bundle(identifier)
+
+
+@app.get("/api/enrollments/{identifier}/status")
+async def enrollment_status(identifier: str):
+    response = await app.state.engine.executor.post("/enrollment/status", json=enrollment_bundle(identifier))
+    if response.is_error:
+        raise HTTPException(502, "Executor enrollment check is unavailable")
+    return response.json()
+
+
+@app.get("/api/device/requests")
+def device_requests(realm: Literal["acme", "acme-guest"], username: str):
+    return [app.state.engine.public(c) for c in app.state.engine.calls.values()
+            if c["realm"] == realm and c.get("confirmation_frozen") and any(e["target"].get("username") == username for e in c["effects"])
+            and c["status"] in {"AWAITING_DEVICE", "AWAITING_APPROVER", "SUBMITTING", "APPLIED_VERIFIED", "DENIED", "REFUSED", "FAILED_VERIFY"}][-20:][::-1]
+
+
+@app.post("/api/calls/{call_id}/decisions")
+async def decision(call_id: str, body: SignedDecision):
+    from services.control.approvals import decide
+    engine = app.state.engine
+    get_call(call_id)
+    async with engine.locks[call_id]:
+        try:
+            return await decide(engine, get_call(call_id), body)
+        except ValueError as exc:
+            raise HTTPException(409, str(exc)) from exc
+        except httpx.HTTPStatusError as exc:
+            raise HTTPException(403, "Executor rejected the decision; its identity, scope, signature or timestamp did not verify") from exc
+
+
+@app.post("/api/device/delivery")
+async def delivery(body: dict):
+    response = await app.state.engine.executor.post("/delivery", json=body)
+    if response.is_error:
+        raise HTTPException(403, "Encrypted delivery is unavailable or the registered device proof is invalid")
+    return response.json()
+
+
+@app.get("/api/receipts/{identifier}")
+async def receipt(identifier: str):
+    if not re.fullmatch(r"[a-f0-9-]{36}", identifier):
+        raise HTTPException(404)
+    response = await app.state.engine.executor.get("/receipts/" + identifier)
+    if response.is_error:
+        raise HTTPException(response.status_code, "Receipt is not ready")
+    return response.json()
+
+
+@app.post("/api/calls/{call_id}/tamper")
+async def tamper(call_id: str):
+    from copy import deepcopy
+    from services.control.approvals import request_for
+    from services.common.crypto import verify
+    call = get_call(call_id)
+    if not call.get("signatures"):
+        raise HTTPException(409, "A signed change set is required for this tamper test")
+    body = deepcopy(request_for(call))
+    # Keep the signed hash while changing the actual data.
+    body["change_set"]["seed_version"] += "-tampered"
+    response = await app.state.engine.executor.post("/apply", json=body)
+    response.raise_for_status()
+    result = response.json()
+    verify(app.state.engine.public_key, result["receipt"]["payload"], result["receipt"]["signature"])
+    call.setdefault("tamper_results", []).append(result["receipt"])
+    app.state.engine.save(call)
+    return result
