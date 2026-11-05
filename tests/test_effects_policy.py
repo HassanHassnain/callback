@@ -67,3 +67,27 @@ def test_unknown_user_field_or_credential_deletion_is_never_silent():
     effects = derive(before, after)
     assert len(effects) == 2 and all(e["type"] == "realm.changed" for e in effects)
     assert evaluate(effects, before)["requires_human"]
+
+
+def test_password_cas_uses_signed_production_metadata_after_clone_rehash():
+    production = state()
+    twin = copy.deepcopy(production)
+    twin["users"]["sam"]["credentials"]["password-sam"]["createdDate"] = 100
+    changed = copy.deepcopy(twin)
+    changed["users"]["sam"]["credentials"]["password-sam"]["createdDate"] = 101
+    changed["users"]["sam"]["requiredActions"] = ["UPDATE_PASSWORD"]
+    effect = derive(twin, changed, production_before=production)[0]
+    assert effect["before"]["credentials"]["password-sam"]["createdDate"] == 1
+
+
+def test_client_secret_rotation_is_visible_without_exporting_its_value():
+    before = state()
+    before["clients"] = {"client": {"id": "client", "secret_fingerprint": "twin-original"}}
+    after = copy.deepcopy(before)
+    after["clients"]["client"]["secret_fingerprint"] = "twin-new"
+    production = copy.deepcopy(before)
+    production["clients"]["client"]["secret_fingerprint"] = "production-original"
+    effects = derive(before, after, production_before=production)
+    assert len(effects) == 1 and effects[0]["type"] == "client.secret.changed"
+    assert effects[0]["before"]["fingerprint"] == "production-original"
+    assert evaluate(effects, production)["requires_human"]

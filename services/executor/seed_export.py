@@ -40,10 +40,10 @@ def build_seed(normalized):
     for client in normalized["clients"].values():
         # Every confidential client receives a twin-only credential. No VPC URLs
         # or real client authentication material enter the import representation.
-        entry = {key: client[key] for key in ["id", "clientId", "enabled", "protocol", "publicClient",
-                                              "serviceAccountsEnabled", "standardFlowEnabled"] if key in client}
+        entry = {key: copy.deepcopy(value) for key, value in client.items() if key != "secret_fingerprint"}
         entry["redirectUris"] = ["http://localhost:8080/*"]
-        if not entry.get("publicClient"):
+        if (not entry.get("publicClient") and not entry.get("bearerOnly")
+                and entry.get("clientAuthenticatorType", "client-secret") == "client-secret"):
             entry["secret"] = secrets.token_urlsafe(40)
         clients.append(entry)
     stamp = datetime.now(UTC).strftime("%Y%m%dT%H%M%S%fZ")
@@ -51,7 +51,9 @@ def build_seed(normalized):
     return {"schema_version": 1, "realm": realm, "version": stamp + "-" + state_digest[:12],
             "created_at": datetime.now(UTC).isoformat(), "prod_state_digest": state_digest,
             "normalized_state": normalized, "scrubbed": True,
-            "realm_import": {"realm": realm, "enabled": True, "sslRequired": "none",
+            "user_profile": normalized.get("userProfile", {}),
+            "realm_import": {**copy.deepcopy(normalized["settings"]),
+                "realm": realm, "enabled": True, "sslRequired": "none",
                 "registrationAllowed": False, "resetPasswordAllowed": False,
                 "groups": [copy.deepcopy(g) for g in normalized["groups"].values()],
                 "roles": {"realm": [copy.deepcopy(r) for r in normalized["roles"].values()]},

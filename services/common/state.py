@@ -1,5 +1,7 @@
 """Shared production/twin state normalization; never exports credential secrets."""
 
+import hashlib
+
 def without_secrets(value):
     if isinstance(value, list):
         return [without_secrets(item) for item in value]
@@ -36,11 +38,21 @@ def snapshot(kc, realm):
     groups = kc.list_all(realm, "groups", briefRepresentation="false")
     roles = kc.list_all(realm, "roles")
     clients = kc.request("GET", realm, "clients")
+    client_state = {}
+    for client in clients:
+        metadata = without_secrets(client)
+        if (not client.get("publicClient") and not client.get("bearerOnly")
+                and client.get("clientAuthenticatorType", "client-secret") == "client-secret"):
+            secret = kc.request("GET", realm, f"clients/{client['id']}/client-secret").get("value")
+            if secret:
+                metadata["secret_fingerprint"] = hashlib.sha256(secret.encode()).hexdigest()
+        client_state[client["id"]] = metadata
     normalized = {
         "realm": realm, "settings": without_secrets(representation), "users": dict(sorted(users.items())),
         "groups": {g["id"]: without_secrets(g) for g in sorted(groups, key=lambda g: g["id"])},
         "roles": {role["id"]: without_secrets(role) for role in sorted(roles, key=lambda r: r["id"])},
-        "clients": {c["id"]: without_secrets(c) for c in sorted(clients, key=lambda c: c["id"])},
+        "clients": dict(sorted(client_state.items())),
+        "userProfile": without_secrets(kc.request("GET", realm, "users/profile")),
     }
     return normalized
 

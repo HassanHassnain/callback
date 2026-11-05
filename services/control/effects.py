@@ -5,8 +5,13 @@ from datetime import UTC, datetime
 
 from services.common.crypto import digest
 
+EFFECT_TYPES = ["user.password.reset", "user.required_action.added", "user.required_action.removed",
+    "credential.otp.removed", "user.enabled.changed", "user.unlocked", "user.email.changed",
+    "user.attribute.changed", "group.member.added", "group.member.removed", "role.granted", "role.revoked",
+    "user.created", "user.deleted", "client.secret.changed", "realm.changed", "egress.attempted"]
 
-def derive(before, after, *, tool_call_ids=()):
+
+def derive(before, after, *, tool_call_ids=(), production_before=None):
     if before["realm"] != after["realm"]:
         raise ValueError("Cannot compare different realms")
     realm, effects = before["realm"], []
@@ -40,12 +45,18 @@ def derive(before, after, *, tool_call_ids=()):
         password_before = {k: v for k, v in old["credentials"].items() if v["type"] == "password"}
         password_after = {k: v for k, v in new["credentials"].items() if v["type"] == "password"}
         password_changed = password_before != password_after
-        if password_changed:
-            add("user.password.reset", old, {"credentials": password_before},
+        if password_changed and len(password_after) != 1:
+            add("realm.changed", old, {"path": f"users/{uid}/password_credentials", "value": password_before},
+                {"path": f"users/{uid}/password_credentials", "value": password_after}, False)
+        elif password_changed:
+            original = (production_before or before)["users"].get(uid, old)
+            original_passwords = {k: v for k, v in original["credentials"].items() if v["type"] == "password"}
+            add("user.password.reset", old, {"credentials": original_passwords},
                 {"changed": True, "temporary": "UPDATE_PASSWORD" in new["requiredActions"]}, False)
         for cid, credential in old["credentials"].items():
             if credential["type"] == "otp" and cid not in new["credentials"]:
-                add("credential.otp.removed", old, credential, None, False)
+                original = (production_before or before)["users"].get(uid, old)
+                add("credential.otp.removed", old, original["credentials"].get(cid, credential), None, False)
         # Every credential delta not represented above remains visible and gated.
         known_before = {k: v for k, v in old["credentials"].items() if v["type"] not in {"otp", "password"}}
         known_after = {k: v for k, v in new["credentials"].items() if v["type"] != "password"
@@ -84,10 +95,19 @@ def derive(before, after, *, tool_call_ids=()):
             if field not in covered and old.get(field) != new.get(field):
                 add("realm.changed", old, {"path": f"users/{uid}/{field}", "value": old.get(field)},
                     {"path": f"users/{uid}/{field}", "value": new.get(field)})
-    for section in ["settings", "groups", "roles", "clients"]:
-        if before.get(section) != after.get(section):
-            add("realm.changed", {}, {"path": section, "value": before.get(section)},
-                {"path": section, "value": after.get(section)})
+    for cid in sorted(before.get("clients", {}).keys() | after.get("clients", {}).keys()):
+        old, new = before["clients"].get(cid, {}), after["clients"].get(cid, {})
+        if old.get("secret_fingerprint") != new.get("secret_fingerprint"):
+            original = (production_before or before)["clients"].get(cid, {})
+            add("client.secret.changed", {}, {"client_id": cid, "fingerprint": original.get("secret_fingerprint")},
+                {"client_id": cid, "changed": True}, False)
+    for section in ["settings", "groups", "roles", "clients", "userProfile"]:
+        a, b = before.get(section), after.get(section)
+        if section == "clients":
+            a = {k: {f: v for f, v in c.items() if f != "secret_fingerprint"} for k, c in (a or {}).items()}
+            b = {k: {f: v for f, v in c.items() if f != "secret_fingerprint"} for k, c in (b or {}).items()}
+        if a != b:
+            add("realm.changed", {}, {"path": section, "value": a}, {"path": section, "value": b})
     return effects
 
 
@@ -114,5 +134,9 @@ def change_set(call, effects):
 def compare_claims(effects, claims):
     counts = Counter((e["type"], e["target"].get("username")) for e in effects)
     declared = Counter((c["type"], c.get("username")) for c in claims)
-    return [{"effect_id": e["id"], "mismatch": declared[(e["type"], e["target"].get("username"))] < counts[(e["type"], e["target"].get("username"))]}
-            for e in effects]
+    results = [{"effect_id": e["id"], "mismatch": declared[(e["type"], e["target"].get("username"))] < counts[(e["type"], e["target"].get("username"))]}
+               for e in effects]
+    for (kind, username), count in (declared - counts).items():
+        results.append({"effect_id": None, "mismatch": True, "reason": "Claim has no corresponding observed effect",
+                        "claimed": {"type": kind, "username": username, "count": count}})
+    return results

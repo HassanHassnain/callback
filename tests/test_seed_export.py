@@ -54,3 +54,14 @@ def test_database_secret_data_hash_comparison_rejects_reused_otp():
                 {"id": "o1", "secret_data_sha256": hashlib.sha256(credential["secretData"].encode()).hexdigest()}]
     with pytest.raises(RuntimeError, match="OTP"):
         audit_database_hashes(seed, metadata)
+
+
+def test_seed_preserves_user_profile_and_bearer_only_client_configuration():
+    state = snapshot_fixture()
+    state["userProfile"] = {"attributes": [{"name": "tier", "permissions": {"view": ["admin"], "edit": ["admin"]}}]}
+    state["clients"]["builtin"] = {"id": "builtin", "clientId": "realm-management", "bearerOnly": True,
+        "publicClient": False, "directAccessGrantsEnabled": False}
+    seed = build_seed(state)
+    assert seed["user_profile"] == state["userProfile"]
+    builtin = next(c for c in seed["realm_import"]["clients"] if c["id"] == "builtin")
+    assert builtin["bearerOnly"] and "secret" not in builtin
