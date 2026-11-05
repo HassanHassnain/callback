@@ -9,7 +9,7 @@ sent to Codex.
 
 1. **On your phone**, open
    https://callback-45-63-34-5.sslip.io/device?user=dana.whitfield
-   in Safari or Chrome. Verify **Dana Whitfield · CFO** in Device slot.
+   in Safari or Chrome. Verify the **Dana Whitfield · CFO** link is selected.
    Tap **Create enrollment request** if no request exists. An existing request
    can be reused; the former Refresh label meant it was already created.
    Copy the enrollment ID and note the signing
@@ -45,6 +45,8 @@ registered device. Non-extractable private keys never leave IndexedDB.
 - The console links to each receipt. The browser verifies the executor signature
   against the separately published public key before displaying a verified label.
 
-Decisions expire after ten minutes. Proposals expire after fifteen minutes.
+Decisions expire after ten minutes. Frozen proposals wait for up to one hour;
+execution twins retain their separate fifteen-minute hard lifetime and are
+already destroyed before a proposal is exposed for consent.
 An expired call needs a fresh request. Guest automated tests use separate
 `acme-guest` keys and are explicitly simulated devices, not enrolled real phones.

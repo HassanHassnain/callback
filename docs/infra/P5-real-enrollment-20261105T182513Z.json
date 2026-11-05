@@ -1,0 +1,19 @@
+{
+  "observed_at": "2026-11-05T18:25:10.324743+00:00",
+  "realm": "acme",
+  "real_phone_confirmed_by_user": true,
+  "keys": {
+    "dana.whitfield": {
+      "enrollment_id": "6c26a9da564f67d4af888793a26512308d4ebbcf079b18bf26300d8ffa5ff7c2",
+      "pinned": true
+    },
+    "sam.rivera": {
+      "enrollment_id": "6c94741872c6d00e753773a84aa5acc7e577c6801bb0f87c1c5457e8d9cc7f1a",
+      "pinned": true
+    },
+    "approver:hassan": {
+      "enrollment_id": "39c7e013c19d321c07204469edc716655ecf621a1fb6abefec85f7bf7de6881a",
+      "pinned": true
+    }
+  }
+}

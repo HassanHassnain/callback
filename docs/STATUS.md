@@ -1,7 +1,7 @@
 # Callback status
 
 Updated: 2026-11-05. P0 complete under the explicit user-approved audio
-identity exception. P1 infrastructure checks pass; P2 identity/seed-export and P3 real containment acceptance checks pass; P4 is verified; P5 technical flow is live, with the real-device checkpoint pending.
+identity exception. P1 infrastructure checks pass; P2 identity/seed-export and P3 real containment acceptance checks pass; P4 is verified; P5 real-phone MVP is accepted. P6 is in progress.
 
 ## Done
 
@@ -62,28 +62,29 @@ remain mandatory for every other route. See `docs/account-setup.md` for setup.
 
 ## Not done
 
-P5 is not complete until the real-device checkpoint and public acceptance with
-Hassan's actual phone are performed. His regular Chrome approver browser is now
-pinned and visibly verified; actual phone keys/acceptance remain pending. Phone enrollment, signed approvals,
-independent apply/CAS/post-verify, rollback, encrypted-only password delivery,
-and browser-verified signed receipts are deployed. The complete public flow
-passes in acme-guest with explicitly simulated device keys. Main acme stayed
-unchanged in these guest checks. See docs/device-enrollment.md.
+P5 is complete: Hassan's physical phone is enrolled as Dana and Sam, and his
+regular Chrome browser is pinned as approver. In the public main realm, Sam's
+real device signature auto-applied one temporary reset and independent post-verify
+passed. Hassan confirmed the password appeared on the phone; Codex did not fetch
+or record it. Dana's real phone signed Deny; production before/after digests match.
+Retargeting Sam's signed copy to Dana produced signed HASH_MISMATCH refusal.
+All 15 programmatic checks pass in docs/infra/P5-real-phone-20261105T184311Z.json.
+Real guest executor drift, rollback and encrypted-delivery checks also pass.
 
-P6–P10 (full Gate/red-team UI, voice, benchmark, public guest onboarding/hardening,
-submission assets) remain. No full hackathon submission or measured benchmark is
-claimed. Current local checks: 50 Python tests, Ruff and strict Vite build pass.
+P6 is in progress: the live Gate moves verified cards to production and keeps
+blocked effects on the twin side. Red-team UI, signed fixed-workload operator jobs,
+and operator signature/scope checks are implemented locally; complete deployment
+and end-to-end containment/UI checks remain. Voice, benchmark, guest onboarding,
+hardening and final submission assets (P7–P10) remain.
 
-P5 evidence: docs/infra/P5-executor-20261105T175639Z.json (12 real executor checks) and
-P5-public-20261105T180001Z.json. The first public attempt needed another normal
-caller turn; the second correctly refused a stale seed following the deliberate
-drift probe. Both earlier reports are retained unchanged.
+Current local checks: 51 Python tests, Ruff and strict Vite build pass. The full
+hackathon submission is not complete. All prior failed reports remain preserved.
 
 ## Known limits
 
-- Real phone enrollment/acceptance remain pending. The regular Chrome approver
-  is pinned; a separate automated test browser key remains unpinned. Guest
-  integration keys and proposals are labelled simulated in UI and README.
+- The physical phone/main-realm checks are real. Guest integration keys and
+  proposals are labelled simulated in UI and README. A separate automated test
+  browser approver key remains unpinned.
 - Executor mutations use application-level CAS and a local serialization lock;
   Keycloak's REST API does not provide one atomic multi-operation transaction.
   Independent concurrent administrators can race apply. Post-verify detects
@@ -128,7 +129,7 @@ drift probe. Both earlier reports are retained unchanged.
 
 ## URLs and demo
 
-Application health (P5 typed apply deployed; real-device ceremony pending): https://callback-45-63-34-5.sslip.io/health
+Application health (real-phone P5 MVP accepted): https://callback-45-63-34-5.sslip.io/health
 Executor public key: https://callback-45-63-34-5.sslip.io/executor-pubkey.json
 Source: https://github.com/HassanHassnain/callback
 

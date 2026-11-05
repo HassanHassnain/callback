@@ -1,0 +1,217 @@
+{
+  "observed_at": "2026-11-05T18:26:25.237051+00:00",
+  "acceptance": "Staging only; real phone decisions still required",
+  "device": "Hassan's registered physical phone; no simulated signer",
+  "fixture": "sam_reset",
+  "call": {
+    "call_id": "68d87ea9-7fd0-47fe-b2c6-d2d95f6ef07d",
+    "realm": "acme",
+    "status": "AWAITING_DEVICE",
+    "effects": [
+      {
+        "type": "user.password.reset",
+        "realm": "acme",
+        "target": {
+          "user_id": "aa8de62e-2a4f-57dd-b372-7ce6f983f53b",
+          "username": "sam.rivera"
+        },
+        "before": {
+          "credentials": {
+            "57687861-3570-4d20-b77c-7b44aa70c739": {
+              "createdDate": 1793819194775,
+              "id": "57687861-3570-4d20-b77c-7b44aa70c739",
+              "type": "password"
+            }
+          }
+        },
+        "after": {
+          "changed": true,
+          "temporary": true
+        },
+        "reversible": false,
+        "evidence": {
+          "tool_call_ids": [
+            "call_1e6752c92ea6b9f4fff1159c",
+            "call_c91ac558481eaaebd21649b0",
+            "call_e7ca7b6f54d96f674e1fcdaf",
+            "call_aeb7c1702eb59b10ef014be7",
+            "call_cd23f6d29adb165521a4908f"
+          ],
+          "screenshot_key": "44197ca8-951d-4984-82eb-324432e9d027",
+          "vision_verdict": {
+            "verdict": "UNSURE",
+            "reason": "The screenshot shows the Keycloak admin console on the Credentials tab for user sam.rivera in the Acme realm, with a Password credential listed and a 'Reset password' button available. However, the screenshot does not show any evidence that a password reset was actually performed (e.g., a confirmation dialog, success message, or changed credential state). The claimed effect (password reset with changed=true, temporary=true) cannot be visually confirmed from this static view."
+          }
+        },
+        "irreversible_reason": "Original credential material is never exported",
+        "id": "642fd5481598d7534b899f0a"
+      }
+    ],
+    "policy": {
+      "outcome": "DEVICE_REQUIRED",
+      "auto_eligible": true,
+      "rule_ids": [
+        "R7"
+      ],
+      "requires_device": [
+        "sam.rivera"
+      ],
+      "requires_human": false
+    },
+    "model_calls": [
+      {
+        "requested_model": "clef-flash",
+        "returned_model": "clef-flash",
+        "model_id_verified": true,
+        "seconds": 0.5072322789928876,
+        "usage": {
+          "input_tokens": 358,
+          "output_tokens": 0
+        }
+      },
+      {
+        "requested_model": "nemotron-3.5-content-safety",
+        "returned_model": "nemotron-3.5-content-safety",
+        "model_id_verified": true,
+        "seconds": 1.4819074660044862,
+        "usage": {
+          "prompt_tokens": 501,
+          "completion_tokens": 34,
+          "total_tokens": 535,
+          "prompt_tokens_details": {
+            "cached_tokens": 496
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        }
+      },
+      {
+        "requested_model": "deepseek-v4.1-flash-1017",
+        "returned_model": "deepseek-v4.1-flash-1017",
+        "model_id_verified": true,
+        "seconds": 0.48218823700153735,
+        "usage": {
+          "prompt_tokens": 1157,
+          "completion_tokens": 54,
+          "total_tokens": 1211,
+          "prompt_tokens_details": {
+            "cached_tokens": 1152
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        }
+      },
+      {
+        "requested_model": "deepseek-v4.1-flash-1017",
+        "returned_model": "deepseek-v4.1-flash-1017",
+        "model_id_verified": true,
+        "seconds": 0.552986566995969,
+        "usage": {
+          "prompt_tokens": 1309,
+          "completion_tokens": 78,
+          "total_tokens": 1387,
+          "prompt_tokens_details": {
+            "cached_tokens": 1280
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        }
+      },
+      {
+        "requested_model": "deepseek-v4.1-flash-1017",
+        "returned_model": "deepseek-v4.1-flash-1017",
+        "model_id_verified": true,
+        "seconds": 0.924461066009826,
+        "usage": {
+          "prompt_tokens": 1513,
+          "completion_tokens": 161,
+          "total_tokens": 1674,
+          "prompt_tokens_details": {
+            "cached_tokens": 1280
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        }
+      },
+      {
+        "requested_model": "deepseek-v4.1-flash-1017",
+        "returned_model": "deepseek-v4.1-flash-1017",
+        "model_id_verified": true,
+        "seconds": 1.638412451997283,
+        "usage": {
+          "prompt_tokens": 1716,
+          "completion_tokens": 73,
+          "total_tokens": 1789,
+          "prompt_tokens_details": {
+            "cached_tokens": 1408
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        }
+      },
+      {
+        "requested_model": "deepseek-v4.1-flash-1017",
+        "returned_model": "deepseek-v4.1-flash-1017",
+        "model_id_verified": true,
+        "seconds": 0.7122548899933463,
+        "usage": {
+          "prompt_tokens": 1894,
+          "completion_tokens": 62,
+          "total_tokens": 1956,
+          "prompt_tokens_details": {
+            "cached_tokens": 1664
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        }
+      },
+      {
+        "requested_model": "mimo-v2.6-pro",
+        "returned_model": "mimo-v2.6-pro",
+        "model_id_verified": true,
+        "seconds": 2.0199449639912928,
+        "usage": {
+          "prompt_tokens": 1783,
+          "completion_tokens": 103,
+          "total_tokens": 1886,
+          "prompt_tokens_details": {
+            "cached_tokens": 256
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        }
+      },
+      {
+        "requested_model": "deepseek-v4.1-flash-1017",
+        "returned_model": "deepseek-v4.1-flash-1017",
+        "model_id_verified": true,
+        "seconds": 0.8666802970110439,
+        "usage": {
+          "prompt_tokens": 2081,
+          "completion_tokens": 164,
+          "total_tokens": 2245,
+          "prompt_tokens_details": {
+            "cached_tokens": 1792
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        }
+      }
+    ],
+    "change_set_hash": "9560d1204dfd35b36aaaf627e1099c191954ead6f5e190777e6b73f12e1bc60c",
+    "destroy_proof": {
+      "docker_inspect": "No such container",
+      "observed_at": "2026-11-05T18:26:23.620402+00:00",
+      "container_id": "a7531576ab9c9b9b92e83ae08963c3479bbfa6a91ba53a8c1f4de77184388b40"
+    },
+    "production_status": "UNCHANGED"
+  }
+}

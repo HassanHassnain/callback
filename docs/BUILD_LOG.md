@@ -382,3 +382,40 @@ This is distinct from the unpinned automated test-browser key. Phone key ceremon
 still awaits Hassan confirming Dana's displayed fingerprint prefix 7d438445
 and creating Sam's request using the direct phone URL. Codex will retrieve IDs
 and pin the public keys; do not ask Hassan to recopy long IDs unnecessarily.
+
+
+## P5 — MVP reached: real phone accepted (2026-11-05)
+
+Hassan confirmed Dana's fingerprint prefix 7d438445 and created Sam's phone
+request. Pinned both exact public signing/encryption bundles through executor SSH;
+all three real enrollment-status checks return pinned=true. The private keys stay
+on the physical phone and regular Chrome browser. Enrollment proof:
+docs/infra/P5-real-enrollment-20261105T182513Z.json.
+
+Staged real Vultr planner calls in acme: Sam
+68d87ea9-7fd0-47fe-b2c6-d2d95f6ef07d and Dana
+c4eb21e6-e053-440f-b579-f24800c2c438. Sam yields one reset, R7, device-only;
+Dana yields OTP removal plus CONFIGURE_TOTP, R5/R6, device plus human. Both twins
+were frozen and destroyed before phone delivery. Hassan approved Sam and confirmed
+the temporary password appeared on his phone, without sharing its value. He
+signed Deny for Dana. No device signature was simulated in these checks.
+
+infra/verify_real_phone.py --phone-display-confirmed passes all 15 checks:
+executor receipt signatures; real-phone context; twin destruction metadata;
+exact returned Vultr models; one Sam reset applied/post-verified via device-only
+AUTO; actual public retarget-to-Dana tamper refused with HASH_MISMATCH; signed
+Dana denial; equal production before/after digests; privileged OTP policy.
+Evidence: docs/infra/P5-real-phone-20261105T184311Z.json. The phone display is
+explicitly human-confirmed; the password was never fetched by this verifier.
+Drift and post-verify rollback use the separate real guest executor integration
+proof (12 checks), not a claim of an extra manual main-realm drift test.
+
+Separated approval waiting from execution: twins remain capped at 15 minutes,
+and are destroyed before delivery; frozen proposals wait up to one hour so the
+physical user can respond asynchronously. Decision signatures still expire in
+10 minutes and full production CAS remains mandatory. Existing signed change
+sets were not edited. The gate UI was refined to move only APPLIED_VERIFIED
+effects to production, keep denied/rejected cards in the twin, show compact
+real limits/destroy proof, and link browser-verifiable receipts. First 1920x1080
+review saved to docs/img/P6-gate-sam-stage-v1.png; second visual iteration built.
+P6 signed operator jobs and red-team UI are under construction, not accepted yet.

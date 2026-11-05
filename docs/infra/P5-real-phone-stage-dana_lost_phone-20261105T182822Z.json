@@ -1,0 +1,341 @@
+{
+  "observed_at": "2026-11-05T18:28:22.618744+00:00",
+  "acceptance": "Staging only; real phone decisions still required",
+  "device": "Hassan's registered physical phone; no simulated signer",
+  "fixture": "dana_lost_phone",
+  "call": {
+    "call_id": "c4eb21e6-e053-440f-b579-f24800c2c438",
+    "realm": "acme",
+    "status": "AWAITING_DEVICE",
+    "effects": [
+      {
+        "type": "credential.otp.removed",
+        "realm": "acme",
+        "target": {
+          "user_id": "38a03a30-1fe0-5349-9f26-5d7ac8bcb91f",
+          "username": "dana.whitfield"
+        },
+        "before": {
+          "createdDate": 1793819194723,
+          "id": "37430f1b-1d81-47b3-b030-abd757d9e937",
+          "type": "otp",
+          "userLabel": "Registered authenticator (synthetic)"
+        },
+        "after": null,
+        "reversible": false,
+        "evidence": {
+          "tool_call_ids": [
+            "call_5b14350f40dd3aafd26e1d61",
+            "call_7ea0ed0a2d6a461ac4e6dc44",
+            "call_d8c599caf58165819ded4d68",
+            "call_09e87e29a083142986956d9a",
+            "call_127008c1ad4ac11a9b5be311",
+            "call_15277d7076a68eb1d5c7c67b",
+            "call_5014a855e06993f9217abf13",
+            "call_3c2a25e4bd6fee1d13d6030c",
+            "call_9b734200d6295fbdd392f82a"
+          ],
+          "screenshot_key": "8ed33678-3b81-40c7-911f-2e137c4b23c9",
+          "vision_verdict": {
+            "verdict": "UNSURE",
+            "reason": "The screenshot shows the Credentials tab for user dana.whitfield in the Acme realm, listing only a Password credential. The claimed effect is the removal of an OTP credential (type 'otp', userLabel 'Registered authenticator (synthetic)'). While the absence of an OTP row is consistent with it having been removed, the screenshot alone cannot establish that an OTP credential previously existed and was deleted\u2014it could simply never have been present. No before-state, event log entry, or removal confirmation is visible to verify the change."
+          }
+        },
+        "irreversible_reason": "Original credential material is never exported",
+        "id": "896753a1e648a3766dd80868"
+      },
+      {
+        "type": "user.required_action.added",
+        "realm": "acme",
+        "target": {
+          "user_id": "38a03a30-1fe0-5349-9f26-5d7ac8bcb91f",
+          "username": "dana.whitfield"
+        },
+        "before": null,
+        "after": "CONFIGURE_TOTP",
+        "reversible": true,
+        "evidence": {
+          "tool_call_ids": [
+            "call_5b14350f40dd3aafd26e1d61",
+            "call_7ea0ed0a2d6a461ac4e6dc44",
+            "call_d8c599caf58165819ded4d68",
+            "call_09e87e29a083142986956d9a",
+            "call_127008c1ad4ac11a9b5be311",
+            "call_15277d7076a68eb1d5c7c67b",
+            "call_5014a855e06993f9217abf13",
+            "call_3c2a25e4bd6fee1d13d6030c",
+            "call_9b734200d6295fbdd392f82a"
+          ],
+          "screenshot_key": "8ed33678-3b81-40c7-911f-2e137c4b23c9",
+          "vision_verdict": {
+            "verdict": "UNSURE",
+            "reason": "The screenshot shows the Keycloak admin console on the Credentials tab for user dana.whitfield in the Acme realm, but it does not display any required actions list or CONFIGURE_TOTP entry. The event claims a required action was added (before: null, after: CONFIGURE_TOTP), which would typically appear under the user's Details tab or a required actions section, but that information is not visible in this screenshot. Therefore, the effect cannot be confirmed or denied from the visible evidence."
+          }
+        },
+        "id": "47fd3efcc6a4d1562c7d17c4"
+      }
+    ],
+    "policy": {
+      "outcome": "HUMAN_REQUIRED",
+      "auto_eligible": false,
+      "rule_ids": [
+        "R5",
+        "R6"
+      ],
+      "requires_device": [
+        "dana.whitfield"
+      ],
+      "requires_human": true
+    },
+    "model_calls": [
+      {
+        "requested_model": "clef-flash",
+        "returned_model": "clef-flash",
+        "model_id_verified": true,
+        "seconds": 0.5124821369972778,
+        "usage": {
+          "input_tokens": 366,
+          "output_tokens": 0
+        }
+      },
+      {
+        "requested_model": "nemotron-3.5-content-safety",
+        "returned_model": "nemotron-3.5-content-safety",
+        "model_id_verified": true,
+        "seconds": 1.4343534389918204,
+        "usage": {
+          "prompt_tokens": 508,
+          "completion_tokens": 30,
+          "total_tokens": 538,
+          "prompt_tokens_details": {
+            "cached_tokens": 496
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        }
+      },
+      {
+        "requested_model": "deepseek-v4.1-flash-1017",
+        "returned_model": "deepseek-v4.1-flash-1017",
+        "model_id_verified": true,
+        "seconds": 0.5631240869988687,
+        "usage": {
+          "prompt_tokens": 1166,
+          "completion_tokens": 59,
+          "total_tokens": 1225,
+          "prompt_tokens_details": {
+            "cached_tokens": 1024
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        }
+      },
+      {
+        "requested_model": "deepseek-v4.1-flash-1017",
+        "returned_model": "deepseek-v4.1-flash-1017",
+        "model_id_verified": true,
+        "seconds": 0.6479430890030926,
+        "usage": {
+          "prompt_tokens": 1329,
+          "completion_tokens": 147,
+          "total_tokens": 1476,
+          "prompt_tokens_details": {
+            "cached_tokens": 1152
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        }
+      },
+      {
+        "requested_model": "deepseek-v4.1-flash-1017",
+        "returned_model": "deepseek-v4.1-flash-1017",
+        "model_id_verified": true,
+        "seconds": 2.073623003991088,
+        "usage": {
+          "prompt_tokens": 1651,
+          "completion_tokens": 80,
+          "total_tokens": 1731,
+          "prompt_tokens_details": {
+            "cached_tokens": 1280
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        }
+      },
+      {
+        "requested_model": "deepseek-v4.1-flash-1017",
+        "returned_model": "deepseek-v4.1-flash-1017",
+        "model_id_verified": true,
+        "seconds": 1.2832395169971278,
+        "usage": {
+          "prompt_tokens": 2073,
+          "completion_tokens": 199,
+          "total_tokens": 2272,
+          "prompt_tokens_details": {
+            "cached_tokens": 1536
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        }
+      },
+      {
+        "requested_model": "clef-flash",
+        "returned_model": "clef-flash",
+        "model_id_verified": true,
+        "seconds": 0.2423899939894909,
+        "usage": {
+          "input_tokens": 632,
+          "output_tokens": 0
+        }
+      },
+      {
+        "requested_model": "nemotron-3.5-content-safety",
+        "returned_model": "nemotron-3.5-content-safety",
+        "model_id_verified": true,
+        "seconds": 1.2290126400039298,
+        "usage": {
+          "prompt_tokens": 511,
+          "completion_tokens": 19,
+          "total_tokens": 530,
+          "prompt_tokens_details": {
+            "cached_tokens": 496
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        }
+      },
+      {
+        "requested_model": "deepseek-v4.1-flash-1017",
+        "returned_model": "deepseek-v4.1-flash-1017",
+        "model_id_verified": true,
+        "seconds": 0.9604089140048018,
+        "usage": {
+          "prompt_tokens": 2322,
+          "completion_tokens": 103,
+          "total_tokens": 2425,
+          "prompt_tokens_details": {
+            "cached_tokens": 2176
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        }
+      },
+      {
+        "requested_model": "deepseek-v4.1-flash-1017",
+        "returned_model": "deepseek-v4.1-flash-1017",
+        "model_id_verified": true,
+        "seconds": 0.774855708994437,
+        "usage": {
+          "prompt_tokens": 2462,
+          "completion_tokens": 94,
+          "total_tokens": 2556,
+          "prompt_tokens_details": {
+            "cached_tokens": 2304
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        }
+      },
+      {
+        "requested_model": "deepseek-v4.1-flash-1017",
+        "returned_model": "deepseek-v4.1-flash-1017",
+        "model_id_verified": true,
+        "seconds": 0.8107365380128613,
+        "usage": {
+          "prompt_tokens": 2593,
+          "completion_tokens": 162,
+          "total_tokens": 2755,
+          "prompt_tokens_details": {
+            "cached_tokens": 2432
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        }
+      },
+      {
+        "requested_model": "deepseek-v4.1-flash-1017",
+        "returned_model": "deepseek-v4.1-flash-1017",
+        "model_id_verified": true,
+        "seconds": 0.7987104749918217,
+        "usage": {
+          "prompt_tokens": 3074,
+          "completion_tokens": 61,
+          "total_tokens": 3135,
+          "prompt_tokens_details": {
+            "cached_tokens": 2688
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        }
+      },
+      {
+        "requested_model": "mimo-v2.6-pro",
+        "returned_model": "mimo-v2.6-pro",
+        "model_id_verified": true,
+        "seconds": 2.2316705060075037,
+        "usage": {
+          "prompt_tokens": 1861,
+          "completion_tokens": 119,
+          "total_tokens": 1980,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        }
+      },
+      {
+        "requested_model": "mimo-v2.6-pro",
+        "returned_model": "mimo-v2.6-pro",
+        "model_id_verified": true,
+        "seconds": 1.741067821989418,
+        "usage": {
+          "prompt_tokens": 1775,
+          "completion_tokens": 112,
+          "total_tokens": 1887,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        }
+      },
+      {
+        "requested_model": "deepseek-v4.1-flash-1017",
+        "returned_model": "deepseek-v4.1-flash-1017",
+        "model_id_verified": true,
+        "seconds": 1.1138456639891956,
+        "usage": {
+          "prompt_tokens": 3262,
+          "completion_tokens": 345,
+          "total_tokens": 3607,
+          "prompt_tokens_details": {
+            "cached_tokens": 3072
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        }
+      }
+    ],
+    "change_set_hash": "183f0bc2cbab25f655d840c380df2eb0534ef63073a075ded4012179819448e7",
+    "destroy_proof": {
+      "docker_inspect": "No such container",
+      "observed_at": "2026-11-05T18:28:18.157166+00:00",
+      "container_id": "a5b17e83375bfc8a345ecb518310276e582fcefa6668a5345becd82fd86085a1"
+    },
+    "production_status": "UNCHANGED"
+  }
+}
