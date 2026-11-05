@@ -88,3 +88,35 @@ def test_started_execution_is_never_repeated(tmp_path, monkeypatch):
         db.execute("INSERT INTO executions VALUES (?,?,?,NULL)", (request.change_set.call_id, request.change_set_hash, "STARTED"))
     result = service.apply(request)["receipt"]["payload"]
     assert result["status"] == "REFUSED" and result["reason"]["code"] == "INDETERMINATE" and not calls
+
+
+def test_receipt_storage_outage_retries_without_repeating_mutation(tmp_path, monkeypatch):
+    import services.executor.apply as module
+    service, request, _, calls, _, _ = setup_service(tmp_path, monkeypatch)
+    stored = {}
+    alias = request.change_set.call_id + ".json"
+    offline = True
+    class Storage:
+        def put_object(self, **kwargs):
+            if kwargs["Key"] == alias and offline:
+                raise OSError("Injected Object Storage alias outage")
+            stored[kwargs["Key"]] = kwargs["Body"]
+    monkeypatch.setattr(module, "s3_client", lambda config: Storage())
+    result = service.apply(request)
+    assert result["receipt"]["payload"]["status"] == "APPLIED_VERIFIED"
+    assert result["storage_pending"] and alias not in stored
+    offline = False
+    service.flush_receipts()
+    assert json.loads(stored[alias]) == result["receipt"]
+    assert service.apply(request)["idempotent"] and len(calls) == 1
+
+
+def test_noncanonical_context_is_refused_before_any_mutation(tmp_path, monkeypatch):
+    from services.common.contracts import original
+    service, request, _, calls, _, _ = setup_service(tmp_path, monkeypatch)
+    raw = original(request)
+    raw["context"] = {"invalid": float("nan")}
+    result = service.apply(ApplyRequest.model_validate(raw))
+    assert result["receipt"]["payload"]["status"] == "REFUSED"
+    assert result["receipt"]["payload"]["reason"]["code"] == "NON_CANONICAL_REQUEST"
+    assert not calls

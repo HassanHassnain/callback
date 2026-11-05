@@ -5,7 +5,7 @@ from collections import Counter
 from datetime import UTC, datetime
 
 from services.common.contracts import original
-from services.common.crypto import digest, verify
+from services.common.crypto import canonical, digest, verify
 from services.common.sealed import public_key
 
 
@@ -21,6 +21,12 @@ def require(condition, code, detail):
 
 
 def validate_hash(request):
+    # Receipt context is outside the signed change set but must also be valid
+    # JCS before any mutation, or post-apply receipt signing could fail.
+    try:
+        canonical(original(request))
+    except (ValueError, TypeError) as exc:
+        raise Refusal("NON_CANONICAL_REQUEST", "All request fields must be canonical JSON") from exc
     change_set = original(request.change_set)
     actual = digest(change_set)
     require(actual == request.change_set_hash, "HASH_MISMATCH", "Canonical change-set hash differs from the submitted hash")

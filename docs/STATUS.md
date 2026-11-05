@@ -63,7 +63,8 @@ remain mandatory for every other route. See `docs/account-setup.md` for setup.
 ## Not done
 
 P5 is not complete until the real-device checkpoint and public acceptance with
-Hassan's actual phone/browser are performed. Phone enrollment, signed approvals,
+Hassan's actual phone are performed. His regular Chrome approver browser is now
+pinned and visibly verified; actual phone keys/acceptance remain pending. Phone enrollment, signed approvals,
 independent apply/CAS/post-verify, rollback, encrypted-only password delivery,
 and browser-verified signed receipts are deployed. The complete public flow
 passes in acme-guest with explicitly simulated device keys. Main acme stayed
@@ -71,16 +72,17 @@ unchanged in these guest checks. See docs/device-enrollment.md.
 
 P6–P10 (full Gate/red-team UI, voice, benchmark, public guest onboarding/hardening,
 submission assets) remain. No full hackathon submission or measured benchmark is
-claimed. Current local checks: 48 Python tests, Ruff and strict Vite build pass.
+claimed. Current local checks: 50 Python tests, Ruff and strict Vite build pass.
 
 P5 evidence: docs/infra/P5-executor-20261105T175639Z.json (12 real executor checks) and
-P5-public-20261105T174601Z.json. The first public attempt needed another normal
+P5-public-20261105T180001Z.json. The first public attempt needed another normal
 caller turn; the second correctly refused a stale seed following the deliberate
 drift probe. Both earlier reports are retained unchanged.
 
 ## Known limits
 
-- Real phone and operator browser enrollment/acceptance remain pending. Guest
+- Real phone enrollment/acceptance remain pending. The regular Chrome approver
+  is pinned; a separate automated test browser key remains unpinned. Guest
   integration keys and proposals are labelled simulated in UI and README.
 - Executor mutations use application-level CAS and a local serialization lock;
   Keycloak's REST API does not provide one atomic multi-operation transaction.

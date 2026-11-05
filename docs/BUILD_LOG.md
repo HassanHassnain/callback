@@ -312,7 +312,7 @@ checks pass, including actual Keycloak reset/post-verify, signed receipt,
 encrypted-only delivery, idempotent response, tamper rejection, signed Dana deny
 with unchanged digest, real deliberate drift refusal, and unchanged main realm.
 The public planner/twin/device-signature/apply path also passes all nine checks:
-docs/infra/P5-public-20261105T174601Z.json. These tests use **simulated guest device
+docs/infra/P5-public-20261105T180001Z.json. These tests use **simulated guest device
 keys**, with real cryptography, inference, twins, executor and identity changes.
 They are labelled in UI, README and reports; they do not satisfy real-phone
 acceptance. Browser receipt verification was observed in Chromium using the
@@ -343,7 +343,7 @@ required human checkpoint is now open: docs/device-enrollment.md gives exact
 phone Dana/Sam and normal-browser approver steps. Await the three user-provided
 enrollment IDs, pin their public bundles, then run actual-phone Sam approval and
 Dana denial. Do not write "MVP reached" before that acceptance. P6–P10 remain.
-Current local verification: 48 Python tests; Ruff; strict Vite/TypeScript build.
+Current local verification: 50 Python tests; Ruff; strict Vite/TypeScript build.
 
 Published the final P4 twin image in Vultr Container Registry at immutable digest
 sha256:72ff271bf03dcbcee94f39bfc89a00d14dd80b7017b8cf86a7c7f2b40600869b;
@@ -360,3 +360,25 @@ connections and return bounded 503 reconnect responses instead of uncaught 500s.
 Call creation refreshes signed seed pointers before claiming a twin; older sync
 responses cannot replace newer versions. Seed pointer writes use unique atomic
 files. These improve availability without relaxing hash, signature or CAS checks.
+
+
+P5 final public rerun also passes all nine checks on the deployed field-preserving
+executor and fresh-seed control flow: docs/infra/P5-public-20261105T180001Z.json.
+Added a canonical-domain guard on the entire typed request before mutation,
+including unsigned receipt context: non-finite numbers cannot cause receipt
+signing to fail after a production change. Storage-outage and noncanonical-input
+regressions bring the local suite to 50 passing tests.
+
+Hassan reported a confusing Refresh enrollment label and missing Device slot.
+The existing Dana requests use the same signing/encryption key; nothing needed
+to be regenerated. Replaced the dropdown with explicit Dana/Sam links, show the
+existing-request state, and added a copy-ID button. No prior key was deleted.
+Using Computer Use, created the approver key in Hassan's actual regular Chrome
+profile and pinned the exact public fingerprint
+96071919a2ad8153d34928573f44b71450d9a297aeb2512b9b1bdeec388bb235
+through executor SSH. Observed KEY PINNED in that browser, saved proof to
+output/playwright/P5-real-browser-approver-pinned.png and kept the tab open.
+This is distinct from the unpinned automated test-browser key. Phone key ceremony
+still awaits Hassan confirming Dana's displayed fingerprint prefix 7d438445
+and creating Sam's request using the direct phone URL. Codex will retrieve IDs
+and pin the public keys; do not ask Hassan to recopy long IDs unnecessarily.
