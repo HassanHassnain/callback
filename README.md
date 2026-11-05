@@ -27,10 +27,10 @@ password delivery and hash-tamper refusal. **Guest device keys/signatures in
 these tests are simulated.** The executor, signatures, REST changes and receipts
 are real. UI banners and each report identify that distinction. Direct executor
 checks additionally exercise signed denial and real production drift. Evidence:
-`docs/infra/P5-public-20261105T174601Z.json` and the P5 executor reports.
+`docs/infra/P5-public-20261105T180001Z.json` and the P5 executor reports.
 
 **The real-phone P5 checkpoint is pending.** Hassan must enroll his actual phone
-as Dana and Sam and his regular browser as approver; automated guest keys do not
+as Dana and Sam. His regular Chrome browser is enrolled as approver; automated guest keys do not
 satisfy it. [Exact enrollment steps](docs/device-enrollment.md). No complete MVP,
 voice flow, benchmark, finished submission assets or hackathon submission is
 claimed yet. See [build status](docs/STATUS.md) and the [complete brief](docs/BRIEF.md).

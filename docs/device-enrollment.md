@@ -10,10 +10,13 @@ sent to Codex.
 1. **On your phone**, open
    https://callback-45-63-34-5.sslip.io/device?user=dana.whitfield
    in Safari or Chrome. Verify **Dana Whitfield · CFO** in Device slot.
-   Tap **Create enrollment request**. Copy the enrollment ID and note the signing
+   Tap **Create enrollment request** if no request exists. An existing request
+   can be reused; the former Refresh label meant it was already created.
+   Copy the enrollment ID and note the signing
    key fingerprint. Keep the page open.
-2. On the same phone, choose **Sam Rivera · Sales** in **Device slot**.
-   Tap **Create enrollment request**. Copy Sam's enrollment ID and fingerprint.
+2. On the same phone, open
+   https://callback-45-63-34-5.sslip.io/device?user=sam.rivera
+   or tap the visible **Sam Rivera · Sales** link. Tap **Create enrollment request**. Copy Sam's enrollment ID and fingerprint.
    Dana's separate key remains in the same browser's IndexedDB.
 3. **On your computer**, in your regular browser, open
    https://callback-45-63-34-5.sslip.io/enroll-approver
@@ -32,12 +35,12 @@ registered device. Non-extractable private keys never leave IndexedDB.
 ## After pinning
 
 - A fresh Sam call stages a temporary reset in a disposable twin. On the phone,
-  choose Sam, inspect the actual changes and hash, then tap **Approve exact
+  tap the Sam link, inspect the actual changes and hash, then tap **Approve exact
   changes**. A standard low-risk reset needs no operator signature. Once the
   independent executor reports **APPLIED VERIFIED**, reveal the temporary
   password **only on the phone**. Do not share it in chat or in demo recordings.
-- A Dana lost-phone request requires both device and operator approval. Choose
-  Dana on the phone and tap **Deny**. The signed receipt must report **DENIED**
+- A Dana lost-phone request requires both device and operator approval. Tap the Dana link
+  on the phone and tap **Deny**. The signed receipt must report **DENIED**
   with identical production before/after digests.
 - The console links to each receipt. The browser verifies the executor signature
   against the separately published public key before displaying a verified label.
