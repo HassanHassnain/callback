@@ -288,3 +288,75 @@ effect on Sam. The failed report remains unchanged. Private replay now preserves
 P5 is in progress. Strict change-set contracts, signature/floor/CAS checks and
 device-only ECDH/HKDF/AES-GCM delivery have unit coverage; none of the new apply
 path is deployed yet. Current tests: 43 pass; Ruff and Vite strict build pass.
+
+## P5 — Technical path deployed; real-device checkpoint pending (2026-11-05)
+
+Implemented strict typed apply, exact JCS hashes, raw P-256 device/approver
+signatures, production-registered keys, pinned approver realm scope, timestamp
+freshness, independent policy floor, full normalized CAS, typed REST mutations,
+post-state effect comparison, reversible rollback, and signed receipts. A
+started execution without a receipt fails closed instead of repeating a password
+reset. Local receipts persist; an Object Storage outbox retries failed uploads.
+
+The executor generates temporary passwords and seals them to a separately
+registered ECDH device public key (HKDF-SHA256 + AES-GCM). Only authenticated
+registered-device proofs can fetch the verified encrypted delivery. Control,
+agent, API logs and receipts receive no plaintext password. The actual browser
+crypto module interoperates with Python in both directions; wrong binding and
+tampered receipts fail. The phone and operator private keys are non-extractable
+WebCrypto keys persisted in IndexedDB. SSH-only enrollment refuses to overwrite
+an existing different public key and archives public ceremonies.
+
+Live guest direct checks: docs/infra/P5-executor-20261105T173758Z.json, nine
+checks pass, including actual Keycloak reset/post-verify, signed receipt,
+encrypted-only delivery, idempotent response, tamper rejection, signed Dana deny
+with unchanged digest, real deliberate drift refusal, and unchanged main realm.
+The public planner/twin/device-signature/apply path also passes all nine checks:
+docs/infra/P5-public-20261105T174601Z.json. These tests use **simulated guest device
+keys**, with real cryptography, inference, twins, executor and identity changes.
+They are labelled in UI, README and reports; they do not satisfy real-phone
+acceptance. Browser receipt verification was observed in Chromium using the
+published executor key fingerprint 608d83bde0fe54ac901994732fb8e6e1870d7e8bee66414f7b73b8fa534c3c5a.
+Phone layout was visually reviewed at 390×844. Artifacts: output/playwright/P5-*.
+
+Preserved earlier public failures: the first test stopped after the planner
+asked a normal extra staging question; the second used the old seed after our
+manual drift probe. CAS correctly refused it. The initial diagnosis singled out emailVerified; a further real probe found
+that sparse user PUTs clear unspecified root profile fields. Corrected enrollment
+and typed mutations to GET and preserve the writable representation. The earliest
+signed seed confirms main acme stayed intact; restored the affected guest
+Sam/Dana names/email/verification while preserving their public keys and reset
+state. Public pre-repair metadata was archived on executor. Added a regression
+for field preservation. The failed supplementary test report remains unchanged.
+
+A final real operator fault changed guest enabled state after the approved email
+write. The executor observed the extra actual effect, alarmed FAILED_VERIFY,
+rolled back and verified its own email change, and preserved the unrelated
+concurrent enabled state until the test's explicit cleanup. All 12 checks pass:
+docs/infra/P5-executor-20261105T175639Z.json. This is a labelled operator-scripted
+fault with simulated guest signatures, not an invented planner action. Corrected
+fixture drift cleanup uses full field preservation and publishes fresh seeds.
+
+The automated browser enrollment test only creates an **unpinned** test request.
+Its key is not Hassan's real approver enrollment and will not be pinned. The
+required human checkpoint is now open: docs/device-enrollment.md gives exact
+phone Dana/Sam and normal-browser approver steps. Await the three user-provided
+enrollment IDs, pin their public bundles, then run actual-phone Sam approval and
+Dana denial. Do not write "MVP reached" before that acceptance. P6–P10 remain.
+Current local verification: 48 Python tests; Ruff; strict Vite/TypeScript build.
+
+Published the final P4 twin image in Vultr Container Registry at immutable digest
+sha256:72ff271bf03dcbcee94f39bfc89a00d14dd80b7017b8cf86a7c7f2b40600869b;
+evidence in docs/infra/P4-image.json. Redeploy preserves the configured current
+image rather than silently reverting to the historical P3 image.
+
+Receipt layout was reviewed and refined twice: a clear status, hash/digest facts,
+human-readable effects and collapsed signed JSON replace the cramped first pass.
+The browser receipt still independently verifies the signature. The automated
+IndexedDB readback confirms private_key_non_extractable=true; that test's
+approver remains unpinned. Some enrollment polling requests encountered server
+disconnects during executor replacement. Disabled persistent executor HTTP
+connections and return bounded 503 reconnect responses instead of uncaught 500s.
+Call creation refreshes signed seed pointers before claiming a twin; older sync
+responses cannot replace newer versions. Seed pointer writes use unique atomic
+files. These improve availability without relaxing hash, signature or CAS checks.

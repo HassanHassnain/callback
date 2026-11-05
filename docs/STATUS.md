@@ -1,7 +1,7 @@
 # Callback status
 
 Updated: 2026-11-05. P0 complete under the explicit user-approved audio
-identity exception. P1 infrastructure checks pass; P2 identity/seed-export and P3 real containment acceptance checks pass; P4 is in progress.
+identity exception. P1 infrastructure checks pass; P2 identity/seed-export and P3 real containment acceptance checks pass; P4 is verified; P5 technical flow is live, with the real-device checkpoint pending.
 
 ## Done
 
@@ -62,15 +62,43 @@ remain mandatory for every other route. See `docs/account-setup.md` for setup.
 
 ## Not done
 
-P4–P10 are not completed. State-diff and policy modules have initial unit coverage;
-the public React text call/console preview and agent loop are live. A real Sam
-reset reached R7 / DEVICE_REQUIRED, with actual visual evidence and twin destruction.
-P4 text cases and the separately labelled operator containment replay pass.
-P5 signatures, encrypted delivery and executor apply are under construction.
-No device enrollment, production apply or benchmark is available yet; apply
-still returns 501 on the deployed executor.
+P5 is not complete until the real-device checkpoint and public acceptance with
+Hassan's actual phone/browser are performed. Phone enrollment, signed approvals,
+independent apply/CAS/post-verify, rollback, encrypted-only password delivery,
+and browser-verified signed receipts are deployed. The complete public flow
+passes in acme-guest with explicitly simulated device keys. Main acme stayed
+unchanged in these guest checks. See docs/device-enrollment.md.
+
+P6–P10 (full Gate/red-team UI, voice, benchmark, public guest onboarding/hardening,
+submission assets) remain. No full hackathon submission or measured benchmark is
+claimed. Current local checks: 48 Python tests, Ruff and strict Vite build pass.
+
+P5 evidence: docs/infra/P5-executor-20261105T175639Z.json (12 real executor checks) and
+P5-public-20261105T174601Z.json. The first public attempt needed another normal
+caller turn; the second correctly refused a stale seed following the deliberate
+drift probe. Both earlier reports are retained unchanged.
 
 ## Known limits
+
+- Real phone and operator browser enrollment/acceptance remain pending. Guest
+  integration keys and proposals are labelled simulated in UI and README.
+- Executor mutations use application-level CAS and a local serialization lock;
+  Keycloak's REST API does not provide one atomic multi-operation transaction.
+  Independent concurrent administrators can race apply. Post-verify detects
+  observed differences and alarms; irreversible credential changes cannot be
+  restored from metadata, so crash/partial failure requires reviewed recovery.
+- Password reset verification uses exported credential IDs/timestamps and the
+  UPDATE_PASSWORD flag, not exported secret material or a claim that screenshots
+  establish a password value. Browser receipt verification trusts the published
+  executor public key; its documented fingerprint is the bootstrap reference.
+- The executor uses a bounded mutation whitelist. User creation/deletion,
+  client-secret rotation and catch-all realm changes are refused even with a
+  human signature. Provider-generated extra metadata must also match the exact
+  proposal; otherwise post-verify fails and reversible fields are restored.
+- A started execution without a terminal receipt is never automatically repeated.
+  Local signed receipts are retained and Object Storage upload failures retried.
+- Guest onboarding is not finished; current guest keys belong to explicitly
+  simulated integration tests. No stranger-under-two-minutes claim is made.
 
 - The demo proxy permits exact-domain HTTP GET only; HTTPS CONNECT is denied.
 - Agent NPROC is capped at 128, in addition to Docker's 512 PID ceiling, after
@@ -98,7 +126,7 @@ still returns 501 on the deployed executor.
 
 ## URLs and demo
 
-Application health (text preview, production apply disabled): https://callback-45-63-34-5.sslip.io/health
+Application health (P5 typed apply deployed; real-device ceremony pending): https://callback-45-63-34-5.sslip.io/health
 Executor public key: https://callback-45-63-34-5.sslip.io/executor-pubkey.json
 Source: https://github.com/HassanHassnain/callback
 
