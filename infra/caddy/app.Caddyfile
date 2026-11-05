@@ -1,0 +1,25 @@
+CALLBACK_HOST {
+    header {
+        Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'"
+        X-Content-Type-Options nosniff
+        Referrer-Policy same-origin
+        Cache-Control no-store
+    }
+    handle /api/* {
+        reverse_proxy 127.0.0.1:8000 {
+            header_up X-Forwarded-For {remote_host}
+        }
+    }
+    handle /health {
+        reverse_proxy 127.0.0.1:8000
+    }
+    handle /executor-pubkey.json {
+        root * /srv
+        file_server
+    }
+    handle {
+        root * /srv/web
+        try_files {path} /index.html
+        file_server
+    }
+}

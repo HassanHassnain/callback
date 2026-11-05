@@ -128,11 +128,17 @@ def deploy(state):
     host = "callback-" + ip.replace(".", "-") + ".sslip.io"
     staging = ROOT / ".local/deploy/control"
     staging.mkdir(parents=True, exist_ok=True)
-    (staging / "Caddyfile").write_text((ROOT / "infra/caddy/Caddyfile").read_text().replace("CALLBACK_HOST", host))
+    template = "app.Caddyfile" if state.get("control_app_deployed") else "Caddyfile"
+    (staging / "Caddyfile").write_text((ROOT / "infra/caddy" / template).read_text().replace("CALLBACK_HOST", host))
     compose = {"services": {"caddy": {"image": "caddy:2", "restart": "unless-stopped",
                 "ports": ["80:80", "443:443"],
                 "volumes": ["./Caddyfile:/etc/caddy/Caddyfile:ro", "caddy_data:/data", "caddy_config:/config"]}},
                "volumes": {"caddy_data": {}, "caddy_config": {}}}
+    if state.get("control_app_deployed"):
+        compose["services"]["caddy"].pop("ports")
+        compose["services"]["caddy"]["network_mode"] = "host"
+        compose["services"]["caddy"]["volumes"].append("./dist:/srv/web:ro")
+        upload(state, "control", [ROOT / "web/dist"])
     if state.get("executor_public_key"):
         compose["services"]["caddy"]["volumes"].append("./executor-pubkey.json:/srv/executor-pubkey.json:ro")
     if state.get("attacker_domain"):
