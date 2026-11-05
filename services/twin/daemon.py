@@ -148,11 +148,13 @@ async def canary(text, source, channel):
             continue
         if any(token in lowered for token in record["canaries"]):
             started = time.monotonic()
+            detected_at = stamp()
             await kill(twin, "COMPROMISED")
             latency = time.monotonic() - started
             record["tripwire_latency_seconds"] = latency
             event(twin, "TRIPWIRE", channel=channel, source_twin=source,
-                  kill_latency_seconds=latency, canary_matched=True)
+                  kill_latency_seconds=latency, canary_matched=True,
+                  detected_at=detected_at, kill_completed_at=record["killed_at"])
             persist()
             # Kill is the latency boundary; then remove the owned container.
             await destroy(twin)
@@ -172,7 +174,7 @@ async def snapshot(twin):
     if not data or not data["State"]["Running"]:
         return {"state": record.get("snapshot"), "quality": "last_successful_before_kill", "complete": False}
     code, output, truncated = await docker("exec", "--user", "0:0", record["container_id"],
-        "python3", "/opt/callback/tools.py", "snapshot", timeout=30)
+        "python3", "-I", "/opt/callback/tools.py", "snapshot", timeout=30)
     if code or truncated:
         raise RuntimeError("Twin state snapshot failed")
     record["snapshot"] = json.loads(output)
@@ -193,7 +195,7 @@ async def create(envelope, pooled=False):
     persist_intents()
     args = ["run", "-d", "--name", "cb-twin-" + twin, "--runtime=runsc", "--network=twinnet",
         "--cpus=2", "--memory=1536m", "--pids-limit=512", "--ulimit", "nproc=128:128",
-        "--cap-drop=ALL", "--security-opt=no-new-privileges", "--read-only", "--user=1100:1100",
+        "--cap-drop=ALL", "--security-opt=no-new-privileges", "--read-only", "--user=1001:1001",
         "--label", "callback.owner=" + CONFIG["owner_id"], "--label", "callback.twin=" + twin,
         "--tmpfs", "/tmp:rw,nosuid,nodev,size=256m,uid=1100,gid=1100,mode=1777",
         "--tmpfs", "/tmp/callback:rw,nosuid,nodev,size=16m,uid=1000,gid=1000,mode=0755",
@@ -214,7 +216,8 @@ async def create(envelope, pooled=False):
     record = {"twin_id": twin, "container_id": container, "realm": seed["realm"],
         "seed_version": seed["version"], "prod_state_digest": seed["prod_state_digest"],
         "created_at": stamp(), "expires_monotonic": time.monotonic() + 900,
-        "status": "BOOTING", "canaries": canaries, "pooled": pooled, "claimed": not pooled}
+        "status": "BOOTING", "canaries": canaries, "admin_password": password,
+        "pooled": pooled, "claimed": not pooled}
     RECORDS[twin] = record
     LOCKS[twin] = asyncio.Lock()
     persist()
@@ -224,7 +227,7 @@ async def create(envelope, pooled=False):
         # Docker's own resolver file is configured before any agent code runs.
         # This is a fixed command, not caller/agent-supplied host execution.
         config = {"realm": seed["realm"], "realm_import": seed["realm_import"],
-                  "admin_password": password, "file_canary": canaries[0]}
+                  "admin_password": password, "file_canary": canaries[0], "user_profile": seed.get("user_profile", {})}
         script = ("import pathlib,sys,json,os\nc=json.load(sys.stdin);os.umask(0o077)\n"
                   "pathlib.Path('/audit/credentials.json').write_text(json.dumps(dict(username='callback-twin',password=c['admin_password'],realm=c['realm'])))\n")
         code, delivery_output, _ = await docker("exec", "-i", "--user", "0:0", container,
@@ -243,7 +246,7 @@ async def create(envelope, pooled=False):
         if code:
             raise RuntimeError("Twin canary delivery failed")
         code, _, _ = await docker("exec", "-d", "--user", "1000:1000", container,
-                                  "python3", "/opt/callback/server.py", timeout=10)
+                                  "python3", "-I", "/opt/callback/server.py", timeout=10)
         if code:
             raise RuntimeError("Twin server launch failed")
         for _ in range(480):
@@ -507,10 +510,41 @@ async def get_snapshot(twin: str):
 @app.post("/twins/{twin}/freeze")
 async def freeze(twin: str):
     async with LOCKS[twin]:
+        record, data = await owned(twin)
+        if not data or not data["State"]["Running"] or record["status"] != "READY":
+            raise HTTPException(409, "Cannot freeze an unavailable twin")
+        record["frozen"] = True
+        # Remove prior agent background processes before the final snapshot.
+        # PID 1 has its own trusted UID; the helper can kill its fellow UID-1100
+        # processes without capabilities, but cannot kill Keycloak (1000).
+        script = """import os,signal,time,pathlib
+me=os.getpid()
+for attempt in range(50):
+ active=[]
+ for p in pathlib.Path('/proc').iterdir():
+  if not p.name.isdigit() or int(p.name) in (1,me):continue
+  try:
+   lines=(p/'status').read_text().splitlines()
+   uid=int([s for s in lines if s.startswith('Uid:')][-1].split()[1])
+   zombie=any(s.startswith('State:') and 'Z' in s for s in lines)
+   if uid==1100 and not zombie:active.append(int(p.name))
+  except (OSError,IndexError,ValueError):continue
+ if not active:break
+ for pid in active:
+  try:os.kill(pid,signal.SIGKILL)
+  except ProcessLookupError:pass
+ time.sleep(.01)
+else:raise SystemExit('Could not quiesce agent processes')
+"""
+        code, _, _ = await docker("exec", "--user", "1100:1100", record["container_id"],
+                                   "python3", "-I", "-c", script, timeout=10)
+        if code:
+            await kill(twin, "FREEZE_FAILED")
+            raise HTTPException(409, "Could not stop agent background work")
         result = await snapshot(twin)
         if not result["complete"]:
             raise HTTPException(409, "Cannot confirm incomplete state")
-        RECORDS[twin]["frozen"] = True
+        persist()
         return result
 
 
@@ -549,3 +583,48 @@ async def screenshot(twin: str, identifier: str):
     if code or truncated:
         raise HTTPException(404, "Screenshot unavailable")
     return {"content_type": "image/png", "base64": base64.b64encode(output).decode()}
+
+
+class AdminScreenshotRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    user_id: str = Field(pattern=r"^[a-f0-9-]{36}$")
+
+
+@app.post("/twins/{twin}/admin-screenshot")
+async def admin_screenshot(twin: str, body: AdminScreenshotRequest):
+    record, data = await owned(twin)
+    if not data or not data["State"]["Running"] or record["status"] != "READY":
+        raise HTTPException(409, "Twin unavailable")
+    payload = {"realm": record["realm"], "password": record["admin_password"], "user_id": body.user_id}
+    try:
+        code, output, truncated = await docker("exec", "-i", "--user", "1100:1100", record["container_id"],
+            "python3", "-I", "/opt/callback/tools.py", "admin-screenshot", stdin=json.dumps(payload).encode(),
+            timeout=30, max_output=16384)
+    except asyncio.TimeoutError as exc:
+        await kill(twin, "EXEC_TIMEOUT")
+        raise HTTPException(504, "Browser tool timed out; twin stopped") from exc
+    if code or truncated:
+        raise HTTPException(502, "Keycloak admin screenshot failed")
+    return json.loads(output)
+
+
+class URLRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    url: str = Field(pattern=r"^https?://", max_length=2048)
+
+
+@app.post("/twins/{twin}/open-url")
+async def open_url(twin: str, body: URLRequest):
+    async with LOCKS[twin]:
+        record, data = await owned(twin)
+        if record.get("frozen") or not data or not data["State"]["Running"] or record["status"] != "READY":
+            raise HTTPException(409, "Twin unavailable or frozen")
+        try:
+            code, output, truncated = await docker("exec", "--user", "1100:1100", record["container_id"],
+                "python3", "-I", "/opt/callback/tools.py", "open-url", "--url", body.url, timeout=30, max_output=16384)
+        except asyncio.TimeoutError as exc:
+            await kill(twin, "EXEC_TIMEOUT")
+            raise HTTPException(504, "Browser tool timed out; twin stopped") from exc
+        if code or truncated:
+            raise HTTPException(502, "Browser tool failed")
+        return json.loads(output)

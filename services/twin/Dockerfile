@@ -13,4 +13,4 @@ COPY services/common/state.py /opt/callback/services/common/state.py
 COPY services/twin/entrypoint.py services/twin/server.py services/twin/tools.py /opt/callback/
 ENV PATH="/opt/keycloak/bin:${PATH}" HOME=/home/twin
 USER 1100:1100
-ENTRYPOINT ["python3", "/opt/callback/entrypoint.py"]
+ENTRYPOINT ["python3", "-I", "/opt/callback/entrypoint.py"]

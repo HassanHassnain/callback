@@ -29,6 +29,14 @@ try:
             time.sleep(0.1)
         else:
             raise SystemExit("Twin Keycloak did not become ready")
+    with httpx.Client(base_url="http://127.0.0.1:8080", trust_env=False, timeout=20) as client:
+        response = client.post("/realms/master/protocol/openid-connect/token", data={
+            "grant_type": "password", "client_id": "admin-cli", "username": "callback-twin",
+            "password": config["admin_password"]})
+        response.raise_for_status()
+        response = client.put("/admin/realms/" + config["realm"] + "/users/profile",
+            headers={"Authorization": "Bearer " + response.json()["access_token"]}, json=config["user_profile"])
+        response.raise_for_status()
     Path("/tmp/callback/server-ready").touch()
     raise SystemExit(server.wait())
 finally:

@@ -1,0 +1,22 @@
+{
+  "twin_id": "d240bcfa-cd36-4bf6-9690-13a413041def",
+  "container_id": "285811467b949dce8c19cd1175f053cac8f1fefce2826463a557f83f5ed09a85",
+  "employees": 40,
+  "sam_tier": [
+    "standard"
+  ],
+  "user_site_hook_ignored": true,
+  "frozen_exec_status": 409,
+  "actual_browser_screenshot": "c08470e3-967b-4050-9d84-372907395ca0.png",
+  "browser_url": "http://127.0.0.1:8080/admin/master/console/#/acme/users/aa8de62e-2a4f-57dd-b372-7ce6f983f53b/credentials",
+  "background_stopped": true,
+  "trusted_anchor_uid": "1001:1001",
+  "destroy_proof": {
+    "docker_inspect": "No such container",
+    "observed_at": "2026-11-05T13:18:03.326538+00:00",
+    "container_id": "285811467b949dce8c19cd1175f053cac8f1fefce2826463a557f83f5ed09a85"
+  },
+  "observed_at": "2026-11-05T13:18:03.242755+00:00",
+  "all_passed": true,
+  "workload": "Implementer-written hostile hook and background-work regression; real Vultr twin"
+}
