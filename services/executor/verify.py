@@ -124,28 +124,32 @@ def policy_floor(change_set, current, devices, operators):
 def cas(change_set, current):
     require(digest(current) == change_set["prod_state_digest"], "DRIFT", "Production state differs from the signed seed")
     for effect in change_set["effects"]:
-        user = current["users"][effect["target"]["user_id"]]
-        kind, expected = effect["type"], effect["before"]
-        if kind == "user.password.reset":
-            actual = {"credentials": {k: v for k, v in user["credentials"].items() if v["type"] == "password"}}
-        elif kind == "credential.otp.removed":
-            actual = user["credentials"].get(expected["id"])
-        elif kind == "user.email.changed":
-            actual = user["email"]
-        elif kind == "user.enabled.changed":
-            actual = user["enabled"]
-        elif kind == "user.attribute.changed":
-            actual = {"attribute": expected["attribute"], "value": user["attributes"].get(expected["attribute"])}
-        elif kind == "user.unlocked":
-            actual = user["bruteForce"]
-        elif kind.startswith("group.member."):
-            actual = {"group": expected["group"], "member": expected["group"] in user["groups"]}
-        elif kind.startswith("role."):
-            scope = expected["scope"]
-            roles = user["realmRoles"] if scope == "realm" else user["clientRoles"].get(scope.removeprefix("client:"), [])
-            actual = {"scope": scope, "role": expected["role"], "granted": expected["role"] in roles}
-        elif kind == "user.required_action.added":
-            actual = None if effect["after"] not in user["requiredActions"] else effect["after"]
-        else:
-            actual = expected if expected in user["requiredActions"] else None
-        require(actual == expected, "DRIFT", "An effect precondition does not match production")
+        require(effect_value(effect, current) == effect["before"], "DRIFT", "An effect precondition does not match production")
+
+
+def effect_value(effect, current):
+    user = current["users"][effect["target"]["user_id"]]
+    kind, expected = effect["type"], effect["before"]
+    if kind == "user.password.reset":
+        actual = {"credentials": {k: v for k, v in user["credentials"].items() if v["type"] == "password"}}
+    elif kind == "credential.otp.removed":
+        actual = user["credentials"].get(expected["id"])
+    elif kind == "user.email.changed":
+        actual = user["email"]
+    elif kind == "user.enabled.changed":
+        actual = user["enabled"]
+    elif kind == "user.attribute.changed":
+        actual = {"attribute": expected["attribute"], "value": user["attributes"].get(expected["attribute"])}
+    elif kind == "user.unlocked":
+        actual = user["bruteForce"]
+    elif kind.startswith("group.member."):
+        actual = {"group": expected["group"], "member": expected["group"] in user["groups"]}
+    elif kind.startswith("role."):
+        scope = expected["scope"]
+        roles = user["realmRoles"] if scope == "realm" else user["clientRoles"].get(scope.removeprefix("client:"), [])
+        actual = {"scope": scope, "role": expected["role"], "granted": expected["role"] in roles}
+    elif kind == "user.required_action.added":
+        actual = None if effect["after"] not in user["requiredActions"] else effect["after"]
+    else:
+        actual = expected if expected in user["requiredActions"] else None
+    return actual

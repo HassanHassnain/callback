@@ -66,7 +66,7 @@ def provision():
         # profile fields, rather than replacing the realm's profile configuration.
         profile = admin.request("GET", realm, "users/profile")
         known = {item["name"] for item in profile.get("attributes", [])}
-        for name in ("tier", "device_pubkey_jwk", "employee_id", "phone"):
+        for name in ("tier", "device_pubkey_jwk", "device_encryption_pubkey_jwk", "employee_id", "phone"):
             if name not in known:
                 profile.setdefault("attributes", []).append({"name": name, "multivalued": False,
                     "permissions": {"view": ["admin"], "edit": ["admin"]}})

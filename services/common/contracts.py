@@ -59,12 +59,14 @@ class Effect(Strict):
         elif kind.startswith("group.member."):
             valid = (exact(before, ["group", "member"]) and exact(after, ["group", "member"])
                 and isinstance(after["group"], str) and before["group"] == after["group"]
-                and type(before["member"]) is bool and type(after["member"]) is bool)
+                and type(before["member"]) is bool and type(after["member"]) is bool
+                and before["member"] != after["member"] and after["member"] == kind.endswith("added"))
         elif kind.startswith("role."):
             valid = (exact(before, ["scope", "role", "granted"]) and exact(after, ["scope", "role", "granted"])
                 and isinstance(after["scope"], str) and isinstance(after["role"], str)
                 and before["scope"] == after["scope"] and before["role"] == after["role"]
-                and type(before["granted"]) is bool and type(after["granted"]) is bool)
+                and type(before["granted"]) is bool and type(after["granted"]) is bool
+                and before["granted"] != after["granted"] and after["granted"] == kind.endswith("granted"))
         elif kind == "user.unlocked":
             valid = isinstance(before, dict) and isinstance(after, dict)
         if not valid:

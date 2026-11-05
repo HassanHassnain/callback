@@ -1,6 +1,7 @@
 """Typed REST mutations, independent post-verify, reversible rollback, signed receipts."""
 
 import copy
+import hashlib
 import json
 import secrets
 import sqlite3
@@ -10,13 +11,13 @@ from datetime import UTC, datetime
 from pathlib import Path
 
 from services.common.contracts import original
-from services.common.crypto import canonical, digest, public_jwk, sign
+from services.common.crypto import canonical, digest, public_jwk, sign, verify
 from services.common.sealed import seal
 from services.common.state import snapshot
 from services.control.effects import derive
 from services.executor.keycloak import Keycloak
 from services.executor.seed_export import EXPORT_LOCK, export_all, s3_client
-from services.executor.verify import Refusal, cas, policy_floor, registered, require, validate_hash, verify_decisions
+from services.executor.verify import Refusal, cas, policy_floor, registered, require, validate_hash, verify_decisions, effect_value, fresh
 
 REVERSIBLE = {"user.email.changed", "user.enabled.changed", "user.attribute.changed", "group.member.added",
     "group.member.removed", "role.granted", "role.revoked", "user.required_action.added", "user.required_action.removed"}
@@ -227,10 +228,17 @@ class ApplyService:
                             if effect["type"].startswith("user.required_action."):
                                 inverse["type"] = "user.required_action.removed" if effect["type"].endswith("added") else "user.required_action.added"
                             try:
-                                mutate(kc, change_set["realm"], inverse, before)
-                                rollback.append({"effect_id": effect["id"], "reverted": True})
+                                observed = snapshot(kc, change_set["realm"])
+                                # Never overwrite an unrelated concurrent field change.
+                                if effect_value(effect, observed) == effect["before"]:
+                                    rollback.append({"effect_id": effect["id"], "reverted": True, "already_original": True})
+                                    continue
+                                require(effect_value(inverse, observed) == inverse["before"], "ROLLBACK_DRIFT", "Concurrent field change prevents rollback")
+                                mutate(kc, change_set["realm"], inverse, observed)
+                                verified = effect_value(effect, snapshot(kc, change_set["realm"])) == effect["before"]
+                                rollback.append({"effect_id": effect["id"], "reverted": verified})
                             except Exception:
-                                rollback.append({"effect_id": effect["id"], "reverted": False, "reason": "Provider rollback failed"})
+                                rollback.append({"effect_id": effect["id"], "reverted": False, "reason": "Rollback refused or provider verification failed"})
                         after = snapshot(kc, change_set["realm"])
                         result = self.receipt(request, "FAILED_VERIFY", before=before, after=after,
                             reason={"code": "FAILED_VERIFY", "error_type": type(exc).__name__, "alarm": True},
@@ -259,3 +267,42 @@ class ApplyService:
                 Body=canonical(result["receipt"]), ContentType="application/json")
         except Exception:
             result["storage_pending"] = True
+
+    def delivery(self, proof):
+        payload, signature = proof["payload"], proof["signature"]
+        require(set(payload) == {"call_id", "realm", "username", "change_set_hash", "purpose", "ts"}
+                and payload["purpose"] == "delivery", "INVALID_DELIVERY", "Invalid delivery proof")
+        fresh(payload["ts"])
+        require(payload["realm"] in self.config["realms"], "INVALID_DELIVERY", "Unknown realm")
+        kc = Keycloak(self.config)
+        try:
+            users = kc.request("GET", payload["realm"], "users", params={"username": payload["username"], "exact": "true"})
+            require(len(users) == 1, "UNENROLLED_DEVICE", "Registered employee not found")
+            verify(registered(users[0], "device_pubkey_jwk"), payload, signature)
+        finally:
+            kc.client.close()
+        with closing(self.db()) as db:
+            row = db.execute("SELECT d.box FROM deliveries d JOIN executions e ON d.call_id=e.call_id "
+                "WHERE d.call_id=? AND d.username=? AND d.realm=? AND d.hash=? AND e.status='APPLIED_VERIFIED'",
+                (payload["call_id"], payload["username"], payload["realm"], payload["change_set_hash"])).fetchone()
+        require(row is not None, "DELIVERY_UNAVAILABLE", "No verified encrypted delivery exists for this device")
+        return {"box": json.loads(row[0])}
+
+    def flush_receipts(self):
+        # Content-addressed sync markers avoid repeated uploads while retaining
+        # every local receipt and retrying failures after service restart.
+        client = s3_client(self.config)
+        for path in self.receipts.glob("*.json"):
+            marker = path.with_suffix(".synced")
+            if marker.exists():
+                continue
+            data = path.read_bytes()
+            envelope = json.loads(data)
+            rid = envelope["payload"]["receipt_id"]
+            client.put_object(Bucket=self.config["receipts_bucket"], Key=rid + ".json", Body=data, ContentType="application/json")
+            with closing(self.db()) as db:
+                terminal = db.execute("SELECT call_id FROM executions WHERE receipt_id=?", (rid,)).fetchone()
+            if terminal:
+                client.put_object(Bucket=self.config["receipts_bucket"], Key=terminal[0] + ".json", Body=data, ContentType="application/json")
+            marker.write_text(hashlib.sha256(data).hexdigest())
+            marker.chmod(0o600)
