@@ -13,6 +13,8 @@ export function ConsolePage({notify}:{notify:Notice}){
  const applied=call?.production_status==='APPLIED_VERIFIED';
  const blocked=call?.policy?.outcome==='REJECT'||['DENIED','REFUSED','FAILED_VERIFY'].includes(call?.production_status||'');
  const unmatched=call?.claim_comparison?.filter(item=>item.effect_id===null&&item.mismatch)||[];
+ const otpEffects=call?.effects.filter(effect=>effect.type==='credential.otp.removed')||[];
+ const tripwire=call?.egress.findLast(event=>event.kind==='TRIPWIRE');
  const receipts=calls.filter(item=>['APPLIED_VERIFIED','DENIED','REFUSED','FAILED_VERIFY','BLOCKED','NOT_APPLIED'].includes(item.production_status));
  return <section className="workspace console-workspace">
   {new URLSearchParams(location.search).get('demo')==='1'&&<DemoBar selected={id} choose={choose} notify={notify}/>}
@@ -24,10 +26,11 @@ export function ConsolePage({notify}:{notify:Notice}){
   {call?.workload_origin==='operator_containment_test'&&<p className="preview">Operator-scripted containment workload. Limits, commands and host-survival checks are real. No planner generated the workload; no production apply is requested.</p>}
   {call?.containment_result&&<div className="containment-checks">{Object.entries(call.containment_result.checks).map(([key,passed])=><span className={passed?'check-passed':'check-failed'} key={key}>{passed?'PASS':'FAIL'} · {key.replaceAll('_',' ')}</span>)}</div>}
   <div className="panel-heading"><Status value={call?.status||(id?'LOADING_CALL':undefined)}/><span className="call-id">{call?.call_id||'Select a call to inspect its evidence'}</span></div>
-  <div className={'gate-workspace '+(applied?'gate-passed':blocked?'gate-blocked':'')}>
+  {tripwire?.kill_latency_seconds!==undefined&&<section className="incident-strip"><div><div className="eyebrow">TRIPWIRE / MEASURED</div><h2>Compromised. Contained.</h2></div><div><strong>{(tripwire.kill_latency_seconds*1000).toFixed(1)} ms</strong><span>Detection to completed kill</span></div><div><strong>{otpEffects.length}</strong><span>Observed OTP removals in the twin</span></div><Status value="BLOCKED"/></section>}
+  <div data-testid="gate" data-production-status={call?.production_status||'LOADING'} className={'gate-workspace '+(applied?'gate-passed':blocked?'gate-blocked':'')}>
    <section className="twin-side">
     <div className="panel-heading"><div><div className="eyebrow">DISPOSABLE / ISOLATED</div><h2>Twin changes</h2></div><span className="subtle">{call?`${call.effects.length} effect${call.effects.length===1?'':'s'}`:'—'}</span></div>
-    {applied?<div className="passed-placeholder"><span className="eyebrow">SIGNED · APPLIED · RE-READ</span><h3>Exact effects passed the Gate.</h3><p>The approved changes appear in production with independent verification.</p></div>:call?.effects.length?call.effects.map(effect=><EffectCard key={effect.id} effect={effect} call={call}/>):<p className="empty">{call?.busy?'The agent is working in the twin. Actual effects will appear here.':call?'No identity changes were observed.':'Choose a call to inspect the changes the agent actually made.'}</p>}
+    {applied?<div className="passed-placeholder"><span className="eyebrow">SIGNED · APPLIED · RE-READ</span><h3>Exact effects passed the Gate.</h3><p>The approved changes appear in production with independent verification.</p></div>:call&&call.effects.length>5?<div className="bulk-effects"><h3>{otpEffects.length?`${otpEffects.length} OTP credentials removed in the twin`:`${call.effects.length} observed effects`}</h3><Status value={blocked?'REJECT':'PENDING'}/><p>{call.policy?.rule_ids.join(' · ')}</p>{call.claim_comparison?.some(item=>item.mismatch)&&<p className="denied">MISMATCH · reported claim differs from observed state</p>}<details><summary>Inspect all {call.effects.length} actual effects</summary>{call.effects.map(effect=><EffectCard key={effect.id} effect={effect} call={call}/>)}</details></div>:call?.effects.length?call.effects.map(effect=><EffectCard key={effect.id} effect={effect} call={call}/>):<p className="empty">{call?.busy?'The agent is working in the twin. Actual effects will appear here.':call?'No identity changes were observed.':'Choose a call to inspect the changes the agent actually made.'}</p>}
     {unmatched.length>0&&<details className="unmatched-claims"><summary>MISMATCH · claims without observed effects</summary><Json value={unmatched}/></details>}
     {call&&<><Facts call={call}/><DestroyProof call={call}/></>}
    </section>

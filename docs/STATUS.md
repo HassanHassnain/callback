@@ -1,7 +1,7 @@
 # Callback status
 
-Updated: 2026-11-05. P0 complete under the explicit user-approved audio
-identity exception. P1 infrastructure checks pass; P2 identity/seed-export and P3 real containment acceptance checks pass; P4 is verified; P5 real-phone MVP is accepted. P6 is in progress.
+Updated: 2026-11-06. P0 complete under the explicit user-approved audio
+identity exception. P1 infrastructure checks pass; P2 identity/seed-export and P3 real containment acceptance checks pass; P4 is verified; P5 real-phone MVP is accepted. P6 browser and containment acceptance passed.
 
 ## Done
 
@@ -71,14 +71,19 @@ Retargeting Sam's signed copy to Dana produced signed HASH_MISMATCH refusal.
 All 15 programmatic checks pass in docs/infra/P5-real-phone-20261105T184311Z.json.
 Real guest executor drift, rollback and encrypted-delivery checks also pass.
 
-P6 is in progress: the live Gate moves verified cards to production and keeps
-blocked effects on the twin side. Red-team UI, signed fixed-workload operator jobs,
-and operator signature/scope checks are implemented locally; complete deployment
-and end-to-end containment/UI checks remain. Voice, benchmark, guest onboarding,
-hardening and final submission assets (P7–P10) remain.
+P6: Playwright verified all three recorded Gate states at 1920×1080 and
+verified a fresh signed hash-mismatch refusal. The separate signed operator
+workloads passed fork, memory, filesystem and hostile-replay checks. The hostile
+replay measured 705.7 ms from tripwire detection to kill and observed 14 OTP
+removals inside its twin. See docs/infra/P6-demo-e2e-20261105T192549Z.json and
+docs/infra/P6-operator-jobs-20261105T190747Z.json.
 
-Current local checks: 51 Python tests, Ruff and strict Vite build pass. The full
-hackathon submission is not complete. All prior failed reports remain preserved.
+Voice, benchmark, guest onboarding, hardening and submission assets remain.
+The public P6 demo is live. The final landing-page walkthrough is built locally
+and awaits a refreshed deployment connection.
+
+Current local checks: 52 Python tests and strict Vite build pass. The live
+browser test is opt-in. Earlier failed reports remain preserved.
 
 ## Known limits
 

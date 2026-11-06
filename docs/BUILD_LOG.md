@@ -419,3 +419,25 @@ effects to production, keep denied/rejected cards in the twin, show compact
 real limits/destroy proof, and link browser-verifiable receipts. First 1920x1080
 review saved to docs/img/P6-gate-sam-stage-v1.png; second visual iteration built.
 P6 signed operator jobs and red-team UI are under construction, not accepted yet.
+
+## P6 — Gate, signed containment tests and recorded demo acceptance (2026-11-06)
+
+The live Gate shows signed Sam apply and Dana denial. The four fixed signed
+operator tests passed with a simulated guest signer. The separately labelled
+hostile replay removed 14 OTP credentials in its gVisor twin. The canary killed
+the twin in 705.7 ms and the independent executor observed equal production
+digests. The ordinary planner's response to the hostile page was refusal. The
+red-team page also verified a real pinned Chrome operator signature for the
+fork workload.
+
+CALLBACK_LIVE_E2E=1 uv run pytest -q tests/e2e/test_demo.py passed in 21.69 s.
+The test selected the three recorded beats, verified their receipts in Chrome
+and created a fresh hash-mismatch refusal. Gate visuals were reviewed and
+iterated at 1920×1080. Screenshots and passing JSON reports are in docs/img
+and docs/infra. The earlier warm-pool 425 report is retained. The isolated
+browser test uses installed Chrome after the bundled headless shell crashed.
+Default tests reported 52 passed and one opt-in skip.
+
+The landing explainer was built after the public replay test. Its static
+deployment is pending. The new client IPv4 timed out on SSH and Vultr account
+API preflight returned 401. The existing public service remained healthy.

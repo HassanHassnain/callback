@@ -38,11 +38,16 @@ and after digests. A retargeted signed copy was refused for HASH_MISMATCH. All 1
 programmatic checks pass in `docs/infra/P5-real-phone-20261105T184311Z.json`.
 [Enrollment and acceptance procedure](docs/device-enrollment.md).
 
-The remaining work is the full red-team/demo UI, voice, benchmark, public guest
-onboarding/hardening, and final submission assets. No complete hackathon submission
-or measured benchmark is claimed yet. See [build status](docs/STATUS.md) and the
-[complete brief](docs/BRIEF.md). All runtime model calls use only Vultr Serverless
-Inference.
+[Replay the three Gate states](https://callback-45-63-34-5.sslip.io/console?demo=1).
+The replay presents recorded executions. Sam and Dana used a physical phone.
+The separate hostile replay used a simulated guest operator and a scripted
+benign claim. Its commands, twin mutations and tripwire were real. Playwright
+verified all three signed receipts in the browser and checked a fresh tamper
+refusal. [Browser evidence](docs/infra/P6-demo-e2e-20261105T192549Z.json)
+
+Voice, the benchmark, public guest onboarding and submission assets are in
+progress. See [build status](docs/STATUS.md) and the [brief](docs/BRIEF.md).
+All runtime model calls use Vultr Serverless Inference.
 
 ## Development
 

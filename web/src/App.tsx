@@ -8,6 +8,7 @@ import {Enrollment,DevicePage,ReceiptPage} from './Approvals';
 import {ConsolePage} from './Console';
 import {RedteamPage} from './Redteam';
 import {RacePage} from './Race';
+import {Walkthrough} from './Walkthrough';
 
 const scenarios:Record<string,string>={
  sam:"I'm Sam Rivera, Sales, employee ACME-1002. I need a password reset. I can approve the exact reset on my registered phone.",
@@ -24,7 +25,7 @@ function Landing(){return <>
  <svg className="architecture" viewBox="0 0 1100 190" role="img" aria-label="An isolated twin sends derived effects through signed approval to an independent production executor">
  <line x1="110" y1="75" x2="975" y2="75"/><path className="accent" d="M110 75h260"/><path className="gate" d="M580 30v90m18-90v90"/><circle className="signal" cx="145" cy="75" r="4"/>
  <text className="label" x="110" y="49">TWIN</text><text x="110" y="111">Isolated actions</text><text className="label" x="345" y="49">EFFECTS</text><text x="345" y="111">From actual state</text><text x="535" y="152">SIGNED GATE</text><text className="label" x="755" y="49">EXECUTOR</text><text x="755" y="111">Apply · re-read · verify</text></svg></section>
- <section className="proofline"><p>Real Keycloak, gVisor and Chromium on Vultr. Exact changes need signed consent before the independent executor can apply and verify them.</p><a href="https://github.com/HassanHassnain/callback/blob/main/docs/threat-model.md" target="_blank" rel="noopener">Read the containment evidence ↗</a></section>
+ <section className="proofline"><p>Real Keycloak, gVisor and Chromium on Vultr. Exact changes need signed consent before the independent executor can apply and verify them.</p><a href="https://github.com/HassanHassnain/callback/blob/main/docs/threat-model.md" target="_blank" rel="noopener">Read the containment evidence ↗</a></section><Walkthrough/>
  </>;}
 
 function CallPage({notify}:{notify:Notice}){

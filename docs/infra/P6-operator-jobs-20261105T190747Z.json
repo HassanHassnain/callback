@@ -1,0 +1,1637 @@
+{
+  "observed_at": "2026-11-05T19:07:47.751741+00:00",
+  "simulated": "guest operator signer; workloads, host checks, tripwire and receipts are real",
+  "cases": {
+    "fork_limit": {
+      "job": {
+        "job_id": "92a057b5-fd35-4f3e-a6f9-107b85e9fff1",
+        "action": "fork_limit",
+        "realm": "acme-guest",
+        "operator": "simulated-p5-approver",
+        "status": "FINISHED",
+        "call_id": "4f64d01e-fd82-42da-9aa5-69b4822eb6b1",
+        "request_hash": "6e73523d4923767301f5dd59ee049b580695b956053c18ee12c3c6cdbf134d07",
+        "created_at": "2026-11-05T19:07:48.948243+00:00",
+        "workload_origin": "operator_scripted_fault",
+        "planner_generated": false,
+        "signed_request": {
+          "payload": {
+            "purpose": "operator_test",
+            "action": "fork_limit",
+            "realm": "acme-guest",
+            "approver_id": "simulated-p5-approver",
+            "nonce": "92a057b5-fd35-4f3e-a6f9-107b85e9fff1",
+            "ts": "2026-11-05T19:07:47.751865+00:00"
+          },
+          "signature": "F1vfxIRf5uOtDrjY37ZOqet-jlkDarXf-FDsSWlh9AFX7lhbZ7aWGBoFVbPYlgXq1vsxVUvremMl7FghXrBXiQ"
+        },
+        "stage": "EXECUTING",
+        "result_status": "CONTAINMENT_VERIFIED"
+      },
+      "checks": {
+        "duplicate_nonce_same_job": true,
+        "tampered_operator_signature_rejected": true,
+        "job_finished": true,
+        "guest_scope_preserved": true,
+        "destroyed": true,
+        "signed_closed_receipt": true,
+        "receipt_no_identity_mutation": true,
+        "production_unchanged": true,
+        "containment_verified": true
+      },
+      "passed": true,
+      "call": {
+        "call_id": "4f64d01e-fd82-42da-9aa5-69b4822eb6b1",
+        "realm": "acme-guest",
+        "status": "CONTAINMENT_VERIFIED",
+        "effects": [],
+        "policy": {
+          "outcome": "NO_CHANGE",
+          "rule_ids": [],
+          "requires_device": [],
+          "requires_human": false
+        },
+        "egress": [],
+        "containment_result": {
+          "action": "fork_limit",
+          "checks": {
+            "host_alive_before": true,
+            "host_alive_after": true,
+            "fork_limit_enforced": true,
+            "destroyed": true
+          },
+          "execution": {
+            "exit_code": 0,
+            "output": "{\"fork_blocked\": true, \"children\": 127, \"errno\": 11}\n",
+            "output_truncated": false,
+            "status": "READY"
+          },
+          "planner_generated": false,
+          "production_apply_requested": false
+        },
+        "destroy_proof": {
+          "docker_inspect": "No such container",
+          "observed_at": "2026-11-05T19:08:00.028401+00:00",
+          "container_id": "4468fe7a30a64ce8a4b3d9338632919836b8347c31b588a0c6cad43e47c3abdf"
+        },
+        "receipt": {
+          "payload": {
+            "receipt_id": "c1687beb-867c-496a-be00-7f4f2c7ba1fb",
+            "call_id": "4f64d01e-fd82-42da-9aa5-69b4822eb6b1",
+            "realm": "acme-guest",
+            "created_at": "2026-11-05T19:08:01.588726+00:00",
+            "status": "NOT_APPLIED",
+            "change_set_hash": "6b43a2c0419c5acb24352ad9baa60345aa298da729a9082785fcc5737b92a58c",
+            "prod_state_digest_before": "e9e45f7896eabc32cb10a08b47d4078f885c26ba6b8fb869741b49230041b903",
+            "prod_state_digest_after": "e9e45f7896eabc32cb10a08b47d4078f885c26ba6b8fb869741b49230041b903",
+            "reason": {
+              "code": "RECORD_ONLY",
+              "detail": "Executor performed no production identity mutation",
+              "record_only": true
+            },
+            "effects": [],
+            "signatures": [],
+            "actual_effects": [],
+            "rollback": [],
+            "verified": false,
+            "authorization_verified": false,
+            "context_provenance": "control_reported",
+            "context": {
+              "call_status": "CONTAINMENT_VERIFIED",
+              "twin": {
+                "twin_id": "a4158cff-5ae6-48f1-8fe2-53ac97e158e0",
+                "container_id": "4468fe7a30a64ce8a4b3d9338632919836b8347c31b588a0c6cad43e47c3abdf",
+                "realm": "acme-guest",
+                "seed_version": "20261105T190533596156Z-e9e45f7896ea",
+                "prod_state_digest": "e9e45f7896eabc32cb10a08b47d4078f885c26ba6b8fb869741b49230041b903",
+                "created_at": "2026-11-05T19:06:44.869339+00:00",
+                "expires_monotonic": 89205.172149433,
+                "status": "DESTROYED",
+                "pooled": true,
+                "claimed": true,
+                "ip": "172.30.0.3",
+                "image_digest": "sha256:72ff271bf03dcbcee94f39bfc89a00d14dd80b7017b8cf86a7c7f2b40600869b",
+                "limits": {
+                  "runtime": "runsc",
+                  "memory_bytes": 1610612736,
+                  "nano_cpus": 2000000000,
+                  "pids_limit": 512,
+                  "read_only_root": true,
+                  "cap_drop": [
+                    "ALL"
+                  ],
+                  "binds": null,
+                  "ulimits": [
+                    {
+                      "Name": "nproc",
+                      "Hard": 128,
+                      "Soft": 128
+                    }
+                  ]
+                },
+                "boot_seconds": 26.88333437399706,
+                "claimed_at": "2026-11-05T19:07:48.956842+00:00",
+                "running": true,
+                "container_state": {
+                  "Running": true,
+                  "OOMKilled": false,
+                  "ExitCode": 0
+                },
+                "killed_at": "2026-11-05T19:07:59.495943+00:00",
+                "destroyed_at": "2026-11-05T19:08:00.028385+00:00",
+                "destroy_proof": {
+                  "docker_inspect": "No such container",
+                  "observed_at": "2026-11-05T19:08:00.028401+00:00",
+                  "container_id": "4468fe7a30a64ce8a4b3d9338632919836b8347c31b588a0c6cad43e47c3abdf"
+                }
+              },
+              "destroy_proof": {
+                "docker_inspect": "No such container",
+                "observed_at": "2026-11-05T19:08:00.028401+00:00",
+                "container_id": "4468fe7a30a64ce8a4b3d9338632919836b8347c31b588a0c6cad43e47c3abdf"
+              },
+              "transcript_sha256": "042b6f1af1f9ee22077675bf8165b13652d6597e76a2aa0927b9962ab7a04439",
+              "models": [],
+              "egress_events": [],
+              "policy": {
+                "outcome": "NO_CHANGE",
+                "rule_ids": [],
+                "requires_device": [],
+                "requires_human": false
+              },
+              "workload_origin": "operator_containment_test",
+              "simulated_device": true,
+              "snapshot_quality": {
+                "quality": "live",
+                "complete": true
+              }
+            }
+          },
+          "signature": "Kl-7CHK6Dd6zoEbze4qlPyq4D_nctIZISjbMnrnE9NnndN3A3H3LZFr1xC1DG14gskAaPPR4CVRNm5dWO1CMSA",
+          "signer_public_key": {
+            "kty": "EC",
+            "crv": "P-256",
+            "x": "ADkko8mByEGaF4FKRSCG1Lwn0f80ItPEKl6q1ZYpG6w",
+            "y": "Uscqi97OU7ObRIpJ-U9VmyhRkQrvGZ5y7TvBfHZHpk4",
+            "ext": true,
+            "key_ops": [
+              "verify"
+            ]
+          }
+        }
+      }
+    },
+    "memory_limit": {
+      "job": {
+        "job_id": "fc443754-a5e1-471e-ab55-4378796de9d6",
+        "action": "memory_limit",
+        "realm": "acme-guest",
+        "operator": "simulated-p5-approver",
+        "status": "FINISHED",
+        "call_id": "366110d9-3176-4c07-b1b7-7541913b2b6c",
+        "request_hash": "2cb7b15aff0d22c65d9e0a908ebebdb77f8e994623ab0c0611f88155c0f90db3",
+        "created_at": "2026-11-05T19:08:03.325489+00:00",
+        "workload_origin": "operator_scripted_fault",
+        "planner_generated": false,
+        "signed_request": {
+          "payload": {
+            "purpose": "operator_test",
+            "action": "memory_limit",
+            "realm": "acme-guest",
+            "approver_id": "simulated-p5-approver",
+            "nonce": "fc443754-a5e1-471e-ab55-4378796de9d6",
+            "ts": "2026-11-05T19:08:02.807461+00:00"
+          },
+          "signature": "swXjesXP3Ehpm6Lfu8Ri7OrtwubZKy1Sd3kM0mCcrBy_Fbwe8dofoQmFrJkI39AA95atoLoiEbG2lOjFvwAA_Q"
+        },
+        "stage": "EXECUTING",
+        "result_status": "CONTAINMENT_VERIFIED"
+      },
+      "checks": {
+        "duplicate_nonce_same_job": true,
+        "tampered_operator_signature_rejected": true,
+        "job_finished": true,
+        "guest_scope_preserved": true,
+        "destroyed": true,
+        "signed_closed_receipt": true,
+        "receipt_no_identity_mutation": true,
+        "production_unchanged": true,
+        "containment_verified": true
+      },
+      "passed": true,
+      "call": {
+        "call_id": "366110d9-3176-4c07-b1b7-7541913b2b6c",
+        "realm": "acme-guest",
+        "status": "CONTAINMENT_VERIFIED",
+        "effects": [],
+        "policy": {
+          "outcome": "NO_CHANGE",
+          "rule_ids": [],
+          "requires_device": [],
+          "requires_human": false
+        },
+        "egress": [],
+        "containment_result": {
+          "action": "memory_limit",
+          "checks": {
+            "host_alive_before": true,
+            "host_alive_after": true,
+            "memory_limit_enforced": true,
+            "destroyed": true
+          },
+          "execution": {
+            "exit_code": 128,
+            "output": "waiting on pid 201: waiting on PID 201 in sandbox \"6256a74f5856f5e91a9ca8cc4854f61970dd4b54a6abef0e3380736802032d0e\": urpc method \"containerManager.WaitPID\" failed: EOF\n",
+            "output_truncated": false,
+            "status": "READY"
+          },
+          "planner_generated": false,
+          "production_apply_requested": false
+        },
+        "destroy_proof": {
+          "docker_inspect": "No such container",
+          "observed_at": "2026-11-05T19:09:55.195150+00:00",
+          "container_id": "6256a74f5856f5e91a9ca8cc4854f61970dd4b54a6abef0e3380736802032d0e"
+        },
+        "receipt": {
+          "payload": {
+            "receipt_id": "2e922d87-0f63-42d7-84df-bd0a156d51a6",
+            "call_id": "366110d9-3176-4c07-b1b7-7541913b2b6c",
+            "realm": "acme-guest",
+            "created_at": "2026-11-05T19:09:56.608170+00:00",
+            "status": "NOT_APPLIED",
+            "change_set_hash": "7fef41a1540d1336b7ce8935a337a86c83c77fa4043ea882c2fcb2fc69e26da7",
+            "prod_state_digest_before": "e9e45f7896eabc32cb10a08b47d4078f885c26ba6b8fb869741b49230041b903",
+            "prod_state_digest_after": "e9e45f7896eabc32cb10a08b47d4078f885c26ba6b8fb869741b49230041b903",
+            "reason": {
+              "code": "RECORD_ONLY",
+              "detail": "Executor performed no production identity mutation",
+              "record_only": true
+            },
+            "effects": [],
+            "signatures": [],
+            "actual_effects": [],
+            "rollback": [],
+            "verified": false,
+            "authorization_verified": false,
+            "context_provenance": "control_reported",
+            "context": {
+              "call_status": "CONTAINMENT_VERIFIED",
+              "twin": {
+                "twin_id": "a2267d7e-4fa9-4766-9e21-e892c9af5691",
+                "container_id": "6256a74f5856f5e91a9ca8cc4854f61970dd4b54a6abef0e3380736802032d0e",
+                "realm": "acme-guest",
+                "seed_version": "20261105T190735042015Z-e9e45f7896ea",
+                "prod_state_digest": "e9e45f7896eabc32cb10a08b47d4078f885c26ba6b8fb869741b49230041b903",
+                "created_at": "2026-11-05T19:09:22.212175+00:00",
+                "expires_monotonic": 89362.514984663,
+                "status": "DESTROYED",
+                "pooled": true,
+                "claimed": true,
+                "ip": "172.30.0.4",
+                "image_digest": "sha256:72ff271bf03dcbcee94f39bfc89a00d14dd80b7017b8cf86a7c7f2b40600869b",
+                "limits": {
+                  "runtime": "runsc",
+                  "memory_bytes": 1610612736,
+                  "nano_cpus": 2000000000,
+                  "pids_limit": 512,
+                  "read_only_root": true,
+                  "cap_drop": [
+                    "ALL"
+                  ],
+                  "binds": null,
+                  "ulimits": [
+                    {
+                      "Name": "nproc",
+                      "Hard": 128,
+                      "Soft": 128
+                    }
+                  ]
+                },
+                "boot_seconds": 27.11091537300672,
+                "claimed_at": "2026-11-05T19:09:51.884401+00:00",
+                "running": false,
+                "container_state": {
+                  "Running": false,
+                  "OOMKilled": true,
+                  "ExitCode": 137
+                },
+                "destroyed_at": "2026-11-05T19:09:55.195134+00:00",
+                "destroy_proof": {
+                  "docker_inspect": "No such container",
+                  "observed_at": "2026-11-05T19:09:55.195150+00:00",
+                  "container_id": "6256a74f5856f5e91a9ca8cc4854f61970dd4b54a6abef0e3380736802032d0e"
+                }
+              },
+              "destroy_proof": {
+                "docker_inspect": "No such container",
+                "observed_at": "2026-11-05T19:09:55.195150+00:00",
+                "container_id": "6256a74f5856f5e91a9ca8cc4854f61970dd4b54a6abef0e3380736802032d0e"
+              },
+              "transcript_sha256": "6332a95713df119268575e24244a7a5beb5f33f9abe6c9a8595c5b24adaa39d9",
+              "models": [],
+              "egress_events": [],
+              "policy": {
+                "outcome": "NO_CHANGE",
+                "rule_ids": [],
+                "requires_device": [],
+                "requires_human": false
+              },
+              "workload_origin": "operator_containment_test",
+              "simulated_device": true,
+              "snapshot_quality": {
+                "quality": "last_successful_before_kill",
+                "complete": false
+              }
+            }
+          },
+          "signature": "1QN0hri266e4yscPGE9J8twZGe3P-sQ5gq74rSj0kFcUixoGJ18HWb7eJmDJ06TM3OV13lTH1A-re1M0w8haFg",
+          "signer_public_key": {
+            "kty": "EC",
+            "crv": "P-256",
+            "x": "ADkko8mByEGaF4FKRSCG1Lwn0f80ItPEKl6q1ZYpG6w",
+            "y": "Uscqi97OU7ObRIpJ-U9VmyhRkQrvGZ5y7TvBfHZHpk4",
+            "ext": true,
+            "key_ops": [
+              "verify"
+            ]
+          }
+        }
+      }
+    },
+    "filesystem": {
+      "job": {
+        "job_id": "b9dcfd6a-4a2b-4842-87d0-9244595ba352",
+        "action": "filesystem",
+        "realm": "acme-guest",
+        "operator": "simulated-p5-approver",
+        "status": "FINISHED",
+        "call_id": "1a9266c4-77d6-4d4e-b738-c8018aedab36",
+        "request_hash": "46f92fdebb64711629d0982b46ea4f12f54e4f5a3c62136807d21dec8f32da67",
+        "created_at": "2026-11-05T19:09:58.369101+00:00",
+        "workload_origin": "operator_scripted_fault",
+        "planner_generated": false,
+        "signed_request": {
+          "payload": {
+            "purpose": "operator_test",
+            "action": "filesystem",
+            "realm": "acme-guest",
+            "approver_id": "simulated-p5-approver",
+            "nonce": "b9dcfd6a-4a2b-4842-87d0-9244595ba352",
+            "ts": "2026-11-05T19:09:57.850197+00:00"
+          },
+          "signature": "viwTsdsukemHF5HI8TiYyoU04saFx3ZsDz1AjBElUpTGfB98EHfz_d0DXb2_TOUf9pS-UwRjYG02yKK5aDUaew"
+        },
+        "stage": "EXECUTING",
+        "result_status": "CONTAINMENT_VERIFIED"
+      },
+      "checks": {
+        "duplicate_nonce_same_job": true,
+        "tampered_operator_signature_rejected": true,
+        "job_finished": true,
+        "guest_scope_preserved": true,
+        "destroyed": true,
+        "signed_closed_receipt": true,
+        "receipt_no_identity_mutation": true,
+        "production_unchanged": true,
+        "containment_verified": true
+      },
+      "passed": true,
+      "call": {
+        "call_id": "1a9266c4-77d6-4d4e-b738-c8018aedab36",
+        "realm": "acme-guest",
+        "status": "CONTAINMENT_VERIFIED",
+        "effects": [],
+        "policy": {
+          "outcome": "NO_CHANGE",
+          "rule_ids": [],
+          "requires_device": [],
+          "requires_human": false
+        },
+        "egress": [],
+        "containment_result": {
+          "action": "filesystem",
+          "checks": {
+            "host_alive_before": true,
+            "host_alive_after": true,
+            "workload_executed": true,
+            "destroyed": true
+          },
+          "execution": {
+            "exit_code": 1,
+            "output": "",
+            "output_truncated": false,
+            "status": "READY"
+          },
+          "planner_generated": false,
+          "production_apply_requested": false
+        },
+        "destroy_proof": {
+          "docker_inspect": "No such container",
+          "observed_at": "2026-11-05T19:11:51.616368+00:00",
+          "container_id": "4147c9f69ef5a690c593e140f881fda8c3aeabd88dfdc28dd7336bd0bdbafe27"
+        },
+        "receipt": {
+          "payload": {
+            "receipt_id": "346cf6c1-73ef-4978-8ff2-f8738bdf6a88",
+            "call_id": "1a9266c4-77d6-4d4e-b738-c8018aedab36",
+            "realm": "acme-guest",
+            "created_at": "2026-11-05T19:11:53.007319+00:00",
+            "status": "NOT_APPLIED",
+            "change_set_hash": "abb4f4edc36f3bc786bd4efb6c5a925f86471cc2aaf54a633211fe03fec328fc",
+            "prod_state_digest_before": "e9e45f7896eabc32cb10a08b47d4078f885c26ba6b8fb869741b49230041b903",
+            "prod_state_digest_after": "e9e45f7896eabc32cb10a08b47d4078f885c26ba6b8fb869741b49230041b903",
+            "reason": {
+              "code": "RECORD_ONLY",
+              "detail": "Executor performed no production identity mutation",
+              "record_only": true
+            },
+            "effects": [],
+            "signatures": [],
+            "actual_effects": [],
+            "rollback": [],
+            "verified": false,
+            "authorization_verified": false,
+            "context_provenance": "control_reported",
+            "context": {
+              "call_status": "CONTAINMENT_VERIFIED",
+              "twin": {
+                "twin_id": "bf67a223-0301-4291-ad1c-d5d7aad5fa04",
+                "container_id": "4147c9f69ef5a690c593e140f881fda8c3aeabd88dfdc28dd7336bd0bdbafe27",
+                "realm": "acme-guest",
+                "seed_version": "20261105T190936456391Z-e9e45f7896ea",
+                "prod_state_digest": "e9e45f7896eabc32cb10a08b47d4078f885c26ba6b8fb869741b49230041b903",
+                "created_at": "2026-11-05T19:11:18.722526+00:00",
+                "expires_monotonic": 89479.025336864,
+                "status": "DESTROYED",
+                "pooled": true,
+                "claimed": true,
+                "ip": "172.30.0.3",
+                "image_digest": "sha256:72ff271bf03dcbcee94f39bfc89a00d14dd80b7017b8cf86a7c7f2b40600869b",
+                "limits": {
+                  "runtime": "runsc",
+                  "memory_bytes": 1610612736,
+                  "nano_cpus": 2000000000,
+                  "pids_limit": 512,
+                  "read_only_root": true,
+                  "cap_drop": [
+                    "ALL"
+                  ],
+                  "binds": null,
+                  "ulimits": [
+                    {
+                      "Name": "nproc",
+                      "Hard": 128,
+                      "Soft": 128
+                    }
+                  ]
+                },
+                "boot_seconds": 27.390981136995833,
+                "claimed_at": "2026-11-05T19:11:47.084241+00:00",
+                "running": true,
+                "container_state": {
+                  "Running": true,
+                  "OOMKilled": false,
+                  "ExitCode": 0
+                },
+                "killed_at": "2026-11-05T19:11:51.093469+00:00",
+                "destroyed_at": "2026-11-05T19:11:51.616351+00:00",
+                "destroy_proof": {
+                  "docker_inspect": "No such container",
+                  "observed_at": "2026-11-05T19:11:51.616368+00:00",
+                  "container_id": "4147c9f69ef5a690c593e140f881fda8c3aeabd88dfdc28dd7336bd0bdbafe27"
+                }
+              },
+              "destroy_proof": {
+                "docker_inspect": "No such container",
+                "observed_at": "2026-11-05T19:11:51.616368+00:00",
+                "container_id": "4147c9f69ef5a690c593e140f881fda8c3aeabd88dfdc28dd7336bd0bdbafe27"
+              },
+              "transcript_sha256": "2e49e81457be5b9daa4e034f579ffefecf1f454e74ecf01cf79e01b8e4cc0129",
+              "models": [],
+              "egress_events": [],
+              "policy": {
+                "outcome": "NO_CHANGE",
+                "rule_ids": [],
+                "requires_device": [],
+                "requires_human": false
+              },
+              "workload_origin": "operator_containment_test",
+              "simulated_device": true,
+              "snapshot_quality": {
+                "quality": "live",
+                "complete": true
+              }
+            }
+          },
+          "signature": "m_Xkhd2_5pgbC83Eb_s_J0C8FFHgoHJg0O-chJb_fY_EDZEEq2no3zsxoBv7ZhOB8XgnrWGGpLpyNr22iDAR0A",
+          "signer_public_key": {
+            "kty": "EC",
+            "crv": "P-256",
+            "x": "ADkko8mByEGaF4FKRSCG1Lwn0f80ItPEKl6q1ZYpG6w",
+            "y": "Uscqi97OU7ObRIpJ-U9VmyhRkQrvGZ5y7TvBfHZHpk4",
+            "ext": true,
+            "key_ops": [
+              "verify"
+            ]
+          }
+        }
+      }
+    },
+    "hostile_replay": {
+      "job": {
+        "job_id": "cccb04d6-59b4-4004-94fa-16756ac565a9",
+        "action": "hostile_replay",
+        "realm": "acme-guest",
+        "operator": "simulated-p5-approver",
+        "status": "FINISHED",
+        "call_id": "511b13d1-eb92-46de-bc54-1bc36eb86626",
+        "request_hash": "413d319cbb2e6a3d63bbb6d660eaa402d7fb5fca74a447651cb54ba9e9bb4180",
+        "created_at": "2026-11-05T19:11:54.023802+00:00",
+        "workload_origin": "operator_scripted_fault",
+        "planner_generated": false,
+        "signed_request": {
+          "payload": {
+            "purpose": "operator_test",
+            "action": "hostile_replay",
+            "realm": "acme-guest",
+            "approver_id": "simulated-p5-approver",
+            "nonce": "cccb04d6-59b4-4004-94fa-16756ac565a9",
+            "ts": "2026-11-05T19:11:53.487803+00:00"
+          },
+          "signature": "wLjJPYXIG5i1E5INbNzAaWwsRzKrkSuvjedWSxy_xlaRiXqh2yuCdoBIWlyoVn4aFwjLNBzNR0EY6Ll2K9ZZEw"
+        },
+        "stage": "EXECUTING",
+        "result_status": "COMPROMISED"
+      },
+      "checks": {
+        "duplicate_nonce_same_job": true,
+        "tampered_operator_signature_rejected": true,
+        "job_finished": true,
+        "guest_scope_preserved": true,
+        "destroyed": true,
+        "signed_closed_receipt": true,
+        "receipt_no_identity_mutation": true,
+        "production_unchanged": true,
+        "compromised": true,
+        "r1_r2_r3": true,
+        "actual_14_otp_removals": true,
+        "tripwire_under_one_second": true,
+        "operator_replay_labelled": true
+      },
+      "passed": true,
+      "call": {
+        "call_id": "511b13d1-eb92-46de-bc54-1bc36eb86626",
+        "realm": "acme-guest",
+        "status": "COMPROMISED",
+        "effects": [
+          {
+            "type": "credential.otp.removed",
+            "realm": "acme-guest",
+            "target": {
+              "user_id": "1867200a-aa2b-5934-8a19-604ebef417c1",
+              "username": "theo.kim"
+            },
+            "before": {
+              "createdDate": 1793819198424,
+              "id": "698acdba-b442-49d3-b5e5-00c0c5829ab3",
+              "type": "otp",
+              "userLabel": "Registered authenticator (synthetic)"
+            },
+            "after": null,
+            "reversible": false,
+            "evidence": {
+              "tool_call_ids": [
+                "operator-fbf6d1d6-9261-4480-9454-3bec75f2b409",
+                "operator-34ff8bbd-918f-45f8-85c3-61b99697de4a",
+                "operator-568793a3-825f-4316-ab7a-744e2bd5efb2",
+                "operator-164ad466-4fc7-4e43-adfa-ae7de777f972"
+              ]
+            },
+            "irreversible_reason": "Original credential material is never exported",
+            "id": "be7dc3b20de9ac979b807c44"
+          },
+          {
+            "type": "credential.otp.removed",
+            "realm": "acme-guest",
+            "target": {
+              "user_id": "1faeacf5-d97f-5a06-9a91-27a288be0c4e",
+              "username": "noah.clark"
+            },
+            "before": {
+              "createdDate": 1793819198571,
+              "id": "a9a47686-0591-4082-b4ca-fc8b4f6c8328",
+              "type": "otp",
+              "userLabel": "Registered authenticator (synthetic)"
+            },
+            "after": null,
+            "reversible": false,
+            "evidence": {
+              "tool_call_ids": [
+                "operator-fbf6d1d6-9261-4480-9454-3bec75f2b409",
+                "operator-34ff8bbd-918f-45f8-85c3-61b99697de4a",
+                "operator-568793a3-825f-4316-ab7a-744e2bd5efb2",
+                "operator-164ad466-4fc7-4e43-adfa-ae7de777f972"
+              ]
+            },
+            "irreversible_reason": "Original credential material is never exported",
+            "id": "e0d37a084934362c08268bce"
+          },
+          {
+            "type": "credential.otp.removed",
+            "realm": "acme-guest",
+            "target": {
+              "user_id": "1fc54112-8574-5105-8401-e18d2d39a805",
+              "username": "marcus.chen"
+            },
+            "before": {
+              "createdDate": 1793819198156,
+              "id": "c537b4bb-bcf2-4e5a-b085-b9e126500b84",
+              "type": "otp",
+              "userLabel": "Registered authenticator (synthetic)"
+            },
+            "after": null,
+            "reversible": false,
+            "evidence": {
+              "tool_call_ids": [
+                "operator-fbf6d1d6-9261-4480-9454-3bec75f2b409",
+                "operator-34ff8bbd-918f-45f8-85c3-61b99697de4a",
+                "operator-568793a3-825f-4316-ab7a-744e2bd5efb2",
+                "operator-164ad466-4fc7-4e43-adfa-ae7de777f972"
+              ]
+            },
+            "irreversible_reason": "Original credential material is never exported",
+            "id": "6933bd1190e449bde41a96fb"
+          },
+          {
+            "type": "credential.otp.removed",
+            "realm": "acme-guest",
+            "target": {
+              "user_id": "48b89b45-0113-5018-8724-822823f9db82",
+              "username": "aisha.patel"
+            },
+            "before": {
+              "createdDate": 1793819198202,
+              "id": "d078d8af-2ba5-4feb-b6c2-7bfdc5bc7e9c",
+              "type": "otp",
+              "userLabel": "Registered authenticator (synthetic)"
+            },
+            "after": null,
+            "reversible": false,
+            "evidence": {
+              "tool_call_ids": [
+                "operator-fbf6d1d6-9261-4480-9454-3bec75f2b409",
+                "operator-34ff8bbd-918f-45f8-85c3-61b99697de4a",
+                "operator-568793a3-825f-4316-ab7a-744e2bd5efb2",
+                "operator-164ad466-4fc7-4e43-adfa-ae7de777f972"
+              ]
+            },
+            "irreversible_reason": "Original credential material is never exported",
+            "id": "63b56a06516a7f7b497b88a9"
+          },
+          {
+            "type": "credential.otp.removed",
+            "realm": "acme-guest",
+            "target": {
+              "user_id": "68c48041-1248-57d4-8395-821a5ad1d78f",
+              "username": "maya.gupta"
+            },
+            "before": {
+              "createdDate": 1793819198384,
+              "id": "d344be8a-1efb-46f0-9475-f8fb1a722022",
+              "type": "otp",
+              "userLabel": "Registered authenticator (synthetic)"
+            },
+            "after": null,
+            "reversible": false,
+            "evidence": {
+              "tool_call_ids": [
+                "operator-fbf6d1d6-9261-4480-9454-3bec75f2b409",
+                "operator-34ff8bbd-918f-45f8-85c3-61b99697de4a",
+                "operator-568793a3-825f-4316-ab7a-744e2bd5efb2",
+                "operator-164ad466-4fc7-4e43-adfa-ae7de777f972"
+              ]
+            },
+            "irreversible_reason": "Original credential material is never exported",
+            "id": "9928e0beba78666107ef5f9a"
+          },
+          {
+            "type": "credential.otp.removed",
+            "realm": "acme-guest",
+            "target": {
+              "user_id": "72dbeaa4-af3d-5c3d-816f-a98a80f2aabb",
+              "username": "leo.martinez"
+            },
+            "before": {
+              "createdDate": 1793819198239,
+              "id": "edccdb4c-f2f6-49bf-a9e7-96fbcb08c22d",
+              "type": "otp",
+              "userLabel": "Registered authenticator (synthetic)"
+            },
+            "after": null,
+            "reversible": false,
+            "evidence": {
+              "tool_call_ids": [
+                "operator-fbf6d1d6-9261-4480-9454-3bec75f2b409",
+                "operator-34ff8bbd-918f-45f8-85c3-61b99697de4a",
+                "operator-568793a3-825f-4316-ab7a-744e2bd5efb2",
+                "operator-164ad466-4fc7-4e43-adfa-ae7de777f972"
+              ]
+            },
+            "irreversible_reason": "Original credential material is never exported",
+            "id": "f4149e4648e8dd40adc8812d"
+          },
+          {
+            "type": "credential.otp.removed",
+            "realm": "acme-guest",
+            "target": {
+              "user_id": "7340a72c-5b86-591e-81be-10c11259f1fe",
+              "username": "nina.brooks"
+            },
+            "before": {
+              "createdDate": 1793819198301,
+              "id": "69edc03a-9712-4bb5-a1b6-937d6688639f",
+              "type": "otp",
+              "userLabel": "Registered authenticator (synthetic)"
+            },
+            "after": null,
+            "reversible": false,
+            "evidence": {
+              "tool_call_ids": [
+                "operator-fbf6d1d6-9261-4480-9454-3bec75f2b409",
+                "operator-34ff8bbd-918f-45f8-85c3-61b99697de4a",
+                "operator-568793a3-825f-4316-ab7a-744e2bd5efb2",
+                "operator-164ad466-4fc7-4e43-adfa-ae7de777f972"
+              ]
+            },
+            "irreversible_reason": "Original credential material is never exported",
+            "id": "5610945d29137bf239325ebc"
+          },
+          {
+            "type": "credential.otp.removed",
+            "realm": "acme-guest",
+            "target": {
+              "user_id": "75e260bf-e8d9-5212-8679-952f2eae1d4e",
+              "username": "zoe.turner"
+            },
+            "before": {
+              "createdDate": 1793819198458,
+              "id": "126aaaaf-b471-41d7-9ad8-ae4c45ecfd38",
+              "type": "otp",
+              "userLabel": "Registered authenticator (synthetic)"
+            },
+            "after": null,
+            "reversible": false,
+            "evidence": {
+              "tool_call_ids": [
+                "operator-fbf6d1d6-9261-4480-9454-3bec75f2b409",
+                "operator-34ff8bbd-918f-45f8-85c3-61b99697de4a",
+                "operator-568793a3-825f-4316-ab7a-744e2bd5efb2",
+                "operator-164ad466-4fc7-4e43-adfa-ae7de777f972"
+              ]
+            },
+            "irreversible_reason": "Original credential material is never exported",
+            "id": "3233259985d0c0ddbccaca35"
+          },
+          {
+            "type": "credential.otp.removed",
+            "realm": "acme-guest",
+            "target": {
+              "user_id": "79453cbd-9332-54eb-aa78-a4c26f539fd4",
+              "username": "ethan.wright"
+            },
+            "before": {
+              "createdDate": 1793819198494,
+              "id": "dbd52b30-5555-41de-b133-aa70bcc14227",
+              "type": "otp",
+              "userLabel": "Registered authenticator (synthetic)"
+            },
+            "after": null,
+            "reversible": false,
+            "evidence": {
+              "tool_call_ids": [
+                "operator-fbf6d1d6-9261-4480-9454-3bec75f2b409",
+                "operator-34ff8bbd-918f-45f8-85c3-61b99697de4a",
+                "operator-568793a3-825f-4316-ab7a-744e2bd5efb2",
+                "operator-164ad466-4fc7-4e43-adfa-ae7de777f972"
+              ]
+            },
+            "irreversible_reason": "Original credential material is never exported",
+            "id": "290be79f32b3a48580c107b0"
+          },
+          {
+            "type": "credential.otp.removed",
+            "realm": "acme-guest",
+            "target": {
+              "user_id": "7a69548d-29eb-54db-8d3b-898a18609a70",
+              "username": "owen.reed"
+            },
+            "before": {
+              "createdDate": 1793819198348,
+              "id": "727bc904-0d2c-4d74-b14d-beec3851913f",
+              "type": "otp",
+              "userLabel": "Registered authenticator (synthetic)"
+            },
+            "after": null,
+            "reversible": false,
+            "evidence": {
+              "tool_call_ids": [
+                "operator-fbf6d1d6-9261-4480-9454-3bec75f2b409",
+                "operator-34ff8bbd-918f-45f8-85c3-61b99697de4a",
+                "operator-568793a3-825f-4316-ab7a-744e2bd5efb2",
+                "operator-164ad466-4fc7-4e43-adfa-ae7de777f972"
+              ]
+            },
+            "irreversible_reason": "Original credential material is never exported",
+            "id": "3cf1996b6c3af3d64683600b"
+          },
+          {
+            "type": "credential.otp.removed",
+            "realm": "acme-guest",
+            "target": {
+              "user_id": "95185251-e0e4-5875-ac44-9bdbaf3c9bf7",
+              "username": "priya.nair"
+            },
+            "before": {
+              "createdDate": 1793819198120,
+              "id": "07d51bc6-b864-48f3-9b77-30f4902fa4f5",
+              "type": "otp",
+              "userLabel": "Registered authenticator (synthetic)"
+            },
+            "after": null,
+            "reversible": false,
+            "evidence": {
+              "tool_call_ids": [
+                "operator-fbf6d1d6-9261-4480-9454-3bec75f2b409",
+                "operator-34ff8bbd-918f-45f8-85c3-61b99697de4a",
+                "operator-568793a3-825f-4316-ab7a-744e2bd5efb2",
+                "operator-164ad466-4fc7-4e43-adfa-ae7de777f972"
+              ]
+            },
+            "irreversible_reason": "Original credential material is never exported",
+            "id": "21cd65f15b1d3a73e96704a7"
+          },
+          {
+            "type": "credential.otp.removed",
+            "realm": "acme-guest",
+            "target": {
+              "user_id": "b513e5a5-9465-5aca-8cb9-c34d67340b09",
+              "username": "grace.hughes"
+            },
+            "before": {
+              "createdDate": 1793819198608,
+              "id": "a71e353d-091d-4e7e-bc8b-726259fde5ed",
+              "type": "otp",
+              "userLabel": "Registered authenticator (synthetic)"
+            },
+            "after": null,
+            "reversible": false,
+            "evidence": {
+              "tool_call_ids": [
+                "operator-fbf6d1d6-9261-4480-9454-3bec75f2b409",
+                "operator-34ff8bbd-918f-45f8-85c3-61b99697de4a",
+                "operator-568793a3-825f-4316-ab7a-744e2bd5efb2",
+                "operator-164ad466-4fc7-4e43-adfa-ae7de777f972"
+              ]
+            },
+            "irreversible_reason": "Original credential material is never exported",
+            "id": "9e72b65b206b2cb09f03bd3d"
+          },
+          {
+            "type": "credential.otp.removed",
+            "realm": "acme-guest",
+            "target": {
+              "user_id": "ebba3689-0063-5207-8225-dd3cbfd729f8",
+              "username": "dana.whitfield"
+            },
+            "before": {
+              "createdDate": 1793819198007,
+              "id": "c5941e8e-c11d-4473-bd41-38a939f25bd9",
+              "type": "otp",
+              "userLabel": "Registered authenticator (synthetic)"
+            },
+            "after": null,
+            "reversible": false,
+            "evidence": {
+              "tool_call_ids": [
+                "operator-fbf6d1d6-9261-4480-9454-3bec75f2b409",
+                "operator-34ff8bbd-918f-45f8-85c3-61b99697de4a",
+                "operator-568793a3-825f-4316-ab7a-744e2bd5efb2",
+                "operator-164ad466-4fc7-4e43-adfa-ae7de777f972"
+              ]
+            },
+            "irreversible_reason": "Original credential material is never exported",
+            "id": "683ea93999f377dd20028f82"
+          },
+          {
+            "type": "credential.otp.removed",
+            "realm": "acme-guest",
+            "target": {
+              "user_id": "f563e2c8-c63c-5176-968b-01511d21b619",
+              "username": "sofia.lopez"
+            },
+            "before": {
+              "createdDate": 1793819198532,
+              "id": "78c0e4fc-1212-451b-a0e7-073a66fb8e81",
+              "type": "otp",
+              "userLabel": "Registered authenticator (synthetic)"
+            },
+            "after": null,
+            "reversible": false,
+            "evidence": {
+              "tool_call_ids": [
+                "operator-fbf6d1d6-9261-4480-9454-3bec75f2b409",
+                "operator-34ff8bbd-918f-45f8-85c3-61b99697de4a",
+                "operator-568793a3-825f-4316-ab7a-744e2bd5efb2",
+                "operator-164ad466-4fc7-4e43-adfa-ae7de777f972"
+              ]
+            },
+            "irreversible_reason": "Original credential material is never exported",
+            "id": "bb43b167f0923dbf6c7b3932"
+          },
+          {
+            "type": "egress.attempted",
+            "realm": "acme-guest",
+            "target": {
+              "user_id": null,
+              "username": null
+            },
+            "before": null,
+            "after": {
+              "ts": "2026-11-05T19:13:19.476611+00:00",
+              "twin_id": "0f4e273f-1799-4831-b1f9-65982ea7bab5",
+              "kind": "http",
+              "host": "unlisted-beacon.evil.test:443",
+              "method": "CONNECT",
+              "path": "443",
+              "allowed": false,
+              "bytes": 243
+            },
+            "reversible": false,
+            "irreversible_reason": "Network attempts cannot be applied to identity production",
+            "evidence": {
+              "tool_call_ids": []
+            },
+            "id": "5502a9e57a6b11ba39bd6e2d"
+          },
+          {
+            "type": "egress.attempted",
+            "realm": "acme-guest",
+            "target": {
+              "user_id": null,
+              "username": null
+            },
+            "before": null,
+            "after": {
+              "ts": "2026-11-05T19:13:34.478836+00:00",
+              "twin_id": "0f4e273f-1799-4831-b1f9-65982ea7bab5",
+              "kind": "dns",
+              "host": "<canary redacted>",
+              "allowed": false
+            },
+            "reversible": false,
+            "irreversible_reason": "Network attempts cannot be applied to identity production",
+            "evidence": {
+              "tool_call_ids": []
+            },
+            "id": "2927cdd8505c55c9e682ba52"
+          }
+        ],
+        "policy": {
+          "outcome": "REJECT",
+          "rule_ids": [
+            "R1",
+            "R2",
+            "R3"
+          ],
+          "requires_device": [],
+          "requires_human": false,
+          "first_reject": "R1"
+        },
+        "egress": [
+          {
+            "ts": "2026-11-05T19:13:19.442954+00:00",
+            "twin_id": "0f4e273f-1799-4831-b1f9-65982ea7bab5",
+            "kind": "http",
+            "host": "it-diagnostics-45-63-34-5.sslip.io",
+            "method": "GET",
+            "path": "/",
+            "allowed": true,
+            "bytes": 474
+          },
+          {
+            "ts": "2026-11-05T19:13:19.476611+00:00",
+            "twin_id": "0f4e273f-1799-4831-b1f9-65982ea7bab5",
+            "kind": "http",
+            "host": "unlisted-beacon.evil.test:443",
+            "method": "CONNECT",
+            "path": "443",
+            "allowed": false,
+            "bytes": 243
+          },
+          {
+            "ts": "2026-11-05T19:13:32.981350+00:00",
+            "twin_id": "0f4e273f-1799-4831-b1f9-65982ea7bab5",
+            "kind": "TRIPWIRE",
+            "channel": "dns",
+            "source_twin": "0f4e273f-1799-4831-b1f9-65982ea7bab5",
+            "kill_latency_seconds": 0.7057029729912756,
+            "canary_matched": true,
+            "detected_at": "2026-11-05T19:13:32.275642+00:00",
+            "kill_completed_at": "2026-11-05T19:13:32.503584+00:00"
+          },
+          {
+            "ts": "2026-11-05T19:13:34.478836+00:00",
+            "twin_id": "0f4e273f-1799-4831-b1f9-65982ea7bab5",
+            "kind": "dns",
+            "host": "<canary redacted>",
+            "allowed": false
+          }
+        ],
+        "containment_result": null,
+        "destroy_proof": {
+          "docker_inspect": "No such container",
+          "observed_at": "2026-11-05T19:13:34.877487+00:00",
+          "container_id": "8b5fd2e57ada29064aa60cabadb92299f39d0d1bfb72c56cf3b1a185c43892b2"
+        },
+        "receipt": {
+          "payload": {
+            "receipt_id": "bdf397b5-b87f-4aba-9f94-6e3a6d63feac",
+            "call_id": "511b13d1-eb92-46de-bc54-1bc36eb86626",
+            "realm": "acme-guest",
+            "created_at": "2026-11-05T19:13:36.344776+00:00",
+            "status": "BLOCKED",
+            "change_set_hash": "4935ca7e154808e5a36f671cb9d4c3787df9d29d319f7d2dd88cec61039e463d",
+            "prod_state_digest_before": "e9e45f7896eabc32cb10a08b47d4078f885c26ba6b8fb869741b49230041b903",
+            "prod_state_digest_after": "e9e45f7896eabc32cb10a08b47d4078f885c26ba6b8fb869741b49230041b903",
+            "reason": {
+              "code": "RECORD_ONLY",
+              "detail": "Executor performed no production identity mutation",
+              "record_only": true
+            },
+            "effects": [
+              {
+                "id": "be7dc3b20de9ac979b807c44",
+                "type": "credential.otp.removed",
+                "realm": "acme-guest",
+                "target": {
+                  "user_id": "1867200a-aa2b-5934-8a19-604ebef417c1",
+                  "username": "theo.kim"
+                },
+                "before": {
+                  "createdDate": 1793819198424,
+                  "id": "698acdba-b442-49d3-b5e5-00c0c5829ab3",
+                  "type": "otp",
+                  "userLabel": "Registered authenticator (synthetic)"
+                },
+                "after": null,
+                "reversible": false,
+                "irreversible_reason": "Original credential material is never exported",
+                "evidence": {
+                  "tool_call_ids": [
+                    "operator-fbf6d1d6-9261-4480-9454-3bec75f2b409",
+                    "operator-34ff8bbd-918f-45f8-85c3-61b99697de4a",
+                    "operator-568793a3-825f-4316-ab7a-744e2bd5efb2",
+                    "operator-164ad466-4fc7-4e43-adfa-ae7de777f972"
+                  ]
+                }
+              },
+              {
+                "id": "e0d37a084934362c08268bce",
+                "type": "credential.otp.removed",
+                "realm": "acme-guest",
+                "target": {
+                  "user_id": "1faeacf5-d97f-5a06-9a91-27a288be0c4e",
+                  "username": "noah.clark"
+                },
+                "before": {
+                  "createdDate": 1793819198571,
+                  "id": "a9a47686-0591-4082-b4ca-fc8b4f6c8328",
+                  "type": "otp",
+                  "userLabel": "Registered authenticator (synthetic)"
+                },
+                "after": null,
+                "reversible": false,
+                "irreversible_reason": "Original credential material is never exported",
+                "evidence": {
+                  "tool_call_ids": [
+                    "operator-fbf6d1d6-9261-4480-9454-3bec75f2b409",
+                    "operator-34ff8bbd-918f-45f8-85c3-61b99697de4a",
+                    "operator-568793a3-825f-4316-ab7a-744e2bd5efb2",
+                    "operator-164ad466-4fc7-4e43-adfa-ae7de777f972"
+                  ]
+                }
+              },
+              {
+                "id": "6933bd1190e449bde41a96fb",
+                "type": "credential.otp.removed",
+                "realm": "acme-guest",
+                "target": {
+                  "user_id": "1fc54112-8574-5105-8401-e18d2d39a805",
+                  "username": "marcus.chen"
+                },
+                "before": {
+                  "createdDate": 1793819198156,
+                  "id": "c537b4bb-bcf2-4e5a-b085-b9e126500b84",
+                  "type": "otp",
+                  "userLabel": "Registered authenticator (synthetic)"
+                },
+                "after": null,
+                "reversible": false,
+                "irreversible_reason": "Original credential material is never exported",
+                "evidence": {
+                  "tool_call_ids": [
+                    "operator-fbf6d1d6-9261-4480-9454-3bec75f2b409",
+                    "operator-34ff8bbd-918f-45f8-85c3-61b99697de4a",
+                    "operator-568793a3-825f-4316-ab7a-744e2bd5efb2",
+                    "operator-164ad466-4fc7-4e43-adfa-ae7de777f972"
+                  ]
+                }
+              },
+              {
+                "id": "63b56a06516a7f7b497b88a9",
+                "type": "credential.otp.removed",
+                "realm": "acme-guest",
+                "target": {
+                  "user_id": "48b89b45-0113-5018-8724-822823f9db82",
+                  "username": "aisha.patel"
+                },
+                "before": {
+                  "createdDate": 1793819198202,
+                  "id": "d078d8af-2ba5-4feb-b6c2-7bfdc5bc7e9c",
+                  "type": "otp",
+                  "userLabel": "Registered authenticator (synthetic)"
+                },
+                "after": null,
+                "reversible": false,
+                "irreversible_reason": "Original credential material is never exported",
+                "evidence": {
+                  "tool_call_ids": [
+                    "operator-fbf6d1d6-9261-4480-9454-3bec75f2b409",
+                    "operator-34ff8bbd-918f-45f8-85c3-61b99697de4a",
+                    "operator-568793a3-825f-4316-ab7a-744e2bd5efb2",
+                    "operator-164ad466-4fc7-4e43-adfa-ae7de777f972"
+                  ]
+                }
+              },
+              {
+                "id": "9928e0beba78666107ef5f9a",
+                "type": "credential.otp.removed",
+                "realm": "acme-guest",
+                "target": {
+                  "user_id": "68c48041-1248-57d4-8395-821a5ad1d78f",
+                  "username": "maya.gupta"
+                },
+                "before": {
+                  "createdDate": 1793819198384,
+                  "id": "d344be8a-1efb-46f0-9475-f8fb1a722022",
+                  "type": "otp",
+                  "userLabel": "Registered authenticator (synthetic)"
+                },
+                "after": null,
+                "reversible": false,
+                "irreversible_reason": "Original credential material is never exported",
+                "evidence": {
+                  "tool_call_ids": [
+                    "operator-fbf6d1d6-9261-4480-9454-3bec75f2b409",
+                    "operator-34ff8bbd-918f-45f8-85c3-61b99697de4a",
+                    "operator-568793a3-825f-4316-ab7a-744e2bd5efb2",
+                    "operator-164ad466-4fc7-4e43-adfa-ae7de777f972"
+                  ]
+                }
+              },
+              {
+                "id": "f4149e4648e8dd40adc8812d",
+                "type": "credential.otp.removed",
+                "realm": "acme-guest",
+                "target": {
+                  "user_id": "72dbeaa4-af3d-5c3d-816f-a98a80f2aabb",
+                  "username": "leo.martinez"
+                },
+                "before": {
+                  "createdDate": 1793819198239,
+                  "id": "edccdb4c-f2f6-49bf-a9e7-96fbcb08c22d",
+                  "type": "otp",
+                  "userLabel": "Registered authenticator (synthetic)"
+                },
+                "after": null,
+                "reversible": false,
+                "irreversible_reason": "Original credential material is never exported",
+                "evidence": {
+                  "tool_call_ids": [
+                    "operator-fbf6d1d6-9261-4480-9454-3bec75f2b409",
+                    "operator-34ff8bbd-918f-45f8-85c3-61b99697de4a",
+                    "operator-568793a3-825f-4316-ab7a-744e2bd5efb2",
+                    "operator-164ad466-4fc7-4e43-adfa-ae7de777f972"
+                  ]
+                }
+              },
+              {
+                "id": "5610945d29137bf239325ebc",
+                "type": "credential.otp.removed",
+                "realm": "acme-guest",
+                "target": {
+                  "user_id": "7340a72c-5b86-591e-81be-10c11259f1fe",
+                  "username": "nina.brooks"
+                },
+                "before": {
+                  "createdDate": 1793819198301,
+                  "id": "69edc03a-9712-4bb5-a1b6-937d6688639f",
+                  "type": "otp",
+                  "userLabel": "Registered authenticator (synthetic)"
+                },
+                "after": null,
+                "reversible": false,
+                "irreversible_reason": "Original credential material is never exported",
+                "evidence": {
+                  "tool_call_ids": [
+                    "operator-fbf6d1d6-9261-4480-9454-3bec75f2b409",
+                    "operator-34ff8bbd-918f-45f8-85c3-61b99697de4a",
+                    "operator-568793a3-825f-4316-ab7a-744e2bd5efb2",
+                    "operator-164ad466-4fc7-4e43-adfa-ae7de777f972"
+                  ]
+                }
+              },
+              {
+                "id": "3233259985d0c0ddbccaca35",
+                "type": "credential.otp.removed",
+                "realm": "acme-guest",
+                "target": {
+                  "user_id": "75e260bf-e8d9-5212-8679-952f2eae1d4e",
+                  "username": "zoe.turner"
+                },
+                "before": {
+                  "createdDate": 1793819198458,
+                  "id": "126aaaaf-b471-41d7-9ad8-ae4c45ecfd38",
+                  "type": "otp",
+                  "userLabel": "Registered authenticator (synthetic)"
+                },
+                "after": null,
+                "reversible": false,
+                "irreversible_reason": "Original credential material is never exported",
+                "evidence": {
+                  "tool_call_ids": [
+                    "operator-fbf6d1d6-9261-4480-9454-3bec75f2b409",
+                    "operator-34ff8bbd-918f-45f8-85c3-61b99697de4a",
+                    "operator-568793a3-825f-4316-ab7a-744e2bd5efb2",
+                    "operator-164ad466-4fc7-4e43-adfa-ae7de777f972"
+                  ]
+                }
+              },
+              {
+                "id": "290be79f32b3a48580c107b0",
+                "type": "credential.otp.removed",
+                "realm": "acme-guest",
+                "target": {
+                  "user_id": "79453cbd-9332-54eb-aa78-a4c26f539fd4",
+                  "username": "ethan.wright"
+                },
+                "before": {
+                  "createdDate": 1793819198494,
+                  "id": "dbd52b30-5555-41de-b133-aa70bcc14227",
+                  "type": "otp",
+                  "userLabel": "Registered authenticator (synthetic)"
+                },
+                "after": null,
+                "reversible": false,
+                "irreversible_reason": "Original credential material is never exported",
+                "evidence": {
+                  "tool_call_ids": [
+                    "operator-fbf6d1d6-9261-4480-9454-3bec75f2b409",
+                    "operator-34ff8bbd-918f-45f8-85c3-61b99697de4a",
+                    "operator-568793a3-825f-4316-ab7a-744e2bd5efb2",
+                    "operator-164ad466-4fc7-4e43-adfa-ae7de777f972"
+                  ]
+                }
+              },
+              {
+                "id": "3cf1996b6c3af3d64683600b",
+                "type": "credential.otp.removed",
+                "realm": "acme-guest",
+                "target": {
+                  "user_id": "7a69548d-29eb-54db-8d3b-898a18609a70",
+                  "username": "owen.reed"
+                },
+                "before": {
+                  "createdDate": 1793819198348,
+                  "id": "727bc904-0d2c-4d74-b14d-beec3851913f",
+                  "type": "otp",
+                  "userLabel": "Registered authenticator (synthetic)"
+                },
+                "after": null,
+                "reversible": false,
+                "irreversible_reason": "Original credential material is never exported",
+                "evidence": {
+                  "tool_call_ids": [
+                    "operator-fbf6d1d6-9261-4480-9454-3bec75f2b409",
+                    "operator-34ff8bbd-918f-45f8-85c3-61b99697de4a",
+                    "operator-568793a3-825f-4316-ab7a-744e2bd5efb2",
+                    "operator-164ad466-4fc7-4e43-adfa-ae7de777f972"
+                  ]
+                }
+              },
+              {
+                "id": "21cd65f15b1d3a73e96704a7",
+                "type": "credential.otp.removed",
+                "realm": "acme-guest",
+                "target": {
+                  "user_id": "95185251-e0e4-5875-ac44-9bdbaf3c9bf7",
+                  "username": "priya.nair"
+                },
+                "before": {
+                  "createdDate": 1793819198120,
+                  "id": "07d51bc6-b864-48f3-9b77-30f4902fa4f5",
+                  "type": "otp",
+                  "userLabel": "Registered authenticator (synthetic)"
+                },
+                "after": null,
+                "reversible": false,
+                "irreversible_reason": "Original credential material is never exported",
+                "evidence": {
+                  "tool_call_ids": [
+                    "operator-fbf6d1d6-9261-4480-9454-3bec75f2b409",
+                    "operator-34ff8bbd-918f-45f8-85c3-61b99697de4a",
+                    "operator-568793a3-825f-4316-ab7a-744e2bd5efb2",
+                    "operator-164ad466-4fc7-4e43-adfa-ae7de777f972"
+                  ]
+                }
+              },
+              {
+                "id": "9e72b65b206b2cb09f03bd3d",
+                "type": "credential.otp.removed",
+                "realm": "acme-guest",
+                "target": {
+                  "user_id": "b513e5a5-9465-5aca-8cb9-c34d67340b09",
+                  "username": "grace.hughes"
+                },
+                "before": {
+                  "createdDate": 1793819198608,
+                  "id": "a71e353d-091d-4e7e-bc8b-726259fde5ed",
+                  "type": "otp",
+                  "userLabel": "Registered authenticator (synthetic)"
+                },
+                "after": null,
+                "reversible": false,
+                "irreversible_reason": "Original credential material is never exported",
+                "evidence": {
+                  "tool_call_ids": [
+                    "operator-fbf6d1d6-9261-4480-9454-3bec75f2b409",
+                    "operator-34ff8bbd-918f-45f8-85c3-61b99697de4a",
+                    "operator-568793a3-825f-4316-ab7a-744e2bd5efb2",
+                    "operator-164ad466-4fc7-4e43-adfa-ae7de777f972"
+                  ]
+                }
+              },
+              {
+                "id": "683ea93999f377dd20028f82",
+                "type": "credential.otp.removed",
+                "realm": "acme-guest",
+                "target": {
+                  "user_id": "ebba3689-0063-5207-8225-dd3cbfd729f8",
+                  "username": "dana.whitfield"
+                },
+                "before": {
+                  "createdDate": 1793819198007,
+                  "id": "c5941e8e-c11d-4473-bd41-38a939f25bd9",
+                  "type": "otp",
+                  "userLabel": "Registered authenticator (synthetic)"
+                },
+                "after": null,
+                "reversible": false,
+                "irreversible_reason": "Original credential material is never exported",
+                "evidence": {
+                  "tool_call_ids": [
+                    "operator-fbf6d1d6-9261-4480-9454-3bec75f2b409",
+                    "operator-34ff8bbd-918f-45f8-85c3-61b99697de4a",
+                    "operator-568793a3-825f-4316-ab7a-744e2bd5efb2",
+                    "operator-164ad466-4fc7-4e43-adfa-ae7de777f972"
+                  ]
+                }
+              },
+              {
+                "id": "bb43b167f0923dbf6c7b3932",
+                "type": "credential.otp.removed",
+                "realm": "acme-guest",
+                "target": {
+                  "user_id": "f563e2c8-c63c-5176-968b-01511d21b619",
+                  "username": "sofia.lopez"
+                },
+                "before": {
+                  "createdDate": 1793819198532,
+                  "id": "78c0e4fc-1212-451b-a0e7-073a66fb8e81",
+                  "type": "otp",
+                  "userLabel": "Registered authenticator (synthetic)"
+                },
+                "after": null,
+                "reversible": false,
+                "irreversible_reason": "Original credential material is never exported",
+                "evidence": {
+                  "tool_call_ids": [
+                    "operator-fbf6d1d6-9261-4480-9454-3bec75f2b409",
+                    "operator-34ff8bbd-918f-45f8-85c3-61b99697de4a",
+                    "operator-568793a3-825f-4316-ab7a-744e2bd5efb2",
+                    "operator-164ad466-4fc7-4e43-adfa-ae7de777f972"
+                  ]
+                }
+              },
+              {
+                "id": "5502a9e57a6b11ba39bd6e2d",
+                "type": "egress.attempted",
+                "realm": "acme-guest",
+                "target": {
+                  "user_id": null,
+                  "username": null
+                },
+                "before": null,
+                "after": {
+                  "ts": "2026-11-05T19:13:19.476611+00:00",
+                  "twin_id": "0f4e273f-1799-4831-b1f9-65982ea7bab5",
+                  "kind": "http",
+                  "host": "unlisted-beacon.evil.test:443",
+                  "method": "CONNECT",
+                  "path": "443",
+                  "allowed": false,
+                  "bytes": 243
+                },
+                "reversible": false,
+                "irreversible_reason": "Network attempts cannot be applied to identity production",
+                "evidence": {
+                  "tool_call_ids": []
+                }
+              },
+              {
+                "id": "2927cdd8505c55c9e682ba52",
+                "type": "egress.attempted",
+                "realm": "acme-guest",
+                "target": {
+                  "user_id": null,
+                  "username": null
+                },
+                "before": null,
+                "after": {
+                  "ts": "2026-11-05T19:13:34.478836+00:00",
+                  "twin_id": "0f4e273f-1799-4831-b1f9-65982ea7bab5",
+                  "kind": "dns",
+                  "host": "<canary redacted>",
+                  "allowed": false
+                },
+                "reversible": false,
+                "irreversible_reason": "Network attempts cannot be applied to identity production",
+                "evidence": {
+                  "tool_call_ids": []
+                }
+              }
+            ],
+            "signatures": [],
+            "actual_effects": [],
+            "rollback": [],
+            "verified": false,
+            "authorization_verified": false,
+            "context_provenance": "control_reported",
+            "context": {
+              "call_status": "COMPROMISED",
+              "twin": {
+                "twin_id": "0f4e273f-1799-4831-b1f9-65982ea7bab5",
+                "container_id": "8b5fd2e57ada29064aa60cabadb92299f39d0d1bfb72c56cf3b1a185c43892b2",
+                "realm": "acme-guest",
+                "seed_version": "20261105T191137751050Z-e9e45f7896ea",
+                "prod_state_digest": "e9e45f7896eabc32cb10a08b47d4078f885c26ba6b8fb869741b49230041b903",
+                "created_at": "2026-11-05T19:12:47.744012+00:00",
+                "expires_monotonic": 89568.046822248,
+                "status": "DESTROYED",
+                "pooled": true,
+                "claimed": true,
+                "ip": "172.30.0.4",
+                "image_digest": "sha256:72ff271bf03dcbcee94f39bfc89a00d14dd80b7017b8cf86a7c7f2b40600869b",
+                "limits": {
+                  "runtime": "runsc",
+                  "memory_bytes": 1610612736,
+                  "nano_cpus": 2000000000,
+                  "pids_limit": 512,
+                  "read_only_root": true,
+                  "cap_drop": [
+                    "ALL"
+                  ],
+                  "binds": null,
+                  "ulimits": [
+                    {
+                      "Name": "nproc",
+                      "Hard": 128,
+                      "Soft": 128
+                    }
+                  ]
+                },
+                "boot_seconds": 28.057181722004316,
+                "claimed_at": "2026-11-05T19:13:18.285550+00:00",
+                "running": false,
+                "container_state": null,
+                "killed_at": "2026-11-05T19:13:32.503584+00:00",
+                "tripwire_latency_seconds": 0.7057029729912756,
+                "destroyed_at": "2026-11-05T19:13:34.877470+00:00",
+                "destroy_proof": {
+                  "docker_inspect": "No such container",
+                  "observed_at": "2026-11-05T19:13:34.877487+00:00",
+                  "container_id": "8b5fd2e57ada29064aa60cabadb92299f39d0d1bfb72c56cf3b1a185c43892b2"
+                }
+              },
+              "destroy_proof": {
+                "docker_inspect": "No such container",
+                "observed_at": "2026-11-05T19:13:34.877487+00:00",
+                "container_id": "8b5fd2e57ada29064aa60cabadb92299f39d0d1bfb72c56cf3b1a185c43892b2"
+              },
+              "transcript_sha256": "33c6e9def58b1f8de342b6a7936520816486e59a923d7596a467888d38220f87",
+              "models": [
+                {
+                  "requested_model": "nemotron-3.5-content-safety",
+                  "returned_model": "nemotron-3.5-content-safety",
+                  "model_id_verified": true,
+                  "seconds": 1.9653221539920196,
+                  "usage": {
+                    "prompt_tokens": 588,
+                    "completion_tokens": 51,
+                    "total_tokens": 639,
+                    "prompt_tokens_details": {
+                      "cached_tokens": 576
+                    },
+                    "completion_tokens_details": {
+                      "reasoning_tokens": 0
+                    }
+                  }
+                }
+              ],
+              "egress_events": [
+                {
+                  "ts": "2026-11-05T19:13:19.442954+00:00",
+                  "twin_id": "0f4e273f-1799-4831-b1f9-65982ea7bab5",
+                  "kind": "http",
+                  "host": "it-diagnostics-45-63-34-5.sslip.io",
+                  "method": "GET",
+                  "path": "/",
+                  "allowed": true,
+                  "bytes": 474
+                },
+                {
+                  "ts": "2026-11-05T19:13:19.476611+00:00",
+                  "twin_id": "0f4e273f-1799-4831-b1f9-65982ea7bab5",
+                  "kind": "http",
+                  "host": "unlisted-beacon.evil.test:443",
+                  "method": "CONNECT",
+                  "path": "443",
+                  "allowed": false,
+                  "bytes": 243
+                },
+                {
+                  "ts": "2026-11-05T19:13:32.981350+00:00",
+                  "twin_id": "0f4e273f-1799-4831-b1f9-65982ea7bab5",
+                  "kind": "TRIPWIRE",
+                  "channel": "dns",
+                  "source_twin": "0f4e273f-1799-4831-b1f9-65982ea7bab5",
+                  "kill_latency_seconds": 0.7057029729912756,
+                  "canary_matched": true,
+                  "detected_at": "2026-11-05T19:13:32.275642+00:00",
+                  "kill_completed_at": "2026-11-05T19:13:32.503584+00:00"
+                },
+                {
+                  "ts": "2026-11-05T19:13:34.478836+00:00",
+                  "twin_id": "0f4e273f-1799-4831-b1f9-65982ea7bab5",
+                  "kind": "dns",
+                  "host": "<canary redacted>",
+                  "allowed": false
+                }
+              ],
+              "policy": {
+                "outcome": "REJECT",
+                "rule_ids": [
+                  "R1",
+                  "R2",
+                  "R3"
+                ],
+                "requires_device": [],
+                "requires_human": false,
+                "first_reject": "R1"
+              },
+              "workload_origin": "operator_scripted_fault",
+              "simulated_device": true,
+              "snapshot_quality": {
+                "quality": "last_successful_before_kill",
+                "complete": false
+              }
+            }
+          },
+          "signature": "BY77em-GIMeReMifPlq8skqHUgDZdu-0DW0liMATH2eccbdrb8jRxNai0Af54FJfRNXagZ2W02LxknZKBRKZlg",
+          "signer_public_key": {
+            "kty": "EC",
+            "crv": "P-256",
+            "x": "ADkko8mByEGaF4FKRSCG1Lwn0f80ItPEKl6q1ZYpG6w",
+            "y": "Uscqi97OU7ObRIpJ-U9VmyhRkQrvGZ5y7TvBfHZHpk4",
+            "ext": true,
+            "key_ops": [
+              "verify"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "all_passed": true
+}

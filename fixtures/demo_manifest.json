@@ -1,0 +1,28 @@
+{
+  "mode": "evidence_replay",
+  "description": "Recorded executions, not a new live call. Main-realm phone decisions and a separately labelled guest containment replay.",
+  "source_reports": [
+    "docs/infra/P5-real-phone-20261105T184311Z.json",
+    "docs/infra/P6-operator-jobs-20261105T190747Z.json"
+  ],
+  "beats": [
+    {
+      "id": "dana",
+      "title": "Dana \u00b7 denied",
+      "call_id": "c4eb21e6-e053-440f-b579-f24800c2c438",
+      "origin": "Real physical-phone denial"
+    },
+    {
+      "id": "hostile",
+      "title": "Hostile replay",
+      "call_id": "511b13d1-eb92-46de-bc54-1bc36eb86626",
+      "origin": "Scripted execution \u00b7 guest operator signer simulated"
+    },
+    {
+      "id": "sam",
+      "title": "Sam \u00b7 verified",
+      "call_id": "68d87ea9-7fd0-47fe-b2c6-d2d95f6ef07d",
+      "origin": "Real physical-phone approval"
+    }
+  ]
+}
