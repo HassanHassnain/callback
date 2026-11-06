@@ -1,0 +1,115 @@
+{
+  "scope": "Local FFmpeg and live Vultr audio. Fixed synthetic reply. Excludes planner and browser playback.",
+  "created_at": "2026-11-06T14:32:27.655339+00:00",
+  "checks": [
+    {
+      "clip": "lost_phone",
+      "transcript": "This is Dana Whitfield, CFO, employee ACMA1001. I lost my phone at the airport and urgently need my MFA reset, remove my existing OTP and require re-enrollment.",
+      "stt": {
+        "requested_model": "whisper-large-v3-turbo",
+        "returned_model": null,
+        "seconds": 2.202,
+        "audio_duration_seconds": 13.04,
+        "usage": {
+          "type": "duration",
+          "seconds": 14
+        },
+        "model_id_verified": false,
+        "identity_validation": "catalog_only_user_exception",
+        "identity_limitation": "Provider omitted per-response model identity"
+      },
+      "tts": {
+        "requested_model": "qwen3-tts-12hz-1.7b",
+        "returned_model": null,
+        "seconds": 1.639,
+        "audio_duration_seconds": 3.52,
+        "usage": {
+          "input_tokens": 11,
+          "output_tokens": 45,
+          "total_tokens": 56,
+          "seconds": 4,
+          "cost": "0.00112"
+        },
+        "model_id_verified": false,
+        "identity_validation": "catalog_only_user_exception",
+        "identity_limitation": "Provider omitted per-response model identity",
+        "voice": "ryan",
+        "audio_sha256": "942289c0063a835b564d250c85ffa42eab77d9f75030e94c23c2f7b1176ec2a4"
+      },
+      "seconds": 3.899
+    },
+    {
+      "clip": "lost_phone_stage",
+      "transcript": "Stage only the OTP removal and configure ITP re-enrollment for Dana, Whitfield, then request the exact change on the registered device and from an operator. I understand it cannot reach production without those approvals.",
+      "stt": {
+        "requested_model": "whisper-large-v3-turbo",
+        "returned_model": null,
+        "seconds": 1.269,
+        "audio_duration_seconds": 14.72,
+        "usage": {
+          "type": "duration",
+          "seconds": 15
+        },
+        "model_id_verified": false,
+        "identity_validation": "catalog_only_user_exception",
+        "identity_limitation": "Provider omitted per-response model identity"
+      },
+      "tts": {
+        "requested_model": "qwen3-tts-12hz-1.7b",
+        "returned_model": null,
+        "seconds": 1.237,
+        "audio_duration_seconds": 4.16,
+        "usage": {
+          "input_tokens": 11,
+          "output_tokens": 53,
+          "total_tokens": 64,
+          "seconds": 5,
+          "cost": "0.0014"
+        },
+        "model_id_verified": false,
+        "identity_validation": "catalog_only_user_exception",
+        "identity_limitation": "Provider omitted per-response model identity",
+        "voice": "ryan",
+        "audio_sha256": "c256c4bb5f86846a0a5200377e565d5dda7cd99f17917e78a9ad5a53e708b7a4"
+      },
+      "seconds": 2.563
+    },
+    {
+      "clip": "lost_phone_wait",
+      "transcript": "I cannot approve on the phone right now. You can leave the exact request pending. Do not bypass the registered device or human approval.",
+      "stt": {
+        "requested_model": "whisper-large-v3-turbo",
+        "returned_model": null,
+        "seconds": 0.92,
+        "audio_duration_seconds": 8.0,
+        "usage": {
+          "type": "duration",
+          "seconds": 8
+        },
+        "model_id_verified": false,
+        "identity_validation": "catalog_only_user_exception",
+        "identity_limitation": "Provider omitted per-response model identity"
+      },
+      "tts": {
+        "requested_model": "qwen3-tts-12hz-1.7b",
+        "returned_model": null,
+        "seconds": 1.151,
+        "audio_duration_seconds": 4.0,
+        "usage": {
+          "input_tokens": 11,
+          "output_tokens": 51,
+          "total_tokens": 62,
+          "seconds": 5,
+          "cost": "0.0014"
+        },
+        "model_id_verified": false,
+        "identity_validation": "catalog_only_user_exception",
+        "identity_limitation": "Provider omitted per-response model identity",
+        "voice": "ryan",
+        "audio_sha256": "87ac90a961e464ef440bed28d3dde6fd3f7ff19016be143467adece25403753e"
+      },
+      "seconds": 2.128
+    }
+  ],
+  "median_audio_pipeline_seconds": 2.563
+}

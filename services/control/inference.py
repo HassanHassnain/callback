@@ -71,7 +71,8 @@ class VultrInference:
         if not self.models:
             raise InferenceError("Provider returned an empty model catalog")
         for model in self.models:
-            self._limits[model] = asyncio.Semaphore(8 if model.startswith("glm-5") else 16)
+            if model not in self._limits:
+                self._limits[model] = asyncio.Semaphore(8 if model.startswith("glm-5") else 16)
         return data
 
     def require_model(self, model: str) -> None:
@@ -92,7 +93,8 @@ class VultrInference:
         assert_model(model, response)
         return {"model_id_verified": True, "identity_validation": "exact_response_model"}
 
-    async def request(self, path: str, *, model: str, body: dict[str, Any]) -> httpx.Response:
+    async def request(self, path: str, *, model: str, body: dict[str, Any],
+                      audio_seconds: float | None = None) -> httpx.Response:
         # The base URL is deliberately fixed. Never forward credentials to another host.
         if path not in {"chat/completions", "systemone", "audio/speech", "audio/transcriptions"}:
             raise InferenceError("Unsupported inference route")
@@ -103,7 +105,8 @@ class VultrInference:
             raise InferenceError("VULTR_INFERENCE_API_KEY is missing")
         async with self._limits[model]:
             for attempt in range(self._retries + 1):
-                reservation = await self.budget.reserve(self.models[model], body) if self.budget else None
+                reservation = (await self.budget.reserve(self.models[model], body, audio_seconds=audio_seconds)
+                               if self.budget else None)
                 try:
                     response = await self._client.post(path, json=body)
                 except Exception:

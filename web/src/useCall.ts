@@ -2,12 +2,12 @@ import {useCallback,useEffect,useState} from 'react';
 import {api,APIError} from './api';
 import type {Call,CallSummary} from './types';
 
-export function useCall(listCalls=false){
- const [id,setId]=useState<string|null>(()=>{const query=new URLSearchParams(location.search).get('call');if(query)return query;try{return localStorage.getItem('callback:v1:call');}catch{return null;}});
+export function useCall(listCalls=false,storageKey='callback:v1:call'){
+ const [id,setId]=useState<string|null>(()=>{const query=new URLSearchParams(location.search).get('call');if(query)return query;try{return localStorage.getItem(storageKey);}catch{return null;}});
  const [call,setCall]=useState<Call|null>(null);
  const [calls,setCalls]=useState<CallSummary[]>([]);
  const [error,setError]=useState('');
- const choose=useCallback((next:string|null)=>{setId(next);setCall(null);try{if(next)localStorage.setItem('callback:v1:call',next);else localStorage.removeItem('callback:v1:call');}catch{/* Storage is optional; the call URL remains shareable. */}const params=new URLSearchParams(location.search);if(next)params.set('call',next);else params.delete('call');history.replaceState(null,'',location.pathname+(params.size?'?'+params.toString():''));},[]);
+ const choose=useCallback((next:string|null)=>{setId(next);setCall(null);try{if(next)localStorage.setItem(storageKey,next);else localStorage.removeItem(storageKey);}catch{/* Storage is optional; the call URL remains shareable. */}const params=new URLSearchParams(location.search);if(next)params.set('call',next);else params.delete('call');history.replaceState(null,'',location.pathname+(params.size?'?'+params.toString():''));},[storageKey]);
  useEffect(()=>{
   let active=true;let timer:ReturnType<typeof setTimeout>;
   async function poll(){

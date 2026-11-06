@@ -79,6 +79,7 @@ class ChangeSet(Strict):
     realm: Literal["acme", "acme-guest"]
     seed_version: str = Field(min_length=1, max_length=128)
     prod_state_digest: str = Field(pattern=HEX64)
+    guest_lease: str | None = Field(default=None, pattern=r"^[a-f0-9-]{36}$")
     effects: list[Effect] = Field(max_length=100)
     created_at: str = Field(max_length=64)
 

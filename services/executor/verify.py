@@ -127,8 +127,8 @@ def policy_floor(change_set, current, devices, operators):
     return {"human_required": human, "verified_devices": sorted(devices), "verified_approvers": sorted(operators)}
 
 
-def cas(change_set, current):
-    require(digest(current) == change_set["prod_state_digest"], "DRIFT", "Production state differs from the signed seed")
+def cas(change_set, current, *, scoped_digest=None):
+    require((scoped_digest or digest(current)) == change_set["prod_state_digest"], "DRIFT", "Production state differs from the signed seed")
     for effect in change_set["effects"]:
         require(effect_value(effect, current) == effect["before"], "DRIFT", "An effect precondition does not match production")
 

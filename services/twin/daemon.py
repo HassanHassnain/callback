@@ -26,9 +26,26 @@ RECORDS = {}
 SEEDS = {}
 EVENTS = []
 LOCKS = {}
+DESTROY_LOCKS = {}
 POOL_TASKS = set()
+POOL_RETRY_AT = 0.0
 INTENTS = {}
 PRIVATE = Path(os.environ.get("SANDBOX_CONFIG", "/opt/callback/sandbox-private/config.json")).parent
+
+
+def archive_destroyed(record):
+    keys = {"snapshot", "initial_snapshot", "canaries", "admin_password"} & record.keys()
+    if not keys:
+        return
+    archive = PRIVATE / "twin-archives" / (str(uuid.UUID(record["twin_id"])) + ".json")
+    archive.parent.mkdir(mode=0o700, exist_ok=True)
+    if not archive.exists():
+        temporary = archive.with_suffix(".tmp")
+        temporary.write_text(json.dumps({key: record[key] for key in keys}))
+        temporary.chmod(0o600)
+        temporary.replace(archive)
+    for key in keys:
+        record.pop(key)
 
 
 def persist():
@@ -125,21 +142,24 @@ async def kill(twin, reason):
 
 
 async def destroy(twin):
-    record, data = await owned(twin)
-    if data:
-        if data["State"]["Running"]:
-            await kill(twin, "DESTROYING")
-        code, output, _ = await docker("rm", "-f", record["container_id"])
-        if code:
-            raise RuntimeError("Owned twin removal failed")
-    if await inspect(record["container_id"]) is not None:
-        raise RuntimeError("Container still exists after removal")
-    record.update({"destroyed_at": stamp(), "status": "DESTROYED",
-        "destroy_proof": {"docker_inspect": "No such container", "observed_at": stamp(),
-                          "container_id": record["container_id"]}})
-    persist()
-    return safe(record)
-
+    async with DESTROY_LOCKS.setdefault(twin, asyncio.Lock()):
+        record, data = await owned(twin)
+        if record.get("destroyed_at") and not data:
+            return safe(record)
+        if data:
+            if data["State"]["Running"]:
+                await kill(twin, "DESTROYING")
+            code, _, _ = await docker("rm", "-f", record["container_id"])
+            if code and await inspect(record["container_id"]) is not None:
+                raise RuntimeError("Owned twin removal failed")
+        if await inspect(record["container_id"]) is not None:
+            raise RuntimeError("Container still exists after removal")
+        record.update({"destroyed_at": stamp(), "status": "DESTROYED",
+            "destroy_proof": {"docker_inspect": "No such container", "observed_at": stamp(),
+                              "container_id": record["container_id"]}})
+        archive_destroyed(record)
+        persist()
+        return safe(record)
 
 async def canary(text, source, channel):
     lowered = text.lower()
@@ -172,7 +192,12 @@ def safe(record):
 async def snapshot(twin):
     record, data = await owned(twin)
     if not data or not data["State"]["Running"]:
-        return {"state": record.get("snapshot"), "quality": "last_successful_before_kill", "complete": False}
+        cached = record.get("snapshot")
+        if cached is None and record.get("destroyed_at"):
+            archive = PRIVATE / "twin-archives" / (str(uuid.UUID(twin)) + ".json")
+            if archive.exists():
+                cached = json.loads(archive.read_text()).get("snapshot")
+        return {"state": cached, "quality": "last_successful_before_kill", "complete": False}
     code, output, truncated = await docker("exec", "--user", "0:0", record["container_id"],
         "python3", "-I", "/opt/callback/tools.py", "snapshot", timeout=30)
     if code or truncated:
@@ -287,7 +312,7 @@ async def create(envelope, pooled=False):
         raise
 
 
-async def execute(twin, language, code):
+async def execute(twin, language, code, capture_snapshot=False):
     async with LOCKS[twin]:
         record, data = await owned(twin)
         if record.get("frozen"):
@@ -296,6 +321,7 @@ async def execute(twin, language, code):
             raise HTTPException(409, "Twin is unavailable")
         command = ["bash", "-lc", code] if language == "bash" else ["python3", "-c", code]
         try:
+            observation = None
             exit_code, output, truncated = await docker("exec", "--user", "1100:1100",
                 record["container_id"], *command, timeout=30, max_output=16384)
             if truncated:
@@ -307,7 +333,7 @@ async def execute(twin, language, code):
                     persist()
                 else:
                     with contextlib.suppress(Exception):
-                        await snapshot(twin)
+                        observation = await snapshot(twin)
             if record["status"] == "COMPROMISED":
                 # Guest exec exits as soon as kill lands; finish the tripwire's
                 # event/removal before reporting a terminal result to control.
@@ -316,7 +342,8 @@ async def execute(twin, language, code):
                         break
                     await asyncio.sleep(0.01)
             return {"exit_code": exit_code, "output": output.decode(errors="replace"),
-                    "output_truncated": truncated, "status": record["status"]}
+                    "output_truncated": truncated, "status": record["status"],
+                    **({"snapshot_observation": observation} if capture_snapshot and observation else {})}
         except asyncio.TimeoutError:
             await kill(twin, "EXEC_TIMEOUT")
             return {"exit_code": 124, "output": "30-second exec timeout; twin killed",
@@ -334,7 +361,7 @@ async def maintenance():
                        and not r["claimed"] and not r.get("destroyed_at")
                        and r["seed_version"] == version and r["status"] in {"READY", "BOOTING"}]
             target = CONFIG.get("pool_per_realm", {}).get(realm, 0)
-            if len(current) < target and not POOL_TASKS:
+            if len(current) < target and not POOL_TASKS and time.monotonic() >= POOL_RETRY_AT:
                 task = asyncio.create_task(create(envelope, pooled=True))
                 POOL_TASKS.add(task)
                 task.add_done_callback(pool_finished)
@@ -347,11 +374,12 @@ async def maintenance():
 
 
 def pool_finished(task):
+    global POOL_RETRY_AT
     POOL_TASKS.discard(task)
     if not task.cancelled() and task.exception():
         event(None, "POOL_BOOT_FAILED", error=str(task.exception())[:1800])
         # Avoid a failed boot spinning up disposable containers every two seconds.
-        CONFIG["pool_per_realm"] = {}
+        POOL_RETRY_AT = time.monotonic() + 30
 
 
 @asynccontextmanager
@@ -364,8 +392,11 @@ async def lifespan(app):
             LOCKS[twin] = asyncio.Lock()
             # Restart is a fail-closed lifecycle boundary. Only persisted,
             # label-verified resources belonging to this task are removed.
-            if not record.get("destroyed_at"):
+            if record.get("destroyed_at"):
+                archive_destroyed(record)
+            else:
                 await destroy(twin)
+        persist()
     for twin, intent in list(INTENTS.items()):
         data = await inspect(intent["name"])
         if data and twin not in RECORDS:
@@ -420,6 +451,7 @@ class CreateRequest(BaseModel):
 class ExecRequest(BaseModel):
     model_config = ConfigDict(extra="forbid")
     language: str = Field(pattern="^(bash|python)$")
+    capture_snapshot: bool = False
     code: str = Field(max_length=128000)
 
 
@@ -431,7 +463,7 @@ class SeedRequest(BaseModel):
 class PoolRequest(BaseModel):
     model_config = ConfigDict(extra="forbid")
     acme: int = Field(ge=0, le=3)
-    acme_guest: int = Field(default=0, ge=0, le=1)
+    acme_guest: int = Field(default=0, ge=0, le=3)
 
 
 @app.post("/pool")
@@ -502,7 +534,7 @@ async def create_twin(body: CreateRequest):
 @app.post("/twins/{twin}/exec")
 async def exec_twin(twin: str, body: ExecRequest):
     await owned(twin)
-    return await execute(twin, body.language, body.code)
+    return await execute(twin, body.language, body.code, body.capture_snapshot)
 
 
 @app.get("/twins/{twin}/snapshot")

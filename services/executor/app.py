@@ -15,6 +15,7 @@ from fastapi.responses import JSONResponse
 from pydantic import BaseModel, ConfigDict
 
 from services.common.contracts import ApplyRequest, OperatorProof
+from services.executor import guest
 from services.executor.apply import ApplyService
 from services.executor.enrollment import validate_bundle
 from services.executor.verify import Refusal, registered
@@ -27,6 +28,7 @@ LAST_ERROR = None
 
 
 def export_once(config):
+    guest.nightly(config)
     kc = Keycloak(config)
     try:
         return export_all(kc, config)
@@ -117,6 +119,22 @@ class Proof(BaseModel):
     model_config = ConfigDict(extra="forbid")
     payload: dict
     signature: str
+
+
+@app.post("/guest/enroll")
+def guest_enroll(body: Proof):
+    try:
+        return guest.lease(app.state.config, body.model_dump())
+    except (ValueError, KeyError, TypeError) as exc:
+        raise HTTPException(403, "Guest enrollment proof did not verify") from exc
+
+
+@app.post("/guest/reset")
+def guest_reset(body: Proof):
+    try:
+        return guest.reset(app.state.config, body.model_dump())
+    except (ValueError, KeyError, TypeError) as exc:
+        raise HTTPException(403, "Guest reset proof did not verify") from exc
 
 
 @app.post("/delivery")

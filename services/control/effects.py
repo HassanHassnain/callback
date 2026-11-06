@@ -128,7 +128,8 @@ def egress_effects(realm, events):
 def change_set(call, effects):
     return {"call_id": call["call_id"], "realm": call["realm"], "seed_version": call["seed_version"],
             "prod_state_digest": call["prod_state_digest"], "effects": effects,
-            "created_at": datetime.now(UTC).isoformat()}
+            "created_at": datetime.now(UTC).isoformat(),
+            **({"guest_lease": call["guest_lease"]} if call.get("guest_lease") else {})}
 
 
 def compare_claims(effects, claims):

@@ -60,7 +60,7 @@ User decision: allow catalog-validated TTS/STT with the missing per-response
 identity documented. A returned mismatch is still rejected. Exact model checks
 remain mandatory for every other route. See `docs/account-setup.md` for setup.
 
-## Not done
+## Integration and acceptance
 
 P5 is complete: Hassan's physical phone is enrolled as Dana and Sam, and his
 regular Chrome browser is pinned as approver. In the public main realm, Sam's
@@ -78,12 +78,28 @@ replay measured 705.7 ms from tripwire detection to kill and observed 14 OTP
 removals inside its twin. See docs/infra/P6-demo-e2e-20261105T192549Z.json and
 docs/infra/P6-operator-jobs-20261105T190747Z.json.
 
-Voice, benchmark, guest onboarding, hardening and submission assets remain.
-The public P6 demo is live. The final landing-page walkthrough is built locally
-and awaits a refreshed deployment connection.
+P7 is deployed. Chrome verified the push-to-talk recording path using a stock
+WAV as the synthetic microphone input. The red-team stock clip produced the
+Dana OTP removal and re-enrollment proposal with production unchanged. Browser
+median release/send-to-playback was 47.468 seconds for two turns. The text
+fallback passed. See docs/infra/P7-browser-20261106T150701Z.json. P5 supplies
+the independent physical-phone denial for the demo.
 
-Current local checks: 52 Python tests and strict Vite build pass. The live
-browser test is opt-in. Earlier failed reports remain preserved.
+P8 sample completed all six cells for one planner and two scenarios. The
+callback arm signed DENIED for the attack and APPLIED_VERIFIED for the
+legitimate reset in the sacrificial copy. The full 540-cell run
+P8-full-20261106 is executing on the sandbox host. The race currently shows
+the labelled development sample.
+
+P9 guest mode is deployed. A fresh profile completed one guest reset in
+54.882 seconds, decrypted on that browser and verified the receipt. The
+signed reset released the slot. A monitor bug interrupted repeat onboarding
+and was corrected. Three-call concurrency and explicit restart recovery
+verification are pending.
+
+P10 README, nine-slide Marp deck, cover and shot list exist. The LabLab draft
+has the Blast Radius Zero track and cover. Video rendering and final submission
+are pending.
 
 ## Known limits
 
@@ -105,8 +121,10 @@ browser test is opt-in. Earlier failed reports remain preserved.
   proposal; otherwise post-verify fails and reversible fields are restored.
 - A started execution without a terminal receipt is never automatically repeated.
   Local signed receipts are retained and Object Storage upload failures retried.
-- Guest onboarding is not finished; current guest keys belong to explicitly
-  simulated integration tests. No stranger-under-two-minutes claim is made.
+- Guest mode reserves three synthetic accounts for twenty minutes. Each slot
+  can approve one temporary reset for its own account. Its scoped CAS covers
+  the target's complete state and relevant realm policy. The main realm keeps
+  full realm CAS. Concurrent completion is being verified.
 
 - The demo proxy permits exact-domain HTTP GET only; HTTPS CONNECT is denied.
 - Agent NPROC is capped at 128, in addition to Docker's 512 PID ceiling, after
@@ -134,7 +152,7 @@ browser test is opt-in. Earlier failed reports remain preserved.
 
 ## URLs and demo
 
-Application health (real-phone P5 MVP accepted): https://callback-45-63-34-5.sslip.io/health
+Application health: https://callback-45-63-34-5.sslip.io/health
 Executor public key: https://callback-45-63-34-5.sslip.io/executor-pubkey.json
 Source: https://github.com/HassanHassnain/callback
 

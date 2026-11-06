@@ -28,6 +28,10 @@ def main():
     upload(state, "control", [ROOT / "services", ROOT / "fixtures", ROOT / "pyproject.toml", ROOT / "uv.lock"])
     script = """set -euo pipefail
 cd /opt/callback
+if ! command -v ffmpeg >/dev/null; then
+ apt-get update -qq
+ DEBIAN_FRONTEND=noninteractive apt-get install -y -qq --no-install-recommends ffmpeg
+fi
 if id callback-control >/dev/null 2>&1; then
  test "$(id -u callback-control)" = 1500
 else
@@ -80,13 +84,13 @@ systemctl daemon-reload
 systemctl enable callback-control
 systemctl restart callback-control
 """
-    result = ssh(state, "control", script, timeout=90, check=False)
+    result = ssh(state, "control", script, timeout=300, check=False)
     if result.returncode:
         raise RuntimeError("Control service setup failed; inspect service logs without printing its environment")
     state["control_app_deployed"] = True
     save_state(state)
-    deploy(state)
-    print("Text app deployed: " + state["public_url"] + "/call")
+    deploy(state, configure_hosts=False)
+    print("Call app deployed: " + state["public_url"] + "/call")
 
 
 if __name__ == "__main__":

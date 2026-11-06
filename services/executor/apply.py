@@ -15,6 +15,7 @@ from services.common.crypto import canonical, digest, public_jwk, sign, verify
 from services.common.sealed import seal
 from services.common.state import snapshot
 from services.control.effects import derive
+from services.executor import guest
 from services.executor.keycloak import Keycloak, update_user
 from services.executor.seed_export import EXPORT_LOCK, export_all, s3_client
 from services.executor.verify import Refusal, cas, policy_floor, registered, require, validate_hash, verify_decisions, effect_value, fresh
@@ -139,8 +140,10 @@ def mutate(kc, realm, effect, current, temporary=None):
 
 
 class ApplyService:
-    def __init__(self, config, key):
+    def __init__(self, config, key, *, client_factory=None, local_only=False):
         self.config, self.key = config, key
+        self.client_factory = client_factory
+        self.local_only = local_only
         self.root = Path(config["signing_key_path"]).parent
         self.db_path = self.root / "apply.sqlite3"
         self.receipts = self.root / "receipts"
@@ -169,11 +172,12 @@ class ApplyService:
         path.write_bytes(canonical(envelope))
         path.chmod(0o600)
         storage_pending = False
-        try:
-            s3_client(self.config).put_object(Bucket=self.config["receipts_bucket"], Key=rid + ".json",
-                Body=canonical(envelope), ContentType="application/json")
-        except Exception:
-            storage_pending = True
+        if not self.local_only:
+            try:
+                s3_client(self.config).put_object(Bucket=self.config["receipts_bucket"], Key=rid + ".json",
+                    Body=canonical(envelope), ContentType="application/json")
+            except Exception:
+                storage_pending = True
         return {"receipt": envelope, "storage_pending": storage_pending}
 
     def apply(self, request):
@@ -187,7 +191,7 @@ class ApplyService:
                     require(prior[0] == request.change_set_hash, "CALL_REPLAY", "Call ID already belongs to another hash")
                     require(prior[2] is not None, "INDETERMINATE", "Previous execution needs reconciliation; it will not be repeated")
                     return {"receipt": json.loads((self.receipts / (prior[2] + ".json")).read_text()), "idempotent": True}
-                kc = Keycloak(self.config)
+                kc = (self.client_factory or Keycloak)(self.config)
                 try:
                     before = snapshot(kc, change_set["realm"])
                     approvers_path = self.root / "approvers.json"
@@ -200,7 +204,11 @@ class ApplyService:
                         return result
                     require(request.context.get("call_status") != "COMPROMISED", "COMPROMISED", "Compromised calls are never applicable")
                     policy_floor(change_set, before, devices, operators)
-                    cas(change_set, before)
+                    require(change_set["realm"] != guest.REALM or "guest_lease" in change_set
+                            or not any(e["target"]["username"] in guest.SLOTS for e in change_set["effects"]),
+                            "GUEST_SCOPE", "Reserved judge slots require a scoped guest lease")
+                    scope = guest.check_apply(self.config, change_set, before) if "guest_lease" in change_set else None
+                    cas(change_set, before, scoped_digest=scope)
                     preflight(change_set["effects"], before)
                     with closing(self.db()) as db, db:
                         db.execute("INSERT INTO executions VALUES (?,?,?,NULL)", (change_set["call_id"], request.change_set_hash, "STARTED"))
@@ -253,10 +261,11 @@ class ApplyService:
                         return result
                     result = self.receipt(request, "APPLIED_VERIFIED", before=before, after=after, actual=actual, trusted=True)
                     self.finish(change_set, "APPLIED_VERIFIED", result)
-                    try:
-                        export_all(kc, self.config)
-                    except Exception:
-                        result["seed_export_pending"] = True
+                    if not self.local_only:
+                        try:
+                            export_all(kc, self.config)
+                        except Exception:
+                            result["seed_export_pending"] = True
                     return result
                 finally:
                     kc.client.close()

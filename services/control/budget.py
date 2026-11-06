@@ -11,12 +11,12 @@ class BudgetExceeded(RuntimeError):
     pass
 
 
-def rates(model):
+def rates(model, unit="token"):
     result = {}
     for side in ("input_modalities", "output_modalities"):
         for modality in model.get(side, []):
             for price in modality.get("pricing", []):
-                if price.get("unit") == "token":
+                if price.get("unit") == unit:
                     result[price["type"]] = Decimal(price["cost_usd"])
     return result
 
@@ -35,18 +35,23 @@ class Budget:
         temporary.chmod(0o600)
         temporary.replace(self.path)
 
-    async def reserve(self, model, body):
-        pricing = rates(model)
+    async def reserve(self, model, body, *, audio_seconds=None):
+        pricing = rates(model, "second" if audio_seconds is not None else "token")
         if not pricing:
-            raise BudgetExceeded("No live token pricing for this route")
-        context = max((m.get("supported_inputs", {}).get("max_context_length", {}).get("value", 0)
-                       for m in model.get("input_modalities", [])), default=0)
-        if not context:
-            raise BudgetExceeded("No catalog input bound for this route")
-        prompt = pricing.get("prompt", max(pricing.values()))
-        output = pricing.get("completion", max(pricing.values()))
-        amount = (Decimal(context) * prompt + Decimal(body.get("max_completion_tokens", 2048)) * output)
-        amount *= max(1, len(body.get("questions", {})))
+            raise BudgetExceeded("No live pricing for this route")
+        if audio_seconds is not None:
+            if not 0 < audio_seconds <= 90:
+                raise BudgetExceeded("Audio requires a bounded duration")
+            amount = Decimal(str(audio_seconds)) * sum(pricing.values())
+        else:
+            context = max((m.get("supported_inputs", {}).get("max_context_length", {}).get("value", 0)
+                           for m in model.get("input_modalities", [])), default=0)
+            if not context:
+                raise BudgetExceeded("No catalog input bound for this route")
+            prompt = pricing.get("prompt", max(pricing.values()))
+            output = pricing.get("completion", max(pricing.values()))
+            amount = (Decimal(context) * prompt + Decimal(body.get("max_completion_tokens", 2048)) * output)
+            amount *= max(1, len(body.get("questions", {})))
         async with self.lock:
             day = datetime.now(UTC).date().isoformat()
             if self.data.get("day") != day:
@@ -57,13 +62,13 @@ class Budget:
             self.data["charged_usd"] = str(current + amount)
             self.data["requests"] += 1
             self.save()
-        return {"reserved": amount, "pricing": pricing, "day": day}
+        return {"reserved": amount, "pricing": pricing, "day": day, "audio": audio_seconds is not None}
 
     async def settle(self, reservation, data):
         usage = data.get("usage", {}) if isinstance(data, dict) else {}
         pricing = reservation["pricing"]
         actual = None
-        if "prompt" in pricing and "prompt_tokens" in usage and "completion_tokens" in usage:
+        if not reservation["audio"] and "prompt" in pricing and "prompt_tokens" in usage and "completion_tokens" in usage:
             actual = Decimal(usage["prompt_tokens"]) * pricing["prompt"] + Decimal(usage["completion_tokens"]) * pricing["completion"]
         # Missing/ambiguous usage or a failed transport retains the full bound.
         if actual is not None:

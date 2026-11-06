@@ -441,3 +441,58 @@ Default tests reported 52 passed and one opt-in skip.
 The landing explainer was built after the public replay test. Its static
 deployment is pending. The new client IPv4 timed out on SSH and Vultr account
 API preflight returned 401. The existing public service remained healthy.
+
+## P7 — Public voice and browser evidence (2026-11-06)
+
+Implemented hold-to-talk in Chrome, bounded FFmpeg conversion, live Vultr
+Whisper transcription and Ryan stock reply synthesis. Generated five labelled
+Aiden stock pretexts from the demo fixtures. The control service invokes fixed
+FFmpeg arguments with pipe-only I/O and no inference-key environment. It
+does not persist audio uploads. Identity checks apply the user-approved
+catalog-only audio exception when Vultr omits the returned ID.
+
+CALLBACK_VOICE_E2E=1 uv run pytest -s -q tests/e2e/test_public_voice.py passed
+in 127.73 seconds. Real browser MediaRecorder captured a synthetic WAV from
+Chrome's fake microphone. The red-team clip reached the same live API and
+staged Dana's OTP removal and re-enrollment with production unchanged. Text
+fallback passed. The two release/send-to-playing measurements were 38.195 and
+56.741 seconds, median 47.468. These are batch turns including twin operations,
+not realtime voice. A local component probe separately measured a 2.563 s median
+for FFmpeg, STT and fixed-reply TTS, excluding planner and browser. The first
+public run staged the change but failed playback because Caddy still mounted
+the old configuration file after rsync. Recreating the owned Caddy container
+applied the media policy. A later run hit a disabled warm pool after one
+boot failure. The broker now retries after a backoff and archives destroyed
+snapshots out of its active state file. Prior evidence remains preserved.
+
+## P8 — Matched benchmark sample and full run (2026-11-06)
+
+Materialized 40 synthetic attack scenarios and 20 legitimate scenarios.
+The runner uses three planners, three arms, and fresh gVisor Keycloak copies.
+Its in-process executor connects only to a label-verified disposable bridge
+address. It uses separate simulated signing keys, no production credential.
+The DeepSeek six-cell sample finished across all three arms. Callback signed
+DENIED for the attack and APPLIED_VERIFIED for the legitimate reset. Sample
+coverage and estimates are generated in bench/results and docs/benchmark.md.
+Started P8-full-20261106, 540 cells with a 12-turn maximum, from make bench
+on the owned sandbox. The race displays the sample as such until full results
+are collected.
+
+## P9 — Public guest desk and recovery work (2026-11-06)
+
+Each reserved guest slot has a browser-held signing/encryption key and a
+20-minute lease. The executor checks the exact realm and slot, compares the
+target and realm policy state, and permits only the guest's own temporary
+reset. The browser signs a reset to release its slot. The executor resets
+expired guest slots and records its nightly pass. Sam and Dana's existing
+main-realm phone enrollment stays separate.
+
+CALLBACK_GUEST_E2E=1 uv run pytest -s -q tests/e2e/test_guest_desk.py verified
+a fresh Chrome profile in 54.882 seconds from page open through applied
+verification. Browser decryption and receipt verification passed. The
+temporary password was hidden before screenshot capture. A subsequent repeat
+test exposed a monitor bug. A cancelled call without a planner policy field
+could stop the background usage check, leaving health stale. Closed-call
+archival now accepts the absent field and retries errors separately. Health
+reports stale usage even if the last iteration succeeded. The three-profile
+and forced recovery checks remain pending.

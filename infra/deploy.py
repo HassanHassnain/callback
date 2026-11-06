@@ -119,11 +119,12 @@ echo 'Callback host configured'
     print(f"Configured {role}: {result.stdout.strip()}", flush=True)
 
 
-def deploy(state):
-    with concurrent.futures.ThreadPoolExecutor(max_workers=4) as pool:
-        futures = [pool.submit(configure_host, state, role) for role in ROLES]
-        for future in futures:
-            future.result()
+def deploy(state, *, configure_hosts=True):
+    if configure_hosts:
+        with concurrent.futures.ThreadPoolExecutor(max_workers=4) as pool:
+            futures = [pool.submit(configure_host, state, role) for role in ROLES]
+            for future in futures:
+                future.result()
     ip = state["resources"]["control"]["main_ip"]
     host = "callback-" + ip.replace(".", "-") + ".sslip.io"
     staging = ROOT / ".local/deploy/control"
@@ -153,7 +154,7 @@ def deploy(state):
         upload(state, "control", [attacker])
     (staging / "compose.yaml").write_text(yaml.safe_dump(compose))
     upload(state, "control", [staging / "Caddyfile", staging / "compose.yaml"])
-    ssh(state, "control", "set -e\ncd /opt/callback\ndocker compose up -d\n", timeout=60)
+    ssh(state, "control", "set -e\ncd /opt/callback\ndocker compose up -d --force-recreate caddy\n", timeout=60)
     print("Control HTTPS service started", flush=True)
     # This listener is explicitly a P1 network probe, not a fake Keycloak. P2
     # replaces it with real Keycloak before claiming identity-provider readiness.

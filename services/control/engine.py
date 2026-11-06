@@ -2,7 +2,9 @@
 
 import asyncio
 import base64
+import copy
 import json
+import secrets
 import shlex
 import time
 import uuid
@@ -71,8 +73,11 @@ def now():
 
 
 class Engine:
-    def __init__(self, config, inference):
+    def __init__(self, config, inference, *, planner=PLANNER, sandbox=None):
         self.config = config
+        self.planner = planner
+        self.tools = TOOLS
+        self.tool_schemas = TOOL_SCHEMAS
         self.root = Path(config["private_dir"])
         self.root.joinpath("calls").mkdir(parents=True, exist_ok=True)
         self.root.joinpath("screenshots").mkdir(exist_ok=True)
@@ -80,7 +85,7 @@ class Engine:
         self.directory = json.loads(Path(config["directory_path"]).read_text())["employees"]
         self.inference = inference
         self.models = Models(inference)
-        self.sandbox = Sandbox(config["sandbox_config"])
+        self.sandbox = sandbox or Sandbox(config["sandbox_config"])
         self.executor = httpx.AsyncClient(base_url=config["executor_url"], trust_env=False, timeout=120,
             limits=httpx.Limits(max_keepalive_connections=0))
         self.public_key = json.loads(Path(config["executor_public_key_path"]).read_text())
@@ -88,6 +93,7 @@ class Engine:
         self.locks = {}
         self.seeds = {}
         self.seed_versions = {}
+        self.seed_lock = asyncio.Lock()
         persisted = self.store.load()
         existing = {call["call_id"] for call in persisted}
         for path in self.root.joinpath("calls").glob("*.json"):
@@ -129,21 +135,25 @@ class Engine:
 
     def public(self, call):
         return {key: value for key, value in call.items() if key not in {
-            "messages", "initial_snapshot", "latest_snapshot", "seed_state"}}
+            "messages", "initial_snapshot", "latest_snapshot", "seed_state", "guest_session_token"}}
 
     async def sync_seeds(self):
-        for realm in ("acme", "acme-guest"):
-            response = await self.executor.get("/seeds/latest/" + realm)
-            response.raise_for_status()
-            envelope = response.json()
-            verify(self.public_key, envelope["payload"], envelope["signature"])
-            if realm in self.seeds and self.seeds[realm]["payload"]["version"] > envelope["payload"]["version"]:
-                continue
-            self.seeds[realm] = envelope
-            self.seed_versions[envelope["payload"]["version"]] = envelope
-            await self.sandbox.request("POST", "/seeds", json={"envelope": envelope})
+        async with self.seed_lock:
+            for realm in ("acme", "acme-guest"):
+                response = await self.executor.get("/seeds/latest/" + realm)
+                response.raise_for_status()
+                envelope = response.json()
+                payload = envelope["payload"]
+                verify(self.public_key, payload, envelope["signature"])
+                previous = self.seeds.get(realm, {}).get("payload", {})
+                if previous and (previous["version"] >= payload["version"]
+                                 or previous["prod_state_digest"] == payload["prod_state_digest"]):
+                    continue
+                await self.sandbox.request("POST", "/seeds", json={"envelope": envelope})
+                self.seeds[realm] = envelope
+                self.seed_versions[payload["version"]] = envelope
 
-    async def create(self, realm="acme"):
+    async def create(self, realm="acme", *, guest=None):
         if realm not in self.seeds:
             raise RuntimeError("Signed seed is not ready")
         twin = await self.sandbox.claim(realm)
@@ -160,6 +170,16 @@ class Engine:
             "model_calls": [], "effects": [], "egress": [], "risk": {}, "moderation": [], "claims": [],
             "messages": [{"role": "system", "content": SYSTEM + "\nRealm: " + realm}],
             "production_status": "UNCHANGED", "apply_ready": True, "simulated_device": realm == "acme-guest"}
+        if guest:
+            call["guest_lease"] = guest["id"]
+            call["guest_username"] = guest["username"]
+            call["guest_session_token"] = secrets.token_urlsafe(32)
+            call["prod_state_digest"] = guest["scope_digest"]
+            call["seed_state"] = copy.deepcopy(call["seed_state"])
+            call["seed_state"]["users"][guest["user_id"]] = guest["user_state"]
+            call["messages"][0]["content"] += (
+                "\nThis guest demo permits a single temporary password reset for " + guest["username"] +
+                ". Stage only that reset, request confirmation from that exact device, then end the call.")
         self.calls[call["call_id"]] = call
         self.locks[call["call_id"]] = asyncio.Lock()
         self.save(call)
@@ -193,9 +213,9 @@ class Engine:
             call["receipt_pending"] = True
         self.save(call)
 
-    async def refresh(self, call):
+    async def refresh(self, call, observation=None):
         tid = call["twin"]["twin_id"]
-        state = await self.sandbox.snapshot(tid)
+        state = observation or await self.sandbox.snapshot(tid)
         if state.get("state") is not None:
             call["latest_snapshot"] = state["state"]
         call["snapshot_quality"] = {k: v for k, v in state.items() if k != "state"}
@@ -253,8 +273,8 @@ class Engine:
         if name in {"twin_admin", "twin_exec"}:
             language = arguments.get("language", "bash")
             code = arguments.get("code") if name == "twin_exec" else shlex.join(["kcadm.sh", *arguments["args"]])
-            result = await self.sandbox.exec(tid, language, code)
-            await self.refresh(call)
+            result = await self.sandbox.exec(tid, language, code, capture_snapshot=True)
+            await self.refresh(call, result.pop("snapshot_observation", None))
             return result
         if name == "open_url":
             try:
@@ -331,8 +351,8 @@ class Engine:
                 for _ in range(12):
                     if call["status"] in {"COMPROMISED", "CANCELLED", "ERROR"}:
                         break
-                    data = await self.models.request(call, "chat/completions", PLANNER,
-                        messages=call["messages"], tools=TOOLS, tool_choice="auto", temperature=0.2,
+                    data = await self.models.request(call, "chat/completions", self.planner,
+                        messages=call["messages"], tools=self.tools, tool_choice="auto", temperature=0.2,
                         max_completion_tokens=2048, reasoning={"enabled": False})
                     message = data["choices"][0]["message"]
                     call["messages"].append({key: message[key] for key in ["role", "content", "tool_calls"] if key in message})
@@ -344,7 +364,7 @@ class Engine:
                     for proposed in tool_calls:
                         name = proposed["function"]["name"]
                         arguments = json.loads(proposed["function"]["arguments"])
-                        jsonschema.validate(arguments, TOOL_SCHEMAS[name])
+                        jsonschema.validate(arguments, self.tool_schemas[name])
                         log = {"id": proposed["id"], "name": name, "arguments": arguments, "started_at": now()}
                         call["tool_log"].append(log)
                         self.save(call)

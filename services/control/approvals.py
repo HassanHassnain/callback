@@ -12,7 +12,7 @@ from services.control.policy import evaluate
 def request_for(call, signatures=None):
     context = {"call_status": call["status"], "twin": call["twin"], "destroy_proof": call.get("destroy_proof"),
         "transcript_sha256": hashlib.sha256(json.dumps(call["transcript"], sort_keys=True).encode()).hexdigest(),
-        "models": call["model_calls"], "egress_events": call["egress"], "policy": call["policy"],
+        "models": call["model_calls"], "egress_events": call["egress"], "policy": call.get("policy"),
         "workload_origin": call.get("workload_origin", "live_planner"),
         "simulated_device": call["realm"] == "acme-guest",
         "snapshot_quality": call.get("snapshot_quality", {"complete": False, "quality": "unreported"})}
