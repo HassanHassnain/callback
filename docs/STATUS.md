@@ -108,8 +108,9 @@ docs/infra/P9-recovery-20261106T163052Z.json.
 P10 README, nine-slide Marp deck, cover and shot list exist. The LabLab draft
 is 100% saved with the Blast Radius Zero track, cover, deck, 4:09 MP4,
 source and live guest URL. The MP4 uses stock narration, actual browser
-footage and separately labelled execution evidence. Final publish remains
-pending while the full benchmark and concurrency check run.
+footage and separately labelled execution evidence. Hassan requested that
+the application remain a draft until he explicitly gives the go. The final
+benchmark is still in progress.
 
 ## Known limits
 
