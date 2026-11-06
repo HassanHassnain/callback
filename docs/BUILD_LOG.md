@@ -556,3 +556,8 @@ confirmation on the original page. The old test leases expire normally.
 The corrected full benchmark P8-full-v2-20261106 started on the sandbox
 host with 540 cells, up to 12 turns and three workers. It is running
 independently of the LabLab draft and workstation.
+
+The expiry check found zero active leases after the three earlier test leases
+expired. The separate fresh-browser follow-up verified receipt signature,
+browser decryption and the signed slot reset. Executor readback found zero
+remaining leases. That completed the P9 acceptance checks.

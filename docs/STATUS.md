@@ -97,10 +97,9 @@ P9 guest mode is deployed. A fresh profile completed one guest reset in
 fresh profiles then completed simultaneous independent resets in 79.648,
 82.172 and 85.224 seconds. Their browsers decrypted each password and
 verified each receipt. The main-realm digest matched the earlier signed
-physical-phone denial. The test's cleanup click was skipped after navigating
-back to an unloaded call, so signed reset and automatic lease expiry are
-being checked separately. The test now verifies the receipt in a second tab
-and checks reset on the original page. Forced control and executor recovery
+physical-phone denial. The executor cleared the abandoned test leases automatically. A follow-up
+fresh-browser test verified signed slot reset and the executor readback showed
+zero outstanding leases. Forced control and executor recovery
 passed with preserved key and signed receipt.
 See docs/infra/P9-public-guest-20261106T164523Z.json,
 docs/infra/P9-main-isolation-20261106T164523Z.json and
