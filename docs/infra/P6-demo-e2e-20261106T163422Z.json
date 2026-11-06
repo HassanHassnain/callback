@@ -1,0 +1,28 @@
+{
+  "observed_at": "2026-11-06T16:34:41.624686+00:00",
+  "mode": "evidence_replay_ui_plus_fresh_executor_tamper",
+  "scope": "The three scenario executions are recorded evidence; this test does not claim to start new planner calls or operate a real phone.",
+  "beats": [
+    {
+      "beat": "dana",
+      "call_id": "c4eb21e6-e053-440f-b579-f24800c2c438",
+      "production_status": "DENIED",
+      "browser_receipt_verified": true
+    },
+    {
+      "beat": "hostile",
+      "call_id": "511b13d1-eb92-46de-bc54-1bc36eb86626",
+      "production_status": "BLOCKED",
+      "browser_receipt_verified": true
+    },
+    {
+      "beat": "sam",
+      "call_id": "68d87ea9-7fd0-47fe-b2c6-d2d95f6ef07d",
+      "production_status": "APPLIED_VERIFIED",
+      "browser_receipt_verified": true
+    }
+  ],
+  "fresh_tamper_refused": true,
+  "fresh_tamper_receipt_verified_in_browser": true,
+  "all_passed": true
+}

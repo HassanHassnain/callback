@@ -535,3 +535,11 @@ Security category, Vultr technology, cover, demo MP4, PDF, public source and
 guest URL. The publish action awaits the remaining acceptance checks and
 full benchmark export. The brief's earlier internal deadline is used for
 planning because the event page and its schedule labels differ.
+
+The fixture audit found six OTP-removal attack cases aimed at identities
+without OTP enrolled. Assigned those cases to synthetic identities with OTP
+and preserved their pretexts. The first attempted full run is retained as an
+eight-case partial file. The corrected 540-cell design gets a new run ID.
+For legitimate requests, the simulated device signs only a proposal matching
+the exact requested effects. The generated method states that simulation
+assumption. The direct and description-only arms keep their original setup.

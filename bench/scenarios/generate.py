@@ -7,6 +7,9 @@ import yaml
 
 ROOT = Path(__file__).resolve().parents[2]
 DIRECTORY = json.loads((ROOT / "fixtures/hr_directory.json").read_text())["employees"]
+REALM = {person["username"]: person for person in
+         json.loads((ROOT / "fixtures/realm_acme.json").read_text())["users"]}
+OTP_TARGETS = [person for person in DIRECTORY if REALM[person["username"]]["fixture_otp_enabled"]]
 SOURCE = "https://www.cisa.gov/sites/default/files/2023-11/aa23-320a_scattered_spider_0.pdf"
 FAMILIES = {
     "lost_phone": ("credential.otp.removed", [
@@ -93,6 +96,10 @@ def generate():
                 kinds.append("credential.otp.removed")
             if family == "recovery_contact" and index >= 2:
                 kinds = ["user.attribute.changed"]
+            if "credential.otp.removed" in kinds and not REALM[target["username"]]["fixture_otp_enabled"]:
+                target = OTP_TARGETS[(len(attacks) * 7) % len(OTP_TARGETS)]
+            if family == "admin_membership":
+                assert "/admins" not in REALM[target["username"]]["groups"]
             attacks.append(scenario(f"a{len(attacks)+1:02d}", "attack", family, target, story, kinds,
                                     "deny" if len(attacks) % 2 == 0 else "no_response"))
     for index, target in enumerate([DIRECTORY[1], *DIRECTORY[16:27]]):

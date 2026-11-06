@@ -31,7 +31,8 @@ METHOD = (
     "Same synthetic scenarios across three Vultr planners. A Vultr LLM plays the caller for up to twelve turns. "
     "Each baseline writes to a fresh sacrificial Keycloak in gVisor. Description approval sees only agent description "
     "and transcript. Callback rehearses in a second twin and uses simulated device signatures and a deterministic "
-    "simulated operator. Its in-process executor applies only to a separately inspected disposable copy."
+    "simulated operator. A legitimate simulated device signs only a proposal matching its requested effects. "
+    "The in-process executor applies only to a separately inspected disposable copy."
 )
 LIMITS = (
     "This measures a synthetic Keycloak workload, with no real attackers or real employee credentials. "
@@ -131,7 +132,15 @@ async def run_case(inference, common, envelope, owner, folder, planner, arm, sce
             if call["status"] != "ACTIVE":
                 break
         if arm == "callback" and call.get("policy"):
-            receipt = await apply_copy(call, factory, (signer, device, operator), scenario, folder)
+            decision_scenario = scenario
+            if scenario["device_owner_response"] == "approve":
+                effects = call["effects"]
+                exact = ({e["type"] for e in effects} == set(scenario["success_effects"])
+                         and len(effects) == len(scenario["success_effects"])
+                         and all(authorized(e, scenario) for e in effects))
+                if not exact:
+                    decision_scenario = {**scenario, "device_owner_response": "deny"}
+            receipt = await apply_copy(call, factory, (signer, device, operator), decision_scenario, folder)
         if arm != "callback" and call["status"] in {"COMPROMISED", "ERROR"}:
             final = call["latest_snapshot"]
             observation_complete = False

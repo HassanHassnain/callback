@@ -88,8 +88,9 @@ the independent physical-phone denial for the demo.
 P8 sample completed all six cells for one planner and two scenarios. The
 callback arm signed DENIED for the attack and APPLIED_VERIFIED for the
 legitimate reset in the sacrificial copy. The full 540-cell run
-P8-full-20261106 is executing on the sandbox host. The race currently shows
-the labelled development sample.
+uses P8-full-v2-20261106 on the sandbox host. The first full-run attempt
+is retained as a partial report. The race currently shows the labelled
+development sample.
 
 P9 guest mode is deployed. A fresh profile completed one guest reset in
 54.882 seconds, decrypted on that browser and verified the receipt. The
