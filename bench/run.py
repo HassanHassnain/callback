@@ -20,7 +20,8 @@ from cryptography.hazmat.primitives.asymmetric import ec
 from bench.arms.runtime import ARMS, PLANNERS, REALM, BenchmarkEngine, CopyKeycloak, apply_copy, enroll_copy
 from services.common.crypto import digest, public_jwk, verify
 from services.common.state import snapshot
-from services.control.budget import Budget, rates
+from services.control.budget import Budget, rates, token_cost
+from services.control.models import DECISION
 from services.control.effects import derive
 from services.control.inference import VultrInference
 
@@ -80,8 +81,9 @@ def case_cost(call, inference):
     for item in call["model_calls"]:
         price = rates(inference.models[item["requested_model"]])
         usage = item.get("usage") or {}
-        if "prompt_tokens" in usage and "completion_tokens" in usage and "prompt" in price and "completion" in price:
-            amount += float(usage["prompt_tokens"] * price["prompt"] + usage["completion_tokens"] * price["completion"])
+        actual = token_cost(price, usage, decision=item["requested_model"] == DECISION)
+        if actual is not None:
+            amount += float(actual)
             priced += 1
     return round(amount, 8), priced
 
@@ -172,11 +174,35 @@ async def run_case(inference, common, envelope, owner, folder, planner, arm, sce
             "legitimate_completed": success if legal else None,
             "mismatch_catches": sum(e["mismatch"] for e in call.get("claim_comparison", [])),
             "approvals": call["approvals_requested"], "cost_estimate_usd": cost, "priced_model_calls": priced,
-            "model_calls": len(call["model_calls"]), "seconds": round(time.monotonic() - started, 3),
+            "model_calls": len(call["model_calls"]), "cost_accounting_version": 2,
+            "seconds": round(time.monotonic() - started, 3),
             "turns": sum(t["role"] == "user" for t in call["transcript"]),
         }
     finally:
         await engine.close()
+
+
+def case_key(row):
+    return row["scenario"], row["planner"], row["arm"]
+
+
+def case_directory(root, scenario, planner, arm):
+    return root / hashlib.sha256(f"{planner}/{arm}/{scenario}".encode()).hexdigest()[:16]
+
+
+def reconcile_decision_costs(latest, root, inference):
+    for key, row in list(latest.items()):
+        if "cost_estimate_usd" not in row or row.get("cost_accounting_version") == 2:
+            continue
+        artifacts = sorted(case_directory(root, *key).glob("*/calls/*.json"))
+        if not artifacts:
+            continue
+        observations = json.loads(artifacts[-1].read_text()).get("model_calls", [])
+        costs = [token_cost(rates(inference.models[DECISION]), item.get("usage") or {}, decision=True)
+                 for item in observations if item["requested_model"] == DECISION]
+        priced = [float(cost) for cost in costs if cost is not None]
+        latest[key] = {**row, "cost_estimate_usd": round(row["cost_estimate_usd"] + sum(priced), 8),
+                       "priced_model_calls": row["priced_model_calls"] + len(priced), "cost_accounting_version": 2}
 
 
 def report(run_id, args, rows, expected, seed_version, *, created_at=None):
@@ -257,11 +283,8 @@ async def run(args):
     common = {"sandbox_config": str(config_path), "executor_url": "http://127.0.0.1:1",
               "directory_path": str(ROOT / "fixtures/hr_directory.json"), "attacker_url": "http://" + cfg["attacker_domain"] + "/"}
     journal = root / "cases.jsonl"
-    def cell_key(row):
-        return row["scenario"], row["planner"], row["arm"]
-
     attempts = [json.loads(line) for line in journal.read_text().splitlines()] if journal.exists() else []
-    latest = {cell_key(row): row for row in attempts}
+    latest = {case_key(row): row for row in attempts}
     seen = {key for key, row in latest.items() if not args.retry_errors or row["status"] == "complete"}
     queue = asyncio.Queue()
     for scenario, planner, arm in cells:
@@ -272,12 +295,12 @@ async def run(args):
         await inference.catalog()
         for model in args.models:
             inference.require_model(model)
+        reconcile_decision_costs(latest, root, inference)
 
         async def work():
-            while not queue.empty():
+            while not queue.empty() and not budget.exhausted:
                 scenario, planner, arm = queue.get_nowait()
-                case_id = hashlib.sha256(f"{planner}/{arm}/{scenario['id']}".encode()).hexdigest()[:16]
-                attempt = root / case_id / datetime.now(UTC).strftime("%Y%m%dT%H%M%S%fZ")
+                attempt = case_directory(root, scenario["id"], planner, arm) / datetime.now(UTC).strftime("%Y%m%dT%H%M%S%fZ")
                 started = time.monotonic()
                 try:
                     row = await run_case(inference, common, envelope, cfg["owner_id"], attempt, planner, arm, scenario, args.turns)
@@ -288,13 +311,15 @@ async def run(args):
                             "planner": planner, "arm": arm})
                 with journal.open("a") as output:
                     output.write(json.dumps(row) + "\n")
-                latest[cell_key(row)] = row
+                latest[case_key(row)] = row
                 rows = list(latest.values())
                 print(f"{len(rows)}/{len(cells)} {planner} {arm} {scenario['id']} {row['status']} "
                       f"{row.get('error_type', row.get('call_status'))} {row['seconds']}s", flush=True)
                 report(args.run_id, args, rows, len(cells), envelope["payload"]["version"])
 
         await asyncio.gather(*(work() for _ in range(args.workers)))
+        if budget.exhausted:
+            print("Daily reservation limit reached. Resume after the budget window resets.", flush=True)
     report(args.run_id, args, list(latest.values()), len(cells), envelope["payload"]["version"])
     lock.close()
 

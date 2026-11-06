@@ -105,7 +105,8 @@ class VultrInference:
             raise InferenceError("VULTR_INFERENCE_API_KEY is missing")
         async with self._limits[model]:
             for attempt in range(self._retries + 1):
-                reservation = (await self.budget.reserve(self.models[model], body, audio_seconds=audio_seconds)
+                reservation = (await self.budget.reserve(self.models[model], body, audio_seconds=audio_seconds,
+                                                        decision=path == "systemone")
                                if self.budget else None)
                 try:
                     response = await self._client.post(path, json=body)

@@ -1,0 +1,9 @@
+{
+  "observed_at": "2026-11-06T20:13:19.221337+00:00",
+  "attempted_cases": 202,
+  "completed_cases": 64,
+  "provider_subscription_text_cost_estimate_usd": 0.566165,
+  "scope": "Current-month provider-reported chat and decision tokens at live catalog rates. Includes other Callback work, excludes audio, and is not an invoice.",
+  "budget_issue": "System One bills usage.input_tokens. The legacy code retained every maximum reservation because it expected chat usage.prompt_tokens and completion_tokens.",
+  "budget_fix": "Use actual System One input tokens at the live catalog rate after successful calls. Preserve earlier reservations and use a USD 20 cap for this benchmark's daily budget."
+}

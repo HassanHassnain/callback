@@ -21,11 +21,24 @@ def rates(model, unit="token"):
     return result
 
 
+def token_cost(pricing, usage, *, decision=False):
+    if decision:
+        # System One bills the input count even when the catalog represents
+        # the single price under the legacy "completion" label.
+        price = pricing.get("prompt", pricing.get("completion"))
+        if price is not None and "input_tokens" in usage:
+            return Decimal(usage["input_tokens"]) * price
+    elif {"prompt", "completion"} <= pricing.keys() and {"prompt_tokens", "completion_tokens"} <= usage.keys():
+        return Decimal(usage["prompt_tokens"]) * pricing["prompt"] + Decimal(usage["completion_tokens"]) * pricing["completion"]
+    return None
+
+
 class Budget:
     def __init__(self, path, limit_usd="20"):
         self.path = Path(path)
         self.limit = Decimal(limit_usd)
         self.lock = asyncio.Lock()
+        self.exhausted = False
         self.data = json.loads(self.path.read_text()) if self.path.exists() else {}
 
     def save(self):
@@ -35,7 +48,7 @@ class Budget:
         temporary.chmod(0o600)
         temporary.replace(self.path)
 
-    async def reserve(self, model, body, *, audio_seconds=None):
+    async def reserve(self, model, body, *, audio_seconds=None, decision=False):
         pricing = rates(model, "second" if audio_seconds is not None else "token")
         if not pricing:
             raise BudgetExceeded("No live pricing for this route")
@@ -50,26 +63,27 @@ class Budget:
                 raise BudgetExceeded("No catalog input bound for this route")
             prompt = pricing.get("prompt", max(pricing.values()))
             output = pricing.get("completion", max(pricing.values()))
-            amount = (Decimal(context) * prompt + Decimal(body.get("max_completion_tokens", 2048)) * output)
-            amount *= max(1, len(body.get("questions", {})))
+            if decision:
+                amount = Decimal(context) * prompt * max(1, len(body["questions"]))
+            else:
+                amount = Decimal(context) * prompt + Decimal(body.get("max_completion_tokens", 2048)) * output
         async with self.lock:
             day = datetime.now(UTC).date().isoformat()
             if self.data.get("day") != day:
                 self.data = {"day": day, "charged_usd": "0", "requests": 0}
             current = Decimal(self.data["charged_usd"])
             if current + amount > self.limit:
+                self.exhausted = True
                 raise BudgetExceeded("Application daily inference budget reached")
             self.data["charged_usd"] = str(current + amount)
             self.data["requests"] += 1
             self.save()
-        return {"reserved": amount, "pricing": pricing, "day": day, "audio": audio_seconds is not None}
+        return {"reserved": amount, "pricing": pricing, "day": day, "audio": audio_seconds is not None, "decision": decision}
 
     async def settle(self, reservation, data):
         usage = data.get("usage", {}) if isinstance(data, dict) else {}
         pricing = reservation["pricing"]
-        actual = None
-        if not reservation["audio"] and "prompt" in pricing and "prompt_tokens" in usage and "completion_tokens" in usage:
-            actual = Decimal(usage["prompt_tokens"]) * pricing["prompt"] + Decimal(usage["completion_tokens"]) * pricing["completion"]
+        actual = None if reservation["audio"] else token_cost(pricing, usage, decision=reservation["decision"])
         # Missing/ambiguous usage or a failed transport retains the full bound.
         if actual is not None:
             async with self.lock:

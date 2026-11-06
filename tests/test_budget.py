@@ -36,3 +36,19 @@ def test_response_tokens_refund_unused_bound_but_missing_usage_does_not(tmp_path
         assert Decimal(budget.data["charged_usd"]) == Decimal("0.122")
 
     asyncio.run(run())
+
+
+def test_systemone_settles_billed_input_tokens_from_live_catalog_shape(tmp_path):
+    async def run():
+        budget = Budget(tmp_path / "budget.json", "1")
+        model = {
+            "input_modalities": [{"supported_inputs": {"max_context_length": {"value": 262144}}}],
+            "output_modalities": [{"pricing": [{"type": "completion", "unit": "token", "cost_usd": "0.00000005"}]}],
+        }
+        reservation = await budget.reserve(model, {"questions": {"a": {}, "b": {}}}, decision=True)
+        assert reservation["reserved"] == Decimal("0.02621440")
+        result = await budget.settle(reservation, {"usage": {"input_tokens": 2000, "output_tokens": 0}})
+        assert Decimal(result["budget_charge_usd"]) == Decimal("0.0001")
+        assert Decimal(budget.data["charged_usd"]) == Decimal("0.0001")
+
+    asyncio.run(run())

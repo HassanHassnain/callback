@@ -25,6 +25,7 @@ def main():
     parser.add_argument("--sample", type=int, choices=range(1, 21))
     parser.add_argument("--workers", type=int, choices=range(1, 4), default=3)
     parser.add_argument("--turns", type=int, choices=range(1, 13), default=12)
+    parser.add_argument("--budget", choices=["12", "20"], default="12")
     args = parser.parse_args()
     if not re.fullmatch(r"[A-Za-z0-9_-]{1,50}", args.run_id):
         parser.error("Invalid run ID")
@@ -59,7 +60,7 @@ def main():
     if not key or "\r" in key or "\n" in key:
         raise RuntimeError("Invalid inference credential")
     command = ["/opt/callback/.venv/bin/python", "-m", "bench.run", "--run-id", args.run_id,
-               "--workers", str(args.workers), "--turns", str(args.turns),
+               "--workers", str(args.workers), "--turns", str(args.turns), "--budget", args.budget,
                "--inference-key-file", "/opt/callback/bench/.cache/inference-key"]
     if args.retry_errors:
         command.append("--retry-errors")

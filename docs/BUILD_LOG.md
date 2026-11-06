@@ -561,3 +561,26 @@ The expiry check found zero active leases after the three earlier test leases
 expired. The separate fresh-browser follow-up verified receipt signature,
 browser decryption and the signed slot reset. Executor readback found zero
 remaining leases. That completed the P9 acceptance checks.
+
+## P8 — Decision billing reconciliation (2026-11-07 PKT)
+
+The 12 USD conservative benchmark budget stopped productive inference after 64
+completed cells. The runner journaled 202 attempts, including budget refusals.
+Vultr's current-month observed chat and decision tokens were approximately
+0.566 USD at catalog rates across Callback work, excluding audio. The previous
+settlement logic handled chat's prompt_tokens/completion_tokens but omitted
+System One's billed input_tokens. It retained every maximum decision
+reservation. Vultr documents per-question input-token billing at
+https://api.vultrinference.com/docs/reference/create-systemone.
+
+The benchmark journal and earlier spend reservations were preserved. The
+corrected settlement code uses the live decision rate and actual billed input
+tokens. Previous successful cases' decision cost estimates are reconstructed
+programmatically from their saved model responses. Resumed the same matched
+design with the 20 USD runner cap and retry-errors. Future budget refusals
+stop the queue instead of consuming all remaining cells. The live control
+plane also received the corrected accounting. Evidence and the earlier
+partial report are retained.
+
+The LabLab application remains a saved draft. Hassan explicitly requested
+approval before final submission.
