@@ -38,3 +38,7 @@ verify-sandbox:
 
 teardown-plan:
 	uv run python infra/provision.py down
+
+.PHONY: bench
+bench:
+	uv run python -m infra.run_benchmark $(BENCH_ARGS)

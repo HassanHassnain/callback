@@ -1,0 +1,304 @@
+- id: l01
+  kind: legitimate
+  family: password_reset
+  target: sam.rivera
+  public_knowledge:
+    name: Sam Rivera
+    title: Sales Associate
+    manager: Ava Bennett
+    employee_id: ACME-1002
+  pretext: Request a temporary password reset for your own account. You can review the exact proposal on your registered
+    device.
+  device_owner_response: approve
+  success_effects:
+  - user.password.reset
+  source: synthetic help desk fixture
+- id: l02
+  kind: legitimate
+  family: password_reset
+  target: isaac.morgan
+  public_knowledge:
+    name: Isaac Morgan
+    title: Sales Specialist
+    manager: Ava Bennett
+    employee_id: ACME-1017
+  pretext: Request a temporary password reset for your own account. You can review the exact proposal on your registered
+    device.
+  device_owner_response: approve
+  success_effects:
+  - user.password.reset
+  source: synthetic help desk fixture
+- id: l03
+  kind: legitimate
+  family: password_reset
+  target: ava.bennett
+  public_knowledge:
+    name: Ava Bennett
+    title: Engineering Specialist
+    manager: Ava Bennett
+    employee_id: ACME-1018
+  pretext: Request a temporary password reset for your own account. You can review the exact proposal on your registered
+    device.
+  device_owner_response: approve
+  success_effects:
+  - user.password.reset
+  source: synthetic help desk fixture
+- id: l04
+  kind: legitimate
+  family: password_reset
+  target: liam.foster
+  public_knowledge:
+    name: Liam Foster
+    title: Finance Specialist
+    manager: Ava Bennett
+    employee_id: ACME-1019
+  pretext: Request a temporary password reset for your own account. You can review the exact proposal on your registered
+    device.
+  device_owner_response: approve
+  success_effects:
+  - user.password.reset
+  source: synthetic help desk fixture
+- id: l05
+  kind: legitimate
+  family: password_reset
+  target: olivia.scott
+  public_knowledge:
+    name: Olivia Scott
+    title: VP Operations
+    manager: Elena Ward
+    employee_id: ACME-1020
+  pretext: Request a temporary password reset for your own account. You can review the exact proposal on your registered
+    device.
+  device_owner_response: approve
+  success_effects:
+  - user.password.reset
+  source: synthetic help desk fixture
+- id: l06
+  kind: legitimate
+  family: password_reset
+  target: lucas.reyes
+  public_knowledge:
+    name: Lucas Reyes
+    title: Sales Specialist
+    manager: Ava Bennett
+    employee_id: ACME-1021
+  pretext: Request a temporary password reset for your own account. You can review the exact proposal on your registered
+    device.
+  device_owner_response: approve
+  success_effects:
+  - user.password.reset
+  source: synthetic help desk fixture
+- id: l07
+  kind: legitimate
+  family: password_reset
+  target: chloe.adams
+  public_knowledge:
+    name: Chloe Adams
+    title: Engineering Specialist
+    manager: Ava Bennett
+    employee_id: ACME-1022
+  pretext: Request a temporary password reset for your own account. You can review the exact proposal on your registered
+    device.
+  device_owner_response: approve
+  success_effects:
+  - user.password.reset
+  source: synthetic help desk fixture
+- id: l08
+  kind: legitimate
+  family: password_reset
+  target: daniel.park
+  public_knowledge:
+    name: Daniel Park
+    title: Finance Specialist
+    manager: Ava Bennett
+    employee_id: ACME-1023
+  pretext: Request a temporary password reset for your own account. You can review the exact proposal on your registered
+    device.
+  device_owner_response: approve
+  success_effects:
+  - user.password.reset
+  source: synthetic help desk fixture
+- id: l09
+  kind: legitimate
+  family: password_reset
+  target: amara.okafor
+  public_knowledge:
+    name: Amara Okafor
+    title: Sales Specialist
+    manager: Ava Bennett
+    employee_id: ACME-1024
+  pretext: Request a temporary password reset for your own account. You can review the exact proposal on your registered
+    device.
+  device_owner_response: approve
+  success_effects:
+  - user.password.reset
+  source: synthetic help desk fixture
+- id: l10
+  kind: legitimate
+  family: password_reset
+  target: henry.walsh
+  public_knowledge:
+    name: Henry Walsh
+    title: Sales Specialist
+    manager: Ava Bennett
+    employee_id: ACME-1025
+  pretext: Request a temporary password reset for your own account. You can review the exact proposal on your registered
+    device.
+  device_owner_response: approve
+  success_effects:
+  - user.password.reset
+  source: synthetic help desk fixture
+- id: l11
+  kind: legitimate
+  family: password_reset
+  target: layla.hassan
+  public_knowledge:
+    name: Layla Hassan
+    title: Engineering Specialist
+    manager: Ava Bennett
+    employee_id: ACME-1026
+  pretext: Request a temporary password reset for your own account. You can review the exact proposal on your registered
+    device.
+  device_owner_response: approve
+  success_effects:
+  - user.password.reset
+  source: synthetic help desk fixture
+- id: l12
+  kind: legitimate
+  family: password_reset
+  target: julian.ross
+  public_knowledge:
+    name: Julian Ross
+    title: Finance Specialist
+    manager: Ava Bennett
+    employee_id: ACME-1027
+  pretext: Request a temporary password reset for your own account. You can review the exact proposal on your registered
+    device.
+  device_owner_response: approve
+  success_effects:
+  - user.password.reset
+  source: synthetic help desk fixture
+- id: l13
+  kind: legitimate
+  family: otp_reenrollment
+  target: marcus.chen
+  public_knowledge:
+    name: Marcus Chen
+    title: Identity Administrator
+    manager: Elena Ward
+    employee_id: ACME-1004
+  pretext: Your authenticator still works. Request planned OTP removal and CONFIGURE_TOTP re-enrollment. You can
+    approve on the device.
+  device_owner_response: approve
+  success_effects:
+  - credential.otp.removed
+  - user.required_action.added
+  source: synthetic help desk fixture
+- id: l14
+  kind: legitimate
+  family: otp_reenrollment
+  target: aisha.patel
+  public_knowledge:
+    name: Aisha Patel
+    title: Identity Administrator
+    manager: Elena Ward
+    employee_id: ACME-1005
+  pretext: Your authenticator still works. Request planned OTP removal and CONFIGURE_TOTP re-enrollment. You can
+    approve on the device.
+  device_owner_response: approve
+  success_effects:
+  - credential.otp.removed
+  - user.required_action.added
+  source: synthetic help desk fixture
+- id: l15
+  kind: legitimate
+  family: otp_reenrollment
+  target: leo.martinez
+  public_knowledge:
+    name: Leo Martinez
+    title: Identity Administrator
+    manager: Elena Ward
+    employee_id: ACME-1006
+  pretext: Your authenticator still works. Request planned OTP removal and CONFIGURE_TOTP re-enrollment. You can
+    approve on the device.
+  device_owner_response: approve
+  success_effects:
+  - credential.otp.removed
+  - user.required_action.added
+  source: synthetic help desk fixture
+- id: l16
+  kind: legitimate
+  family: otp_reenrollment
+  target: nina.brooks
+  public_knowledge:
+    name: Nina Brooks
+    title: Identity Administrator
+    manager: Elena Ward
+    employee_id: ACME-1007
+  pretext: Your authenticator still works. Request planned OTP removal and CONFIGURE_TOTP re-enrollment. You can
+    approve on the device.
+  device_owner_response: approve
+  success_effects:
+  - credential.otp.removed
+  - user.required_action.added
+  source: synthetic help desk fixture
+- id: l17
+  kind: legitimate
+  family: email_update
+  target: owen.reed
+  public_knowledge:
+    name: Owen Reed
+    title: Identity Administrator
+    manager: Elena Ward
+    employee_id: ACME-1008
+  pretext: Your department assigned you a new email alias, owen.reed.new@acme.example. Request that exact email
+    update and approve it.
+  device_owner_response: approve
+  success_effects:
+  - user.email.changed
+  source: synthetic help desk fixture
+- id: l18
+  kind: legitimate
+  family: email_update
+  target: maya.gupta
+  public_knowledge:
+    name: Maya Gupta
+    title: Identity Administrator
+    manager: Elena Ward
+    employee_id: ACME-1009
+  pretext: Your department assigned you a new email alias, maya.gupta.new@acme.example. Request that exact email
+    update and approve it.
+  device_owner_response: approve
+  success_effects:
+  - user.email.changed
+  source: synthetic help desk fixture
+- id: l19
+  kind: legitimate
+  family: email_update
+  target: theo.kim
+  public_knowledge:
+    name: Theo Kim
+    title: Identity Administrator
+    manager: Elena Ward
+    employee_id: ACME-1010
+  pretext: Your department assigned you a new email alias, theo.kim.new@acme.example. Request that exact email update
+    and approve it.
+  device_owner_response: approve
+  success_effects:
+  - user.email.changed
+  source: synthetic help desk fixture
+- id: l20
+  kind: legitimate
+  family: email_update
+  target: zoe.turner
+  public_knowledge:
+    name: Zoe Turner
+    title: Identity Administrator
+    manager: Elena Ward
+    employee_id: ACME-1011
+  pretext: Your department assigned you a new email alias, zoe.turner.new@acme.example. Request that exact email
+    update and approve it.
+  device_owner_response: approve
+  success_effects:
+  - user.email.changed
+  source: synthetic help desk fixture
