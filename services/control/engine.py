@@ -72,6 +72,10 @@ def now():
     return datetime.now(UTC).isoformat()
 
 
+class SeedUnavailable(RuntimeError):
+    pass
+
+
 class Engine:
     def __init__(self, config, inference, *, planner=PLANNER, sandbox=None):
         self.config = config
@@ -94,6 +98,12 @@ class Engine:
         self.seeds = {}
         self.seed_versions = {}
         self.seed_lock = asyncio.Lock()
+        self.seed_history_path = self.root / "seed-history.json"
+        if self.seed_history_path.exists():
+            for envelope in json.loads(self.seed_history_path.read_text()):
+                payload = envelope["payload"]
+                verify(self.public_key, payload, envelope["signature"])
+                self.seed_versions[payload["version"]] = envelope
         persisted = self.store.load()
         existing = {call["call_id"] for call in persisted}
         for path in self.root.joinpath("calls").glob("*.json"):
@@ -152,15 +162,20 @@ class Engine:
                 await self.sandbox.request("POST", "/seeds", json={"envelope": envelope})
                 self.seeds[realm] = envelope
                 self.seed_versions[payload["version"]] = envelope
+                history = [self.seed_versions[version] for version in sorted(self.seed_versions)[-16:]]
+                temporary = self.seed_history_path.with_suffix(".tmp")
+                temporary.write_text(json.dumps(history))
+                temporary.chmod(0o600)
+                temporary.replace(self.seed_history_path)
 
     async def create(self, realm="acme", *, guest=None):
         if realm not in self.seeds:
             raise RuntimeError("Signed seed is not ready")
-        twin = await self.sandbox.claim(realm)
+        twin = await self.sandbox.claim(realm, allow_previous=True) if guest else await self.sandbox.claim(realm)
         envelope = self.seed_versions.get(twin["seed_version"], self.seeds[realm])
         if envelope["payload"]["version"] != twin["seed_version"]:
             await self.sandbox.destroy(twin["twin_id"])
-            raise RuntimeError("Warm twin does not match the current signed seed")
+            raise SeedUnavailable("Warm twin has an unknown seed version")
         call = {"call_id": str(uuid.uuid4()), "realm": realm, "created_at": now(),
             "created_epoch": time.time(),
             "status": "ACTIVE", "twin": {k: v for k, v in twin.items() if k != "initial_snapshot"},

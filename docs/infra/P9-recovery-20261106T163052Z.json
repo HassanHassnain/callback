@@ -1,0 +1,15 @@
+{
+  "observed_at": "2026-11-06T16:30:52.289568+00:00",
+  "control_pids": [
+    33411,
+    33796
+  ],
+  "executor_pids": [
+    26113,
+    26357
+  ],
+  "control_ready_poll_seconds": 3.222,
+  "executor_ready_poll_seconds": 4.025,
+  "public_key_unchanged": true,
+  "prior_signed_receipt_available": true
+}

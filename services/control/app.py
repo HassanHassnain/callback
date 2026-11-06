@@ -22,7 +22,7 @@ from pydantic import BaseModel, ConfigDict, Field
 from services.common.contracts import SignedDecision, OperatorProof
 from services.control import voice
 from services.control.budget import Budget, BudgetExceeded
-from services.control.engine import Engine
+from services.control.engine import Engine, SeedUnavailable
 from services.control.inference import InferenceError, VultrInference, redact
 from services.control.models import DECISION, MODERATION, PLANNER, VISION
 from services.control.faults import replay_hostile
@@ -211,6 +211,8 @@ async def create_call_locked(body, *, guest=None):
         call["created_epoch"] = time.time()
         engine.save(call)
         return engine.public(call)
+    except SeedUnavailable as exc:
+        raise HTTPException(425, "Twin seed is warming; retry shortly") from exc
     except httpx.HTTPStatusError as exc:
         raise HTTPException(exc.response.status_code, "Twin is warming; retry shortly") from exc
     except httpx.TransportError as exc:

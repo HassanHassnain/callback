@@ -496,3 +496,42 @@ could stop the background usage check, leaving health stale. Closed-call
 archival now accepts the absent field and retries errors separately. Health
 reports stale usage even if the last iteration succeeded. The three-profile
 and forced recovery checks remain pending.
+
+The recovery verifier killed the task-owned control and executor processes.
+systemd and Docker started new PIDs. Readiness returned, the public executor
+key matched, and the earlier Sam receipt remained available. The poll
+intervals measured 3.222 seconds after the control PID changed and 4.025
+seconds after the executor PID changed. The original containment pool's
+reconciliation ran on broker restart before the full benchmark resumed.
+See docs/infra/P9-recovery-20261106T163052Z.json.
+
+A simultaneous guest retry after control recovered exposed seed warm-up 425s
+and exhausted the per-IP retry bucket. Scoped guest starts now accept an
+available recent signed guest rehearsal seed while the executor checks the
+current leased user's complete state and realm policy. Main-realm starts
+still require the current signed seed. The guest browser backs off for ten
+seconds between attempts. The full benchmark was stopped for the owned
+broker rollout after seven journaled cases and resumed under the same run
+ID. Completed observations were preserved.
+
+## P10 — Submission assets and LabLab draft (2026-11-06)
+
+The README exceeds 12 KB. It links primary incident sources, names every
+Vultr product used, includes the Gate capture and trust-zone diagram, and
+shows the generated benchmark table with the development-sample label.
+Rendered the nine-slide Marp source to a PDF, inspected its slide images,
+and rendered the 1920×1080 cover in Chrome at device scale factor two.
+
+Rendered a 4:09 H.264/AAC MP4 using authentic browser recordings, captured
+test evidence, stock Vultr narration and the labelled synthetic caller clip.
+Verified the stream dimensions, duration, audio level and sampled frames.
+The recording follows docs/video-script.md. The Race segment identifies its
+observed sample coverage on screen. Hassan can record the same script in his
+own voice. The generated submission video does not depict a new physical
+phone ceremony.
+
+LabLab's Axiom Labs draft is 100% saved with the C1 Blast Radius Zero track,
+Security category, Vultr technology, cover, demo MP4, PDF, public source and
+guest URL. The publish action awaits the remaining acceptance checks and
+full benchmark export. The brief's earlier internal deadline is used for
+planning because the event page and its schedule labels differ.

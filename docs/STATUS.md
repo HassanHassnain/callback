@@ -94,12 +94,17 @@ the labelled development sample.
 P9 guest mode is deployed. A fresh profile completed one guest reset in
 54.882 seconds, decrypted on that browser and verified the receipt. The
 signed reset released the slot. A monitor bug interrupted repeat onboarding
-and was corrected. Three-call concurrency and explicit restart recovery
-verification are pending.
+and was corrected. A subsequent guest warm-pool retry needed bounded
+backoff and a recent signed rehearsal seed. That path is deployed.
+Three-call concurrency is pending. Forced control and executor recovery
+passed with preserved key and signed receipt in
+docs/infra/P9-recovery-20261106T163052Z.json.
 
 P10 README, nine-slide Marp deck, cover and shot list exist. The LabLab draft
-has the Blast Radius Zero track and cover. Video rendering and final submission
-are pending.
+is 100% saved with the Blast Radius Zero track, cover, deck, 4:09 MP4,
+source and live guest URL. The MP4 uses stock narration, actual browser
+footage and separately labelled execution evidence. Final publish remains
+pending while the full benchmark and concurrency check run.
 
 ## Known limits
 

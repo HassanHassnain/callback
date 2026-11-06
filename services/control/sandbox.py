@@ -20,8 +20,8 @@ class Sandbox:
     async def create(self, envelope):
         return await self.request("POST", "/create", json={"envelope": envelope})
 
-    async def claim(self, realm="acme"):
-        return await self.request("POST", "/claim/" + realm)
+    async def claim(self, realm="acme", *, allow_previous=False):
+        return await self.request("POST", "/claim/" + realm, params={"allow_previous": allow_previous})
 
     async def exec(self, twin, language, code, *, capture_snapshot=False):
         return await self.request("POST", f"/twins/{twin}/exec", json={"language": language, "code": code, **({"capture_snapshot": True} if capture_snapshot else {})})

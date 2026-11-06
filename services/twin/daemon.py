@@ -489,15 +489,19 @@ async def update_seed(body: SeedRequest):
 
 
 @app.post("/claim/{realm}")
-async def claim(realm: str):
+async def claim(realm: str, allow_previous: bool = False):
     version = SEEDS.get(realm, {}).get("payload", {}).get("version")
-    for record in RECORDS.values():
-        if (record["realm"] == realm and record["status"] == "READY" and not record["claimed"]
-                and record["seed_version"] == version and record.get("initial_snapshot") is not None):
-            record["claimed"] = True
-            record["claimed_at"] = stamp()
-            persist()
-            return {**safe(record), "initial_snapshot": record["initial_snapshot"]}
+    candidates = [record for record in RECORDS.values()
+                  if record["realm"] == realm and record["status"] == "READY" and not record["claimed"]
+                  and not record.get("destroyed_at") and record.get("initial_snapshot") is not None]
+    record = next((candidate for candidate in candidates if candidate["seed_version"] == version), None)
+    if record is None and realm == "acme-guest" and allow_previous and candidates:
+        record = max(candidates, key=lambda candidate: candidate["seed_version"])
+    if record:
+        record["claimed"] = True
+        record["claimed_at"] = stamp()
+        persist()
+        return {**safe(record), "initial_snapshot": record["initial_snapshot"]}
     raise HTTPException(425, "Latest-seed twin is still warming; retry shortly")
 
 

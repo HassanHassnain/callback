@@ -53,7 +53,7 @@ function CallPage({notify}:{notify:Notice}){
   for(const candidate of choices){
    const key=await createSlot('device',candidate.identity,'acme-guest');
    const proof=await enrollment(key);
-   for(let attempt=0;attempt<18;attempt++){
+   for(let attempt=0;attempt<9;attempt++){
     try{
      const next=await api<Call&{guest_session_token:string}>('/api/guest/start',{method:'POST',body:JSON.stringify(proof)});
      sessionStorage.setItem('callback:guest-token:'+next.call_id,next.guest_session_token);
@@ -65,8 +65,8 @@ function CallPage({notify}:{notify:Notice}){
      return;
     }catch(e){
      if(e instanceof APIError&&e.status===409)break;
-     if(!(e instanceof APIError)||![425,503].includes(e.status)||attempt===17)throw e;
-     await new Promise(resolve=>setTimeout(resolve,3000));
+     if(!(e instanceof APIError)||![425,503].includes(e.status)||attempt===8)throw e;
+     await new Promise(resolve=>setTimeout(resolve,10000));
     }
    }
   }
