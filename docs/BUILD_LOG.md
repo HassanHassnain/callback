@@ -543,3 +543,16 @@ eight-case partial file. The corrected 540-cell design gets a new run ID.
 For legitimate requests, the simulated device signs only a proposal matching
 the exact requested effects. The generated method states that simulation
 assumption. The direct and description-only arms keep their original setup.
+
+The three-browser guest check completed after signed recent-seed warm-up.
+All three approved temporary resets were APPLIED_VERIFIED in 79.648–85.224
+seconds. All browsers observed local decryption and verified the signed
+receipt. The main realm's signed seed digest still matched the historical
+real-phone denial. A post-test lease inspection showed the first test's
+cleanup skipped its click after navigating back. Updated the acceptance
+test to verify the receipt in a separate tab and require a reset
+confirmation on the original page. The old test leases expire normally.
+
+The corrected full benchmark P8-full-v2-20261106 started on the sandbox
+host with 540 cells, up to 12 turns and three workers. It is running
+independently of the LabLab draft and workstation.

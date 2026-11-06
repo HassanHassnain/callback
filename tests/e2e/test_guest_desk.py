@@ -52,17 +52,17 @@ async def guest(browser, persona, stamp):
         await expect(page.get_by_test_id("guest-password")).to_be_visible(timeout=15000)
         await page.get_by_role("button", name="Hide password").click()
         link = page.get_by_role("link", name="Verify signed receipt")
-        await link.click()
-        await expect(page.get_by_role("status")).to_contain_text("Verified in this browser", timeout=30000)
-        await page.go_back()
+        receipt_page = await context.new_page()
+        await receipt_page.goto(BASE + await link.get_attribute("href"))
+        await expect(receipt_page.get_by_role("status")).to_contain_text("Verified in this browser", timeout=30000)
+        reset = page.get_by_role("button", name="Reset my guest slot")
+        await expect(reset).to_be_enabled(timeout=15000)
+        await reset.click()
+        await expect(page.get_by_role("status").filter(has_text="Your guest slot was reset.")).to_be_visible(timeout=30000)
         return {"persona": persona, "call_id": call_id, "ready_seconds": round(ready_seconds, 3),
                 "elapsed_seconds_to_apply": round(applied_seconds, 3),
-                "browser_decryption_observed": True, "receipt_verified": True}
+                "browser_decryption_observed": True, "receipt_verified": True, "signed_reset_verified": True}
     finally:
-        reset = page.get_by_role("button", name="Reset my guest slot")
-        if await reset.is_visible() and await reset.is_enabled():
-            await reset.click()
-            await expect(page.get_by_role("status").filter(has_text="Your guest slot was reset.")).to_be_visible(timeout=30000)
         await context.close()
 
 

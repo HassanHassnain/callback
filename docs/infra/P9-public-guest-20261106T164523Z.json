@@ -1,0 +1,28 @@
+{
+  "concurrent": [
+    {
+      "persona": "isaac.morgan",
+      "call_id": "db2140e3-e282-4c46-be5d-835ccf85f7fe",
+      "ready_seconds": 6.492,
+      "elapsed_seconds_to_apply": 85.224,
+      "browser_decryption_observed": true,
+      "receipt_verified": true
+    },
+    {
+      "persona": "ava.bennett",
+      "call_id": "d216d46a-c3c3-4fa6-b1a2-0f74e02c74e2",
+      "ready_seconds": 4.455,
+      "elapsed_seconds_to_apply": 79.648,
+      "browser_decryption_observed": true,
+      "receipt_verified": true
+    },
+    {
+      "persona": "liam.foster",
+      "call_id": "1e581a39-a8b8-46fc-b0f7-269a4de6c3bd",
+      "ready_seconds": 5.465,
+      "elapsed_seconds_to_apply": 82.172,
+      "browser_decryption_observed": true,
+      "receipt_verified": true
+    }
+  ]
+}

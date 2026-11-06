@@ -93,12 +93,17 @@ is retained as a partial report. The race currently shows the labelled
 development sample.
 
 P9 guest mode is deployed. A fresh profile completed one guest reset in
-54.882 seconds, decrypted on that browser and verified the receipt. The
-signed reset released the slot. A monitor bug interrupted repeat onboarding
-and was corrected. A subsequent guest warm-pool retry needed bounded
-backoff and a recent signed rehearsal seed. That path is deployed.
-Three-call concurrency is pending. Forced control and executor recovery
-passed with preserved key and signed receipt in
+54.882 seconds, decrypted on that browser and verified the receipt. Three
+fresh profiles then completed simultaneous independent resets in 79.648,
+82.172 and 85.224 seconds. Their browsers decrypted each password and
+verified each receipt. The main-realm digest matched the earlier signed
+physical-phone denial. The test's cleanup click was skipped after navigating
+back to an unloaded call, so signed reset and automatic lease expiry are
+being checked separately. The test now verifies the receipt in a second tab
+and checks reset on the original page. Forced control and executor recovery
+passed with preserved key and signed receipt.
+See docs/infra/P9-public-guest-20261106T164523Z.json,
+docs/infra/P9-main-isolation-20261106T164523Z.json and
 docs/infra/P9-recovery-20261106T163052Z.json.
 
 P10 README, nine-slide Marp deck, cover and shot list exist. The LabLab draft
@@ -130,7 +135,7 @@ pending while the full benchmark and concurrency check run.
 - Guest mode reserves three synthetic accounts for twenty minutes. Each slot
   can approve one temporary reset for its own account. Its scoped CAS covers
   the target's complete state and relevant realm policy. The main realm keeps
-  full realm CAS. Concurrent completion is being verified.
+  full realm CAS. Three independent guest calls completed concurrently.
 
 - The demo proxy permits exact-domain HTTP GET only; HTTPS CONNECT is denied.
 - Agent NPROC is capped at 128, in addition to Docker's 512 PID ceiling, after
