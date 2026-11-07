@@ -1,7 +1,8 @@
 # Callback status
 
-Updated: 2026-11-06. P0 complete under the explicit user-approved audio
-identity exception. P1 infrastructure checks pass; P2 identity/seed-export and P3 real containment acceptance checks pass; P4 is verified; P5 real-phone MVP is accepted. P6 browser and containment acceptance passed.
+Updated 2026-11-07. P0–P10 acceptance checks pass under the explicit
+user-approved audio identity exception. P10 final assets are saved in the
+100%-complete LabLab draft. Final submission awaits Hassan's explicit go.
 
 ## Done
 
@@ -85,12 +86,15 @@ median release/send-to-playback was 47.468 seconds for two turns. The text
 fallback passed. See docs/infra/P7-browser-20261106T150701Z.json. P5 supplies
 the independent physical-phone denial for the demo.
 
-P8 sample completed all six cells for one planner and two scenarios. The
-callback arm signed DENIED for the attack and APPLIED_VERIFIED for the
-legitimate reset in the sacrificial copy. The full 540-cell run
-uses P8-full-v2-20261106 on the sandbox host. The first full-run attempt
-is retained as a partial report. The race currently shows the labelled
-development sample.
+P8 completed all 540 unique cells in P8-full-v2-20261106, with 60 scenarios
+for each of three planners and three arms. Across 180 cases per arm,
+observed unauthorized effects were 48 for direct tools, 22 for
+description-only approval and 0 for Callback. Legitimate completions were
+20/60, 16/60 and 40/60 respectively. Thirteen output-limit terminations and
+three invalid-tool outcomes remain failed tasks in the measured results.
+Ten baseline terminal observations were incomplete, making baseline effect
+counts lower bounds. The generated JSON, method and /race use the same full
+result. Earlier samples and partial reports remain preserved.
 
 P9 guest mode is deployed. A fresh profile completed one guest reset in
 54.882 seconds, decrypted on that browser and verified the receipt. Three
@@ -105,12 +109,39 @@ See docs/infra/P9-public-guest-20261106T164523Z.json,
 docs/infra/P9-main-isolation-20261106T164523Z.json and
 docs/infra/P9-recovery-20261106T163052Z.json.
 
-P10 README, nine-slide Marp deck, cover and shot list exist. The LabLab draft
-is 100% saved with the Blast Radius Zero track, cover, deck, 4:09 MP4,
-source and live guest URL. The MP4 uses stock narration, actual browser
-footage and separately labelled execution evidence. Hassan requested that
-the application remain a draft until he explicitly gives the go. The final
-benchmark is still in progress.
+P10 README, nine-slide Marp deck, cover and shot list are complete. The
+LabLab draft is 100% saved with the Blast Radius Zero track, final 540-case
+deck, final 4:09 MP4, cover, source and live guest URL. The MP4 uses stock
+narration, actual browser footage and separately labelled execution
+evidence. The PDF and sampled video frames passed visual review. The video
+is 1920×1080 H.264/AAC, 249.021 seconds. Hassan requested that the application
+remain a draft until he explicitly gives the go.
+
+Final isolation readback matched the main realm's earlier signed phone-denial
+digest and found zero guest leases. Public health was ready and the public
+benchmark JSON exactly matched the local result. See
+docs/infra/P10-final-isolation-20261107.json.
+
+The final combined regression command enabled the live demo, voice and guest
+tests. All 64 tests passed in 252.09 seconds, with zero skips. Ruff and the
+TypeScript/Vite production build passed. The guest completed in 48.662 seconds,
+including verified device delivery and signed reset. The final two-turn voice
+median was 73.390 seconds. Evidence is recorded in
+docs/infra/P6-demo-e2e-20261107T054601Z.json,
+docs/infra/P9-public-guest-20261107T054620Z.json and
+docs/infra/P7-browser-20261107T054715Z.json.
+
+## Real and simulated paths
+
+- Real execution includes live Vultr inference, Keycloak mutations in
+  disposable gVisor copies, broker containment, executor verification,
+  signed receipts and the completed physical-phone Sam approval and Dana denial.
+- The guest device, benchmark callers and benchmark device/operator decisions
+  are simulated and labelled in the UI and README. The hostile operator test
+  executes real commands with a scripted workload and a simulated benign claim.
+- The deterministic Console demo replays recorded evidence. The submission
+  video labels those replays and its Vultr stock narration. It depicts the
+  completed phone decisions through their records.
 
 ## Known limits
 
@@ -136,6 +167,14 @@ benchmark is still in progress.
   can approve one temporary reset for its own account. Its scoped CAS covers
   the target's complete state and relevant realm policy. The main realm keeps
   full realm CAS. Three independent guest calls completed concurrently.
+- Callback completed 40/60 legitimate benchmark tasks. Its per-planner median
+  benchmark latency was about five minutes, including fresh-copy setup.
+  The guest acceptance tests use warm copies. Ten baseline observations were
+  incomplete, so their observed unauthorized effects are lower bounds.
+- Voice is push-to-talk. Two-turn browser release/send-to-playback medians
+  were 47.468 seconds in P7 acceptance and 68.441 seconds in the first final
+  regression run. The final combined run measured 73.390 seconds. Provider
+  and planner latency vary between runs.
 
 - The demo proxy permits exact-domain HTTP GET only; HTTPS CONNECT is denied.
 - Agent NPROC is capped at 128, in addition to Docker's 512 PID ceiling, after
@@ -172,3 +211,27 @@ Run `make setup`, `make preflight`, `make test`, `make lint`, and `make smoke`.
 
 Text preview: https://callback-45-63-34-5.sslip.io/call
 Operator console: https://callback-45-63-34-5.sslip.io/console
+
+- [Guest desk](https://callback-45-63-34-5.sslip.io/call?guest=1)
+- [Recorded evidence](https://callback-45-63-34-5.sslip.io/console?demo=1)
+- [Full benchmark](https://callback-45-63-34-5.sslip.io/race)
+- [Saved application draft](https://lablab.build/ai-hackathons/vultr-hackathon/axiom-labs/submission)
+
+## Recording and review steps
+
+1. Use a fresh 1920×1080 browser profile and follow the timed narration in
+   docs/video-script.md. Keep employee private keys and temporary passwords
+   outside the recording profile.
+2. Open the cover and the labelled stock-voice test capture. Identify the
+   synthetic caller and recorded execution evidence.
+3. Open /console?demo=1, select Dana and follow its receipt link. Show the
+   browser signature check and equal production digests.
+4. Select Hostile replay. Show the 14 observed OTP removals in its disposable
+   twin, 705.7 ms kill timing and signed unchanged-production receipt.
+5. Select Sam. Show the one APPLIED_VERIFIED reset, then the saved browser
+   hash-mismatch refusal capture. Keep decrypted password material hidden.
+6. Open /race for the full 540-case result and its caveats. Show the landing
+   page architecture and /call?guest=1 simulated-device panel.
+7. Close with the buyer and proposed pricing. The final rendered video is
+   .local/submission-media/Callback-demo-final.mp4. Review the saved LabLab
+   draft and await Hassan's explicit go for final submission.

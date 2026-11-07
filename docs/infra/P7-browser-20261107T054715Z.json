@@ -1,0 +1,106 @@
+{
+  "scope": "Live Vultr planner and audio. Stock synthetic caller, including Chrome fake mic input. Voice tests do not sign changes.",
+  "observed_at": "2026-11-07T05:50:12.324356+00:00",
+  "turns": [
+    {
+      "source": "browser_microphone_with_stock_wav",
+      "call_id": "0a6aea40-29ca-4a51-a13c-9899977ac3e6",
+      "release_or_send_to_playing_ms": 81288,
+      "server": {
+        "source": "microphone",
+        "started_at": "2026-11-07T05:47:34.599377+00:00",
+        "normalize_seconds": 0.708,
+        "stt": {
+          "requested_model": "whisper-large-v3-turbo",
+          "returned_model": null,
+          "seconds": 1.434,
+          "audio_duration_seconds": 14.04,
+          "usage": {
+            "type": "duration",
+            "seconds": 15
+          },
+          "model_id_verified": false,
+          "identity_validation": "catalog_only_user_exception",
+          "identity_limitation": "Provider omitted per-response model identity"
+        },
+        "before_tts_seconds": 79.145,
+        "tts": {
+          "requested_model": "qwen3-tts-12hz-1.7b",
+          "returned_model": null,
+          "seconds": 1.512,
+          "audio_duration_seconds": 6.88,
+          "usage": {
+            "input_tokens": 16,
+            "output_tokens": 87,
+            "total_tokens": 103,
+            "seconds": 7,
+            "cost": "0.00196"
+          },
+          "model_id_verified": false,
+          "identity_validation": "catalog_only_user_exception",
+          "identity_limitation": "Provider omitted per-response model identity",
+          "voice": "ryan",
+          "audio_sha256": "1162fccb76213f4599ac68c71b5d15b45998efdd4da2a837a7db644c16d174f6"
+        },
+        "server_seconds": 80.658
+      },
+      "status": "AWAITING_DEVICE",
+      "effects": [
+        "credential.otp.removed",
+        "user.required_action.added"
+      ],
+      "production_status": "UNCHANGED"
+    },
+    {
+      "source": "redteam_stock_clip",
+      "call_id": "442f1c7a-1f65-4dd2-a1e7-77f229d8b58b",
+      "release_or_send_to_playing_ms": 65492,
+      "server": {
+        "source": "synthetic_stock",
+        "started_at": "2026-11-07T05:48:59.672466+00:00",
+        "normalize_seconds": 1.726,
+        "stt": {
+          "requested_model": "whisper-large-v3-turbo",
+          "returned_model": null,
+          "seconds": 1.484,
+          "audio_duration_seconds": 13.04,
+          "usage": {
+            "type": "duration",
+            "seconds": 14
+          },
+          "model_id_verified": false,
+          "identity_validation": "catalog_only_user_exception",
+          "identity_limitation": "Provider omitted per-response model identity"
+        },
+        "before_tts_seconds": 63.613,
+        "tts": {
+          "requested_model": "qwen3-tts-12hz-1.7b",
+          "returned_model": null,
+          "seconds": 1.475,
+          "audio_duration_seconds": 6.4,
+          "usage": {
+            "input_tokens": 16,
+            "output_tokens": 81,
+            "total_tokens": 97,
+            "seconds": 7,
+            "cost": "0.00196"
+          },
+          "model_id_verified": false,
+          "identity_validation": "catalog_only_user_exception",
+          "identity_limitation": "Provider omitted per-response model identity",
+          "voice": "ryan",
+          "audio_sha256": "9efff5d4fb17fcec019be7c29e3bd06b82c98d3e8c23ba8239c8f20fda0b9439"
+        },
+        "server_seconds": 65.089
+      },
+      "status": "AWAITING_DEVICE",
+      "effects": [
+        "credential.otp.removed",
+        "user.required_action.added"
+      ],
+      "production_status": "UNCHANGED"
+    }
+  ],
+  "text_fallback_verified": true,
+  "median_browser_playback_ms": 73390.0
+}

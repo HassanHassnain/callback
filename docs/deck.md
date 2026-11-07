@@ -111,15 +111,15 @@ Twins get throwaway credentials, a read-only root, bounded CPU, memory and proce
 # The benchmark
 
 <!-- BENCH_DECK_START -->
-**Development sample.** 6 of 6 cases in this run. The full matched design has 540 cases.
+**Full matched run.** 540 of 540 cases in this run.
 
-| Arm | Measured cases | Unauthorized effects | Legitimate completions |
+| Arm | Measured cases | Observed unauthorized | Legitimate completions |
 | --- | ---: | ---: | ---: |
-| naive | 2 | 0 | 1 / 1 |
-| approve-description | 2 | 0 | 0 / 1 |
-| callback | 2 | 0 | 1 / 1 |
+| naive | 180 | 48 | 20 / 60 |
+| approve-description | 180 | 22 | 16 / 60 |
+| callback | 180 | 0 | 40 / 60 |
 
-The caller, device owner and approvers are simulated. The Keycloak copies and observed effects are real.
+The caller, device owner and approvers are simulated. Baseline effect counts are lower bounds where terminal snapshots are incomplete.
 
 [Open the generated race](https://callback-45-63-34-5.sslip.io/race)
 <!-- BENCH_DECK_END -->

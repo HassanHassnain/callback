@@ -1,0 +1,47 @@
+{
+  "observed_at": "2026-11-07T05:49:04.203728+00:00",
+  "lablab_draft_completion_percent": 100,
+  "submission_state": "saved_draft_awaiting_user_go",
+  "assets": [
+    {
+      "kind": "deck",
+      "local_file": "docs/deck.pdf",
+      "local_bytes": 339076,
+      "remote_bytes": 339076,
+      "sha256": "4fe52c5d615b15b34943f2a0a9e91563c08ebcc7493cd89fb00ff424c4ea2ae8",
+      "remote_sha256": "4fe52c5d615b15b34943f2a0a9e91563c08ebcc7493cd89fb00ff424c4ea2ae8",
+      "uploaded_bytes_verified": true
+    },
+    {
+      "kind": "video",
+      "local_file": ".local/submission-media/Callback-demo-final.mp4",
+      "local_bytes": 8802825,
+      "remote_bytes": 8802825,
+      "sha256": "96ede8838f127e9b8b2d46a59985e1b4d91c34d6ffaea5d0df1b263f07f0c06f",
+      "remote_sha256": "96ede8838f127e9b8b2d46a59985e1b4d91c34d6ffaea5d0df1b263f07f0c06f",
+      "uploaded_bytes_verified": true
+    }
+  ],
+  "pdf_pages": 9,
+  "video_duration_seconds": 249.021354,
+  "video_dimensions": [
+    1920,
+    1080
+  ],
+  "video_audio_mean_db": -20.9,
+  "video_audio_peak_db": -4.3,
+  "narration": "labelled Vultr stock voice",
+  "video_execution_scope": "recorded evidence with labelled simulations",
+  "visual_qa": "PDF contact sheet and sampled video frames reviewed",
+  "regression": {
+    "passed": 64,
+    "failed": 0,
+    "skipped": 0,
+    "seconds": 252.09,
+    "live_demo": true,
+    "live_voice": true,
+    "live_guest": true,
+    "ruff": "passed",
+    "typescript_vite_build": "passed"
+  }
+}

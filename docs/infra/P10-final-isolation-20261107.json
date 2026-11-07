@@ -1,0 +1,50 @@
+{
+  "observed_at": "2026-11-07T05:46:04.741603+00:00",
+  "benchmark_complete": true,
+  "unique_cases": 540,
+  "arm_counts": {
+    "approve-description": 180,
+    "callback": 180,
+    "naive": 180
+  },
+  "public_results_match_local": true,
+  "health": {
+    "status": "ok",
+    "phase": "P9",
+    "voice_ready": true,
+    "application_ready": true,
+    "apply_ready": true,
+    "warm_twins": 7,
+    "monitor_error": null,
+    "budget": {
+      "day": "2026-11-07",
+      "charged_usd": "0.06384694",
+      "requests": 38
+    },
+    "synthetic_identities": true
+  },
+  "main_seed_digest": "39afa5c82beeb1fa9ae6291b2c30277369af1130c48464c6e31635cbdbf19f58",
+  "guest_lease_count": 0,
+  "matches_real_phone_denial": true,
+  "post_regression": {
+    "main_seed_digest": "39afa5c82beeb1fa9ae6291b2c30277369af1130c48464c6e31635cbdbf19f58",
+    "guest_lease_count": 0,
+    "observed_at": "2026-11-07T05:51:05.194552+00:00",
+    "health": {
+      "status": "ok",
+      "phase": "P9",
+      "voice_ready": true,
+      "application_ready": true,
+      "apply_ready": true,
+      "warm_twins": 10,
+      "monitor_error": null,
+      "budget": {
+        "day": "2026-11-07",
+        "charged_usd": "0.12828128",
+        "requests": 78
+      },
+      "synthetic_identities": true
+    },
+    "matches_real_phone_denial": true
+  }
+}

@@ -611,3 +611,43 @@ diagnostic columns. Public JSON equals the local artifact. Regression tests
 for retained effects, failed legitimate tasks and infrastructure-error
 classification passed, 3/3. Ruff and git diff checks passed. Earlier samples,
 partial runs, budget evidence and journals remain preserved.
+
+## P10 — Final assets and saved review draft (2026-11-07 UTC)
+
+Refreshed the README, nine-slide Marp deck and 4:09 video with the generated
+540-case result. The video uses labelled Vultr stock narration, actual browser
+captures and recorded execution evidence. The hostile operator workload and
+simulated device/caller paths retain their labels. Kept the earlier media
+variants locally. The final video is
+.local/submission-media/Callback-demo-final.mp4.
+
+Rendered the deck with Marp and inspected its nine-page contact sheet.
+Inspected sampled frames from all twelve video scenes, including the full
+Race table. ffprobe verified 1920×1080 H.264/AAC and 249.021 seconds. Measured
+audio mean was -20.9 dB and peak -4.3 dB. These are volume measurements. The
+README is 18,674 bytes and the cover is 1920×1080.
+
+Replaced the task-created LabLab draft media with the final PDF and MP4,
+updated its additional context with full results and caveats, and observed
+100% completion with autosave confirmed. Independently streamed the uploaded
+assets and matched each SHA-256 and byte count to its reviewed local file.
+See docs/infra/P10-final-assets-20261107.json. The saved draft remains at
+https://lablab.build/ai-hackathons/vultr-hackathon/axiom-labs/submission.
+Final submission awaits Hassan's explicit go.
+
+Ran the combined live regression suite with
+CALLBACK_LIVE_E2E=1 CALLBACK_VOICE_E2E=1 CALLBACK_GUEST_E2E=1 uv run pytest -q.
+All 64 tests passed in 252.09 seconds, with zero skips. make lint passed and
+npm run build --prefix web passed TypeScript checking and the Vite build.
+The fresh guest completed in 48.662 seconds, observed local decryption,
+verified its receipt and confirmed signed reset. The three replay receipts
+and a fresh tampered-copy refusal passed browser verification. Both public
+voice paths and text fallback passed. The final two-turn browser voice median
+was 73.390 seconds, illustrating the planner latency limitation.
+
+Public health and the full result matched local expectations. Executor
+readback matched the main realm's physical-phone denial digest and found
+zero guest leases. Added the final review steps, real/simulated scope and
+remaining benchmark/voice limitations to STATUS. Configured-secret and
+whitespace checks passed before commits. The earlier partial runs and
+failed attempts remain preserved.

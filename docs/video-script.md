@@ -60,7 +60,7 @@ We copied Sam's signed proposal and changed its target to Dana. The old signatur
 
 ### 09 · Race
 
-The race compares direct admin tools, a rushed approver that sees descriptions, and Callback. Each arm uses real sacrificial Keycloak copies. A Vultr model plays the synthetic caller. The table reports the measured cases, including legitimate completions and unauthorized effects. The coverage label identifies the run on screen.
+Across one hundred and eighty cases per arm, we observed forty-eight unauthorized effects with direct tools, twenty-two with description approval, and zero with Callback. Callback completed forty of sixty legitimate tasks. Some baseline terminal snapshots are incomplete, so their effect counts are lower bounds.
 
 ### 10 · Architecture
 

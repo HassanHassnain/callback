@@ -1,0 +1,12 @@
+{
+  "concurrent": [],
+  "solo": {
+    "persona": "isaac.morgan",
+    "call_id": "b3324208-f4d7-40c4-9c92-e830e5a9d49b",
+    "ready_seconds": 4.104,
+    "elapsed_seconds_to_apply": 46.08,
+    "browser_decryption_observed": true,
+    "receipt_verified": true,
+    "signed_reset_verified": true
+  }
+}
