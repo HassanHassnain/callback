@@ -51,6 +51,7 @@ export function GuestPhone({call,slot,notify,onDone,onReset}:Props){
   {call&&<Status value={call.status}/>}
   {call?.effects.map(effect=><EffectCard key={effect.id} effect={effect} call={call}/>)}
   {call?.change_set_hash&&<><div className="eyebrow">EXACT CHANGE-SET HASH</div><code className="breakable">{call.change_set_hash}</code></>}
+  {call?.status==='SUBMITTING'&&<p className="device-hint"><span className="spinner"/>The executor is checking signatures, applying the change and re-reading production…</p>}
   {call?.status==='AWAITING_DEVICE'&&<DecisionButtons call={call} slot={owns?slot:undefined} notify={notify} onDone={onDone}/>}
   {owns&&call?.status==='APPLIED_VERIFIED'&&<div className="device-secret">
    {password?<><code data-testid="guest-password">{password}</code><button onClick={()=>setPassword('')}>Hide password</button></>:

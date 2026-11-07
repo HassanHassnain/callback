@@ -1,5 +1,6 @@
 import {guestHeaders} from './api';
 import {useEffect,useRef,useState} from 'react';
+import {clock,useElapsed} from './Progress';
 
 type Notice = (message:string) => void;
 type ClipSource = 'microphone' | 'synthetic_stock';
@@ -61,6 +62,7 @@ export function PushToTalk({callId,disabled,notify}:{callId:string;disabled:bool
  const recorder=useRef<MediaRecorder|null>(null);
  const timer=useRef<number | undefined>(undefined);
  const {send,sending,player}=useVoiceTurn(notify);
+ const elapsed=useElapsed(sending);
 
  function stop(){
   held.current=false;
@@ -128,7 +130,7 @@ export function PushToTalk({callId,disabled,notify}:{callId:string;disabled:bool
    onKeyUp={e=>{if(e.code==='Space'){e.preventDefault();stop();}}}>
    {recording?'Release to send':sending?'Processing voice…':'Hold to talk'}
   </button>
-  <small>{recording?'Recording · up to 29 s':'Hold with mouse, touch, or Space'}</small>
+  <small>{recording?'Recording · up to 29 s':sending?'Transcribing → planning in the twin → speaking the reply · '+clock(elapsed)+' (usually under a minute)':'Hold with mouse, touch, or Space'}</small>
   {player}
  </div>;
 }
