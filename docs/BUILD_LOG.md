@@ -651,3 +651,22 @@ zero guest leases. Added the final review steps, real/simulated scope and
 remaining benchmark/voice limitations to STATUS. Configured-secret and
 whitespace checks passed before commits. The earlier partial runs and
 failed attempts remain preserved.
+
+## Pre-submission polish (2026-11-07 UTC, Claude)
+
+The guest and main help desk now show live turn progress, built from the
+call's real tool log, with an elapsed timer and the expected 20–60 s
+duration. They also show a device-prompt hint and the executor's
+apply status. Verified on the public URL with one fresh guest run: the
+request reached the device 51 s after sending, then applied and verified
+4 s after approval, and the receipt verified in the browser. The web bundle
+was redeployed with an rsync of `web/dist` only.
+
+Re-cut the submission video as `.local/submission-media/Callback-demo-recut.mp4`
+(4:06). It is built from 2× captures of the recorded evidence pages, a live
+guest run and generated graphics, with Vultr Chatterbox narration, the
+recorded agent reply in Qwen3-TTS Ryan, the stock synthetic caller clip
+and an ACE-Step music bed. A voice-only variant is alongside. Benchmark
+figures come from `bench/results/latest.json`; simulations keep their
+on-screen labels. Sol's `Callback-demo-final.mp4` is unchanged. The
+render source is in `.local/recut-src/`.
