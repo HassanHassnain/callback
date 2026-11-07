@@ -111,11 +111,23 @@ docs/infra/P9-recovery-20261106T163052Z.json.
 
 P10 README, nine-slide Marp deck, cover and shot list are complete. The
 LabLab draft is 100% saved with the Blast Radius Zero track, final 540-case
-deck, final 4:09 MP4, cover, source and live guest URL. The MP4 uses stock
-narration, actual browser footage and separately labelled execution
-evidence. The PDF and sampled video frames passed visual review. The video
-is 1920×1080 H.264/AAC, 249.021 seconds. Hassan requested that the application
+deck, final 4:06 MP4, cover, source and live guest URL. The current MP4 is
+.local/submission-media/Callback-demo-recut.mp4, the version with music.
+It uses Chatterbox narration, Qwen3-TTS Ryan for the agent line and ACE-Step
+1.5 music, all generated through Vultr Serverless Inference. The caller is
+the labelled synthetic stock clip. Actual browser footage and recorded
+execution evidence retain their disclosures. The video is 1920×1080
+H.264/AAC, 246.181917 seconds and 99,443,374 bytes. The thirteen-scene script
+follows .local/recut-src/narration.json and points to the local render source.
+The earlier Callback-demo-final.mp4 remains on disk. Hassan requested that the application
 remain a draft until he explicitly gives the go.
+
+The recut and new 237-character short description are saved and survive a
+draft reload. LabLab rejects the requested 53-character title at its
+50-character limit and the supplied long copy plus retained paragraph at its
+2,000-character limit. A 49-character title and 1,944-character long version
+are prepared in .local/recut-copy-proposal.md, awaiting Hassan's choice.
+The existing title and long description remain saved pending that decision.
 
 Final isolation readback matched the main realm's earlier signed phone-denial
 digest and found zero guest leases. Public health was ready and the public
@@ -140,7 +152,7 @@ docs/infra/P7-browser-20261107T054715Z.json.
   are simulated and labelled in the UI and README. The hostile operator test
   executes real commands with a scripted workload and a simulated benign claim.
 - The deterministic Console demo replays recorded evidence. The submission
-  video labels those replays and its Vultr stock narration. It depicts the
+  video labels those replays and its synthetic narration. It depicts the
   completed phone decisions through their records.
 
 ## Known limits
@@ -222,16 +234,19 @@ Operator console: https://callback-45-63-34-5.sslip.io/console
 1. Use a fresh 1920×1080 browser profile and follow the timed narration in
    docs/video-script.md. Keep employee private keys and temporary passwords
    outside the recording profile.
-2. Open the cover and the labelled stock-voice test capture. Identify the
-   synthetic caller and recorded execution evidence.
-3. Open /console?demo=1, select Dana and follow its receipt link. Show the
-   browser signature check and equal production digests.
-4. Select Hostile replay. Show the 14 observed OTP removals in its disposable
-   twin, 705.7 ms kill timing and signed unchanged-production receipt.
-5. Select Sam. Show the one APPLIED_VERIFIED reset, then the saved browser
+2. Follow the recut's hook, why-now, pitch and how-it-works scenes from
+   .local/recut-src/. Keep the synthetic audio and recorded-evidence labels.
+3. Show the labelled synthetic Dana caller and the Qwen3-TTS Ryan agent line.
+   Follow with the recorded Dana Gate, real-phone denial and verified receipt
+   with equal production digests.
+4. Show Hostile replay, its 14 observed OTP removals in the disposable twin,
+   705.7 ms kill timing and signed unchanged-production receipt.
+5. Show Sam's one APPLIED_VERIFIED reset, then the saved browser
    hash-mismatch refusal capture. Keep decrypted password material hidden.
 6. Open /race for the full 540-case result and its caveats. Show the landing
    page architecture and /call?guest=1 simulated-device panel.
-7. Close with the buyer and proposed pricing. The final rendered video is
-   .local/submission-media/Callback-demo-final.mp4. Review the saved LabLab
+7. Close with the security-team and service-desk buyer. The final rendered
+   video is .local/submission-media/Callback-demo-recut.mp4. The thirteen-scene
+   cut, narration and source references are recorded in docs/video-script.md.
+   Review the saved LabLab
    draft and await Hassan's explicit go for final submission.

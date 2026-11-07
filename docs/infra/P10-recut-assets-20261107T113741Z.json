@@ -1,0 +1,57 @@
+{
+  "observed_at": "2026-11-07T11:37:41.276536+00:00",
+  "draft_url": "https://lablab.build/ai-hackathons/vultr-hackathon/axiom-labs/submission",
+  "submission_state": "saved_draft_awaiting_hassan_go",
+  "video": {
+    "old_local_file": ".local/submission-media/Callback-demo-final.mp4",
+    "new_local_file": ".local/submission-media/Callback-demo-recut.mp4",
+    "uploaded_url": "https://storage.googleapis.com/lablab-video-submissions/submissions/i1ww60pxli17ye21vhp80ltf/x0tzkad74etduvkmdrps3xyq/video/video_z1x9n6u1h6lyqr0ngg8j0nxj.mp4",
+    "local_bytes": 99443374,
+    "remote_bytes": 99443374,
+    "local_sha256": "31cabf660429621c43745ee776dfadeeff0dd5736cce9553d8f73266e65a6979",
+    "remote_sha256": "31cabf660429621c43745ee776dfadeeff0dd5736cce9553d8f73266e65a6979",
+    "sha256_match": true,
+    "byte_count_match": true,
+    "duration_seconds": 246.181917,
+    "width": 1920,
+    "height": 1080,
+    "variant": "with_music"
+  },
+  "original_video_sha256": "96ede8838f127e9b8b2d46a59985e1b4d91c34d6ffaea5d0df1b263f07f0c06f",
+  "copy_verification": {
+    "title": {
+      "old": "Callback | AI Help Desk with a Gate",
+      "saved": "Callback | AI Help Desk with a Gate",
+      "status": "awaiting_user_choice_due_to_50_character_limit",
+      "requested_characters": 53
+    },
+    "short_description": {
+      "old": "Callback rehearses help-desk changes in disposable Keycloak twins on Vultr. A registered device signs the observed effects, and an independent executor verifies what reached production.",
+      "saved": "An AI help-desk agent that acts only in a disposable twin on Vultr. The employee's phone signs the exact observed change; an independent executor applies and verifies it. 540 matched runs: 0 unauthorized changes vs ≥48 with direct tools.",
+      "status": "verified_after_reload",
+      "characters": 237
+    },
+    "long_description": {
+      "old": "A help-desk caller can know an employee’s name, role, manager and phone number. Those details can make a request sound credible while leaving the employee’s identity unverified. Callback puts the authorization boundary around the tools that change accounts.\n\nEmployees speak or type a request. A Vultr Serverless Inference planner rehearses it in a disposable Keycloak twin running under gVisor. Callback reads the twin’s actual state, derives typed effects and destroys the twin before requesting approval. The registered device signs the exact change set. Privileged requests also need an operator signature. An independent executor checks current state, applies the approved changes and verifies the result before signing a receipt.\n\nThe demo shows a physical phone denying a privileged MFA request, an operator-scripted hostile replay contained by a canary tripwire, and a physical phone approving one temporary reset. Judges can try the synthetic guest desk with a simulated device in their browser. The product is designed for IT and security teams and managed help-desk providers that need an auditable recovery process.",
+      "saved": "A help-desk caller can know an employee’s name, role, manager and phone number. Those details can make a request sound credible while leaving the employee’s identity unverified. Callback puts the authorization boundary around the tools that change accounts.\n\nEmployees speak or type a request. A Vultr Serverless Inference planner rehearses it in a disposable Keycloak twin running under gVisor. Callback reads the twin’s actual state, derives typed effects and destroys the twin before requesting approval. The registered device signs the exact change set. Privileged requests also need an operator signature. An independent executor checks current state, applies the approved changes and verifies the result before signing a receipt.\n\nThe demo shows a physical phone denying a privileged MFA request, an operator-scripted hostile replay contained by a canary tripwire, and a physical phone approving one temporary reset. Judges can try the synthetic guest desk with a simulated device in their browser. The product is designed for IT and security teams and managed help-desk providers that need an auditable recovery process.",
+      "status": "awaiting_user_choice_due_to_2000_character_limit",
+      "requested_with_retained_paragraph_characters": 3268
+    },
+    "proposed_title_characters": 49,
+    "proposed_long_characters": 1944
+  },
+  "reload_verification": {
+    "completion_percent": 100,
+    "short_description_persisted": "An AI help-desk agent that acts only in a disposable twin on Vultr. The employee's phone signs the exact observed change; an independent executor applies and verifies it. 540 matched runs: 0 unauthorized changes vs ≥48 with direct tools.",
+    "uploaded_video_persisted": true,
+    "preserved_fields": {
+      "cover": true,
+      "pdf": true,
+      "application_fields": true,
+      "category": "Security",
+      "track": "C1-Blast Radius Zero",
+      "technology": "Vultr"
+    }
+  },
+  "original_video_preserved": true
+}

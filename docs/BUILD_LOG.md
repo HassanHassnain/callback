@@ -652,6 +652,39 @@ remaining benchmark/voice limitations to STATUS. Configured-secret and
 whitespace checks passed before commits. The earlier partial runs and
 failed attempts remain preserved.
 
+## P10 — Recut video and copy refresh (2026-11-07 UTC)
+
+Uploaded the requested Callback-demo-recut.mp4 with music through the same
+logged-in LabLab Chrome session. The uploaded video is 246.181917 seconds,
+1920×1080 H.264/AAC and 99,443,374 bytes. Streamed the uploaded object and
+matched SHA-256 and byte count to the local file. The earlier
+Callback-demo-final.mp4 retained its original SHA-256. Evidence is in
+docs/infra/P10-recut-assets-20261107T113741Z.json.
+
+Rewrote video-script.md from .local/recut-src/narration.json with all thirteen
+scenes, their timeline boundaries, caller/agent inserts and local render
+sources. The document identifies Chatterbox narration, Qwen3-TTS Ryan agent
+speech and ACE-Step 1.5 music as Vultr Serverless Inference outputs. The caller
+remains the labelled synthetic stock clip. Updated STATUS to name the recut
+and preserve the final-submission approval boundary.
+
+Applied the source short description verbatim at 237 characters and verified
+it after reload. The source title has 53 characters and LabLab requires 5–50.
+The supplied long opening with the plain-line benchmark and retained final
+paragraph totals 3,268 characters, exceeding the enforced 2,000-character
+limit. The UI displayed validation errors for both. Restored the existing
+title and long description and requested a copy decision. Prepared a
+49-character title and 1,944-character long description containing every
+requested section and the old final paragraph verbatim.
+
+The saved draft remains 100% complete. After reload, the recut URL and short
+description persisted. The cover image, PDF, category, track, technology,
+repository, demo URL, platform and additional information matched their
+earlier values. The supplied new title and long description await Hassan's
+choice about the field limits. Final submission awaits Hassan's explicit go.
+Checked narration preservation and git diff whitespace. This update changes
+submission media and documentation, so application tests were not repeated.
+
 ## Pre-submission polish (2026-11-07 UTC, Claude)
 
 The guest and main help desk now show live turn progress, built from the
