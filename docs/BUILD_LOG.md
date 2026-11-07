@@ -703,3 +703,20 @@ and an ACE-Step music bed. A voice-only variant is alongside. Benchmark
 figures come from `bench/results/latest.json`; simulations keep their
 on-screen labels. Sol's `Callback-demo-final.mp4` is unchanged. The
 render source is in `.local/recut-src/`.
+
+## P10 — Approved copy saved and reloaded (2026-11-07 UTC)
+
+Hassan approved the prepared 49-character title and condensed long copy,
+with "production untouched" restored to the demo line. Saved the approved
+title and the resulting 1,974-character long description. The source short
+description remains verbatim at 237 characters. The existing final paragraph
+is preserved verbatim and the benchmark uses the requested three plain lines.
+
+Observed autosave, reloaded the draft and compared all three text fields
+against their approved values. All matched and completion remained 100%.
+Played the saved recut in LabLab's player. The observed current time advanced
+to 18.128592 seconds, paused was false, readyState was 4 and no media error
+was present. Its URL matched the previously streamed SHA-256-verified object.
+Paused playback after the check. Updated the existing recut evidence with
+the final copy and playback observations, while retaining the earlier
+limit-decision record. The draft awaits Hassan's final submission go.

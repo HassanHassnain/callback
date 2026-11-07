@@ -122,12 +122,15 @@ follows .local/recut-src/narration.json and points to the local render source.
 The earlier Callback-demo-final.mp4 remains on disk. Hassan requested that the application
 remain a draft until he explicitly gives the go.
 
-The recut and new 237-character short description are saved and survive a
-draft reload. LabLab rejects the requested 53-character title at its
-50-character limit and the supplied long copy plus retained paragraph at its
-2,000-character limit. A 49-character title and 1,944-character long version
-are prepared in .local/recut-copy-proposal.md, awaiting Hassan's choice.
-The existing title and long description remain saved pending that decision.
+The recut, approved 49-character title, 237-character short description and
+1,974-character long description are saved and survive a draft reload.
+Hassan approved the condensed copy required by LabLab's 50/2,000-character
+limits and requested the phrase "production untouched" in the demo line.
+That phrase, all three benchmark lines and the existing final paragraph are
+preserved. Autosave was confirmed, completion remained 100%, and the recut
+played in the draft's player. See
+docs/infra/P10-recut-assets-20261107T113741Z.json. Final submission remains
+subject to Hassan's explicit go.
 
 Final isolation readback matched the main realm's earlier signed phone-denial
 digest and found zero guest leases. Public health was ready and the public

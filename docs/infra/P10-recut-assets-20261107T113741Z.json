@@ -15,10 +15,59 @@
     "duration_seconds": 246.181917,
     "width": 1920,
     "height": 1080,
-    "variant": "with_music"
+    "variant": "with_music",
+    "playback_verification": {
+      "current_time_seconds": 18.128592,
+      "paused": false,
+      "ready_state": 4,
+      "media_error": null,
+      "playback_advancement_observed": true,
+      "uploaded_url_matches_hash_verified_object": true
+    }
   },
   "original_video_sha256": "96ede8838f127e9b8b2d46a59985e1b4d91c34d6ffaea5d0df1b263f07f0c06f",
   "copy_verification": {
+    "title": {
+      "old": "Callback | AI Help Desk with a Gate",
+      "saved": "Callback: AI help desk that can't be sweet-talked",
+      "characters": 49,
+      "status": "verified_after_reload"
+    },
+    "short_description": {
+      "old": "Callback rehearses help-desk changes in disposable Keycloak twins on Vultr. A registered device signs the observed effects, and an independent executor verifies what reached production.",
+      "saved": "An AI help-desk agent that acts only in a disposable twin on Vultr. The employee's phone signs the exact observed change; an independent executor applies and verifies it. 540 matched runs: 0 unauthorized changes vs ≥48 with direct tools.",
+      "characters": 237,
+      "status": "verified_after_reload"
+    },
+    "long_description": {
+      "old": "A help-desk caller can know an employee’s name, role, manager and phone number. Those details can make a request sound credible while leaving the employee’s identity unverified. Callback puts the authorization boundary around the tools that change accounts.\n\nEmployees speak or type a request. A Vultr Serverless Inference planner rehearses it in a disposable Keycloak twin running under gVisor. Callback reads the twin’s actual state, derives typed effects and destroys the twin before requesting approval. The registered device signs the exact change set. Privileged requests also need an operator signature. An independent executor checks current state, applies the approved changes and verifies the result before signing a receipt.\n\nThe demo shows a physical phone denying a privileged MFA request, an operator-scripted hostile replay contained by a canary tripwire, and a physical phone approving one temporary reset. Judges can try the synthetic guest desk with a simulated device in their browser. The product is designed for IT and security teams and managed help-desk providers that need an auditable recovery process.",
+      "saved": "Approval prompts show what an agent says it will do. Callback shows what it actually did in a disposable twin, and only that can reach production.\n\nMGM estimated ~$100M impact. Clorox alleges unverified help-desk resets and claims ~$380M damages. M&S estimated ~£300M after a Scattered Spider attack. ServiceNow paid $2.85B for Moveworks. AI help desks put account resets at machine speed.\n\nHow Callback works\n1. Vultr Serverless Inference plans in a disposable Keycloak/gVisor twin on VX1.\n2. Real state changes become typed effects governed by deterministic policy.\n3. The registered phone signs the exact hash; privileged effects also need a pinned operator.\n4. The sole admin executor rechecks, applies, reads back and signs a browser-verifiable receipt.\n\nWhat the demo shows (recorded live runs)\nA synthetic CFO is denied by a real phone. A hijacked workload wipes 14 authenticators; the canary kills its twin in 705.7 ms, leaving production untouched. A legitimate reset reaches the phone; retargeting returns HASH_MISMATCH.\n\nBenchmark: 540 cases, 60 scenarios ×3 planners ×3 arms; simulated callers/approvers, real Keycloak copies.\nDirect admin tools: ≥48 unauthorized · 20/60 legitimate\nApproval prompts (description only): ≥22 · 16/60\nCallback: 0 · 40/60\n\nBuilt on Vultr\nCloud Compute ×3, VX1, VPC/firewalls, Object Storage, Container Registry. Serverless Inference: DeepSeek planner, MiMo screenshot verifier, Clef risk, Nemotron moderation, Whisper STT, Qwen3-TTS speech, Chatterbox narration and ACE-Step music.\n\nTry it: https://callback-45-63-34-5.sslip.io/call?guest=1\n\nThe demo shows a physical phone denying a privileged MFA request, an operator-scripted hostile replay contained by a canary tripwire, and a physical phone approving one temporary reset. Judges can try the synthetic guest desk with a simulated device in their browser. The product is designed for IT and security teams and managed help-desk providers that need an auditable recovery process.",
+      "characters": 1974,
+      "status": "verified_after_reload"
+    },
+    "user_approved_condensed_copy": true,
+    "requested_phrase_preserved": "production untouched",
+    "existing_final_paragraph_preserved": true
+  },
+  "reload_verification": {
+    "completion_percent": 100,
+    "short_description_persisted": "An AI help-desk agent that acts only in a disposable twin on Vultr. The employee's phone signs the exact observed change; an independent executor applies and verifies it. 540 matched runs: 0 unauthorized changes vs ≥48 with direct tools.",
+    "uploaded_video_persisted": true,
+    "preserved_fields": {
+      "cover": true,
+      "pdf": true,
+      "application_fields": true,
+      "category": "Security",
+      "track": "C1-Blast Radius Zero",
+      "technology": "Vultr"
+    },
+    "title_matches_approved": true,
+    "short_matches_source": true,
+    "long_matches_approved_with_requested_edit": true,
+    "autosave_confirmed_before_reload": true
+  },
+  "original_video_preserved": true,
+  "initial_copy_verification": {
     "title": {
       "old": "Callback | AI Help Desk with a Gate",
       "saved": "Callback | AI Help Desk with a Gate",
@@ -40,18 +89,5 @@
     "proposed_title_characters": 49,
     "proposed_long_characters": 1944
   },
-  "reload_verification": {
-    "completion_percent": 100,
-    "short_description_persisted": "An AI help-desk agent that acts only in a disposable twin on Vultr. The employee's phone signs the exact observed change; an independent executor applies and verifies it. 540 matched runs: 0 unauthorized changes vs ≥48 with direct tools.",
-    "uploaded_video_persisted": true,
-    "preserved_fields": {
-      "cover": true,
-      "pdf": true,
-      "application_fields": true,
-      "category": "Security",
-      "track": "C1-Blast Radius Zero",
-      "technology": "Vultr"
-    }
-  },
-  "original_video_preserved": true
+  "copy_completion_observed_at": "2026-11-07T12:04:04.661960+00:00"
 }
