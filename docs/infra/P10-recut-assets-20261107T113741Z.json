@@ -1,7 +1,7 @@
 {
   "observed_at": "2026-11-07T11:37:41.276536+00:00",
   "draft_url": "https://lablab.build/ai-hackathons/vultr-hackathon/axiom-labs/submission",
-  "submission_state": "saved_draft_awaiting_hassan_go",
+  "submission_state": "submission_updated_successfully",
   "video": {
     "old_local_file": ".local/submission-media/Callback-demo-final.mp4",
     "new_local_file": ".local/submission-media/Callback-demo-recut.mp4",
@@ -89,5 +89,39 @@
     "proposed_title_characters": 49,
     "proposed_long_characters": 1944
   },
-  "copy_completion_observed_at": "2026-11-07T12:04:04.661960+00:00"
+  "copy_completion_observed_at": "2026-11-07T12:04:04.661960+00:00",
+  "initial_submission_state": "saved_draft_awaiting_hassan_go",
+  "publication": {
+    "authorization": "Submit the verified application now",
+    "action_label": "Update Submission",
+    "confirmation_heading": "Submission Updated!",
+    "confirmation_text": "Your submission for Vultr: Agent Rush Hackathon has been updated successfully.",
+    "published_url": "https://lablab.build/ai-hackathons/vultr-hackathon/axiom-labs/callback-ai-help-desk-that-cant-be-sweet-talked",
+    "verified_at": "2026-11-07T12:07:53.580Z",
+    "published_title": "Callback: AI help desk that can't be sweet-talked",
+    "production_untouched_present": true,
+    "published_video": {
+      "duration": 246.181917,
+      "error": null,
+      "readyState": 4,
+      "src": "https://storage.googleapis.com/lablab-video-submissions/submissions/i1ww60pxli17ye21vhp80ltf/x0tzkad74etduvkmdrps3xyq/video/video_z1x9n6u1h6lyqr0ngg8j0nxj.mp4"
+    },
+    "published_video_matches_hash_verified_object": true,
+    "public_links": [
+      {
+        "href": "https://github.com/HassanHassnain/callback",
+        "label": "Github"
+      },
+      {
+        "href": "https://storage.googleapis.com/lablab-static-eu/submissions/i1ww60pxli17ye21vhp80ltf/x0tzkad74etduvkmdrps3xyq/presentation/presentation_srr4p3hixv6xm45q8ujpuqqw.pdf",
+        "label": "Presentation"
+      },
+      {
+        "href": "https://callback-45-63-34-5.sslip.io/call?guest=1",
+        "label": "Demo"
+      }
+    ],
+    "confirmation_screenshot": ".local/lablab-submission-confirmed.png",
+    "published_screenshot": ".local/lablab-published-callback.png"
+  }
 }

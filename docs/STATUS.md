@@ -1,8 +1,9 @@
 # Callback status
 
 Updated 2026-11-07. P0–P10 acceptance checks pass under the explicit
-user-approved audio identity exception. P10 final assets are saved in the
-100%-complete LabLab draft. Final submission awaits Hassan's explicit go.
+user-approved audio identity exception. Hassan gave the final submission go.
+LabLab confirmed "Submission Updated!" and the verified application is
+published with the approved copy and recut video.
 
 ## Done
 
@@ -110,7 +111,7 @@ docs/infra/P9-main-isolation-20261106T164523Z.json and
 docs/infra/P9-recovery-20261106T163052Z.json.
 
 P10 README, nine-slide Marp deck, cover and shot list are complete. The
-LabLab draft is 100% saved with the Blast Radius Zero track, final 540-case
+LabLab application is published with the Blast Radius Zero track, final 540-case
 deck, final 4:06 MP4, cover, source and live guest URL. The current MP4 is
 .local/submission-media/Callback-demo-recut.mp4, the version with music.
 It uses Chatterbox narration, Qwen3-TTS Ryan for the agent line and ACE-Step
@@ -119,8 +120,8 @@ the labelled synthetic stock clip. Actual browser footage and recorded
 execution evidence retain their disclosures. The video is 1920×1080
 H.264/AAC, 246.181917 seconds and 99,443,374 bytes. The thirteen-scene script
 follows .local/recut-src/narration.json and points to the local render source.
-The earlier Callback-demo-final.mp4 remains on disk. Hassan requested that the application
-remain a draft until he explicitly gives the go.
+The earlier Callback-demo-final.mp4 remains on disk. Hassan's earlier draft
+hold was followed by his explicit instruction to submit the verified application.
 
 The recut, approved 49-character title, 237-character short description and
 1,974-character long description are saved and survive a draft reload.
@@ -129,8 +130,10 @@ limits and requested the phrase "production untouched" in the demo line.
 That phrase, all three benchmark lines and the existing final paragraph are
 preserved. Autosave was confirmed, completion remained 100%, and the recut
 played in the draft's player. See
-docs/infra/P10-recut-assets-20261107T113741Z.json. Final submission remains
-subject to Hassan's explicit go.
+docs/infra/P10-recut-assets-20261107T113741Z.json. After Hassan's final go,
+the Update Submission action succeeded. The published page shows the approved
+title, "production untouched" and the same hash-verified recut video URL.
+Publication was verified at 2026-11-07T12:07:53.580Z.
 
 Final isolation readback matched the main realm's earlier signed phone-denial
 digest and found zero guest leases. Public health was ready and the public
@@ -230,7 +233,8 @@ Operator console: https://callback-45-63-34-5.sslip.io/console
 - [Guest desk](https://callback-45-63-34-5.sslip.io/call?guest=1)
 - [Recorded evidence](https://callback-45-63-34-5.sslip.io/console?demo=1)
 - [Full benchmark](https://callback-45-63-34-5.sslip.io/race)
-- [Saved application draft](https://lablab.build/ai-hackathons/vultr-hackathon/axiom-labs/submission)
+- [Published application](https://lablab.build/ai-hackathons/vultr-hackathon/axiom-labs/callback-ai-help-desk-that-cant-be-sweet-talked)
+- [Application editor](https://lablab.build/ai-hackathons/vultr-hackathon/axiom-labs/submission)
 
 ## Recording and review steps
 
@@ -251,5 +255,5 @@ Operator console: https://callback-45-63-34-5.sslip.io/console
 7. Close with the security-team and service-desk buyer. The final rendered
    video is .local/submission-media/Callback-demo-recut.mp4. The thirteen-scene
    cut, narration and source references are recorded in docs/video-script.md.
-   Review the saved LabLab
-   draft and await Hassan's explicit go for final submission.
+   Review the published LabLab application and its publication evidence in
+   docs/infra/P10-recut-assets-20261107T113741Z.json.

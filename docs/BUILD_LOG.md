@@ -720,3 +720,24 @@ was present. Its URL matched the previously streamed SHA-256-verified object.
 Paused playback after the check. Updated the existing recut evidence with
 the final copy and playback observations, while retaining the earlier
 limit-decision record. The draft awaits Hassan's final submission go.
+
+## P10 — Submission update confirmed (2026-11-07 UTC)
+
+Hassan explicitly instructed, "Submit the verified application now." Opened
+the final application step in the same logged-in Chrome session. The final
+control was labelled Update Submission. Clicked it once and observed
+"Submission Updated!" with confirmation that the Vultr Agent Rush submission
+had been updated successfully.
+
+Followed View your submission to the published application. Verified the
+approved title, the restored "production untouched" phrase and the recut
+video URL. The published player reported the expected 246.181917-second
+duration, readyState 4 and no media error. Its source exactly matched the
+previously streamed SHA-256-verified 99,443,374-byte MP4. The public source,
+presentation and demo links also matched the verified application.
+
+Publication was verified at 2026-11-07T12:07:53.580Z, before the requested
+Nov 8, 22:00 UTC deadline. Saved local confirmation and published-page
+screenshots. Updated the recut evidence and current status while preserving
+the earlier draft and approval records. The published application is
+https://lablab.build/ai-hackathons/vultr-hackathon/axiom-labs/callback-ai-help-desk-that-cant-be-sweet-talked.

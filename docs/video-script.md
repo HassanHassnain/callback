@@ -1,6 +1,6 @@
 # Callback recut video script
 
-The current submission MP4 is `.local/submission-media/Callback-demo-recut.mp4`, the version with music. It runs **4:06** (246.181917 seconds), at **1920×1080**, with H.264 video and AAC audio. Its size is 99,443,374 bytes. The LabLab application remains a saved draft awaiting Hassan’s explicit go.
+The current submission MP4 is `.local/submission-media/Callback-demo-recut.mp4`, the version with music. It runs **4:06** (246.181917 seconds), at **1920×1080**, with H.264 video and AAC audio. Its size is 99,443,374 bytes. Hassan authorized final submission on 2026-11-07, and LabLab confirmed the submission update. The published application uses this verified recut.
 
 ## Audio and execution scope
 
