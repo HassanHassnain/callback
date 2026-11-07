@@ -584,3 +584,30 @@ partial report are retained.
 
 The LabLab application remains a saved draft. Hassan explicitly requested
 approval before final submission.
+
+## P8 — Full matched benchmark accepted (2026-11-07 UTC)
+
+Completed P8-full-v2-20261106 with 540 unique planner/arm/scenario cells.
+Every planner/arm pair contains all 60 scenarios. The observed unauthorized
+effect totals were 48 for direct tools, 22 for description-only approval and
+0 for Callback, each across 180 cases. Legitimate completions were 20/60,
+16/60 and 40/60 respectively. The case-level estimated inference total was
+2.556616 USD at observed catalog rates, with failed/unpriced-call caveats.
+
+The runner's original error status mixed infrastructure failures with
+terminal model-induced failures. Added report classification from saved
+artifacts. Thirteen verified OUTPUT_LIMIT terminations and three tool-schema
+validation failures remain failed tasks, with original call_status preserved.
+They count as evaluated cases and receive separate diagnostic columns.
+Infrastructure failures retain error status. Ten baseline terminal
+observations are incomplete, so baseline effect totals are lower bounds.
+No inference was repeated to improve these failed model outcomes.
+
+The report-only finalization read saved broker status, destroy proof and
+tool validation evidence, then regenerated the JSON and Markdown. Preserved
+the raw pre-classification result separately. Collected and published the
+full result, generated README/deck tables from it and deployed the Race
+diagnostic columns. Public JSON equals the local artifact. Regression tests
+for retained effects, failed legitimate tasks and infrastructure-error
+classification passed, 3/3. Ruff and git diff checks passed. Earlier samples,
+partial runs, budget evidence and journals remain preserved.

@@ -32,16 +32,17 @@ def main():
         scope += " The full matched design has 540 cases."
     readme = [
         scope, "",
-        "| Planner | Arm | Cases | Errors | Unauthorized | Privileged | Legitimate | Mismatches | Median s | Mean USD |",
-        "| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |",
+        "| Planner | Arm | Cases | Runtime errors | Tool limits | Invalid tools | Incomplete | Observed unauthorized | Privileged | Legitimate | Mismatches | Median s | Mean USD |",
+        "| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |",
     ]
     for row in result["summary"]:
         readme.append("| " + " | ".join([
-            row["planner"], row["arm"], str(row["n_cases"]), str(row["n_errors"]), n(row["unauthorized_effects"]),
+            row["planner"], row["arm"], str(row["n_cases"]), str(row["n_errors"]), str(row.get("tool_failures", 0)), str(row.get("planner_failures", 0)), str(row.get("incomplete_observations", 0)), n(row["unauthorized_effects"]),
             n(row["privileged_effects"]), pct(row["legitimate_completion_rate"]), n(row["mismatch_catches"]),
             n(row["median_seconds"]), n(row["cost_estimate_usd"]),
         ]) + " |")
-    readme += ["", "[Generated method and raw results](docs/benchmark.md) · "
+    readme += ["", "Tool-limit and invalid-tool outcomes remain failed tasks. Baseline effect counts are lower bounds where terminal observations are incomplete.",
+               "", "[Generated method and raw results](docs/benchmark.md) · "
                    "[Race page](https://callback-45-63-34-5.sslip.io/race)"]
     replace(ROOT / "README.md", "README", "\n".join(readme))
 
@@ -50,7 +51,7 @@ def main():
         arms[case["arm"]].append(case)
     deck = [
         scope, "",
-        "| Arm | Measured cases | Unauthorized effects | Legitimate completions |",
+        "| Arm | Measured cases | Observed unauthorized | Legitimate completions |",
         "| --- | ---: | ---: | ---: |",
     ]
     for arm in ("naive", "approve-description", "callback"):
@@ -60,7 +61,7 @@ def main():
         legit = [row for row in group if row["kind"] == "legitimate"]
         success = sum(row.get("legitimate_completed") is True for row in legit)
         deck.append(f"| {arm} | {len(measured)} | {unauthorized if measured else '—'} | {success} / {len(legit)} |")
-    deck += ["", "The caller, device owner and approvers are simulated. The Keycloak copies and observed effects are real.",
+    deck += ["", "The caller, device owner and approvers are simulated. Baseline effect counts are lower bounds where terminal snapshots are incomplete.",
              "", "[Open the generated race](https://callback-45-63-34-5.sslip.io/race)"]
     replace(ROOT / "docs/deck.md", "DECK", "\n".join(deck))
 

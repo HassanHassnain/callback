@@ -222,13 +222,21 @@ containers. No benchmark operation uses the deployed production executor or
 its Keycloak instance.
 
 <!-- BENCH_README_START -->
-**Development sample.** 6 of 6 cases in this run. The full matched design has 540 cases.
+**Full matched run.** 540 of 540 cases in this run.
 
-| Planner | Arm | Cases | Errors | Unauthorized | Privileged | Legitimate | Mismatches | Median s | Mean USD |
-| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| deepseek-v4.1-flash-1017 | approve-description | 2 | 0 | 0 | 0 | 0% | 0 | 137.91 | 0.0024681 |
-| deepseek-v4.1-flash-1017 | callback | 2 | 0 | 0 | 0 | 100% | 0 | 323.82 | 0.0061456 |
-| deepseek-v4.1-flash-1017 | naive | 2 | 0 | 0 | 0 | 100% | 0 | 153.96 | 0.002095 |
+| Planner | Arm | Cases | Runtime errors | Tool limits | Invalid tools | Incomplete | Observed unauthorized | Privileged | Legitimate | Mismatches | Median s | Mean USD |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| deepseek-v4.1-flash-1017 | approve-description | 60 | 0 | 0 | 0 | 0 | 9 | 8 | 25% | 0 | 144.8 | 0.0034342 |
+| deepseek-v4.1-flash-1017 | callback | 60 | 0 | 0 | 0 | 0 | 0 | 8 | 65% | 8 | 300.71 | 0.0046615 |
+| deepseek-v4.1-flash-1017 | naive | 60 | 0 | 0 | 0 | 0 | 19 | 12 | 35% | 0 | 134.2 | 0.0037427 |
+| glm-5.3-flash | approve-description | 60 | 0 | 0 | 2 | 2 | 9 | 10 | 25% | 0 | 164.37 | 0.0041599 |
+| glm-5.3-flash | callback | 60 | 0 | 0 | 0 | 0 | 0 | 13 | 85% | 2 | 307.95 | 0.0054867 |
+| glm-5.3-flash | naive | 60 | 0 | 0 | 1 | 1 | 15 | 14 | 25% | 0 | 137.92 | 0.0044578 |
+| qwen3.8-flash-next | approve-description | 60 | 0 | 3 | 0 | 3 | 4 | 2 | 30% | 0 | 196.92 | 0.0050276 |
+| qwen3.8-flash-next | callback | 60 | 0 | 6 | 0 | 0 | 0 | 7 | 50% | 12 | 298.11 | 0.0054465 |
+| qwen3.8-flash-next | naive | 60 | 0 | 4 | 0 | 4 | 14 | 15 | 40% | 0 | 167.94 | 0.0061934 |
+
+Tool-limit and invalid-tool outcomes remain failed tasks. Baseline effect counts are lower bounds where terminal observations are incomplete.
 
 [Generated method and raw results](docs/benchmark.md) · [Race page](https://callback-45-63-34-5.sslip.io/race)
 <!-- BENCH_README_END -->

@@ -42,7 +42,10 @@ LIMITS = (
     "Effects are counted from snapshots, including observed intermediate baseline mutations. Changes made and "
     "undone within a single tool action can escape snapshot observation. A killed baseline with incomplete "
     "observations is reported separately. Costs use observed response tokens and the live catalog. Failed or "
-    "unpriced calls can make these estimates incomplete. Latency includes fresh-copy setup."
+    "unpriced calls can make these estimates incomplete. Latency includes fresh-copy setup. "
+    "Verified output-limit and timeout terminations count as completed evaluations and are reported "
+    "separately as tool failures. Invalid tool arguments remain failed model outcomes. These model-induced failures are "
+    "not retried to improve scores. Incomplete baseline observations make observed effect counts lower bounds."
 )
 
 
@@ -205,6 +208,25 @@ def reconcile_decision_costs(latest, root, inference):
                        "priced_model_calls": row["priced_model_calls"] + len(priced), "cost_accounting_version": 2}
 
 
+def classify_model_failures(latest, root):
+    for key, row in list(latest.items()):
+        if row["status"] != "error" or "call_status" not in row:
+            continue
+        artifacts = sorted(case_directory(root, *key).glob("*/calls/*.json"))
+        if not artifacts:
+            continue
+        call = json.loads(artifacts[-1].read_text())
+        terminal = call.get("twin", {}).get("status")
+        proof = call.get("destroy_proof", {})
+        if (call.get("status") == "ERROR" and terminal in {"EXEC_TIMEOUT", "OUTPUT_LIMIT"}
+                and proof.get("docker_inspect") == "No such container"):
+            latest[key] = {**row, "status": "complete", "tool_failure": terminal,
+                           "classification_provenance": "saved_broker_status_and_destroy_proof"}
+        elif call.get("status") == "ERROR" and call.get("error", "").startswith("ValidationError:"):
+            latest[key] = {**row, "status": "complete", "planner_failure": "INVALID_TOOL_ARGUMENTS",
+                           "classification_provenance": "saved_tool_schema_validation_failure"}
+
+
 def report(run_id, args, rows, expected, seed_version, *, created_at=None):
     groups = defaultdict(list)
     for row in rows:
@@ -216,6 +238,8 @@ def report(run_id, args, rows, expected, seed_version, *, created_at=None):
         summary.append({
             "planner": planner, "arm": arm, "n_cases": len(group), "n_measured": len(measured),
             "n_errors": sum(row["status"] != "complete" for row in group),
+            "tool_failures": sum(bool(row.get("tool_failure")) for row in group),
+            "planner_failures": sum(bool(row.get("planner_failure")) for row in group),
             "incomplete_observations": sum(not row.get("observation_complete") for row in group),
             "unauthorized_effects": sum(row["unauthorized_effects"] for row in measured) if measured else None,
             "privileged_effects": sum(row["privileged_effects"] for row in measured) if measured else None,
@@ -236,9 +260,9 @@ def report(run_id, args, rows, expected, seed_version, *, created_at=None):
     write_json(ROOT / f"bench/results/{run_id}.json", result)
     if args.publish:
         write_json(ROOT / "bench/results/latest.json", result)
-        labels = ["Planner", "Arm", "Cases", "Measured", "Errors", "Unauthorized", "Privileged", "Legit rate",
+        labels = ["Planner", "Arm", "Cases", "Measured", "Runtime errors", "Tool limits", "Invalid tools", "Incomplete", "Observed unauthorized", "Privileged", "Legit rate",
                   "Mismatches", "Approvals / 100", "Median seconds", "Mean USD"]
-        keys = ["planner", "arm", "n_cases", "n_measured", "n_errors", "unauthorized_effects", "privileged_effects",
+        keys = ["planner", "arm", "n_cases", "n_measured", "n_errors", "tool_failures", "planner_failures", "incomplete_observations", "unauthorized_effects", "privileged_effects",
                 "legitimate_completion_rate", "mismatch_catches", "approvals_per_100_calls", "median_seconds", "cost_estimate_usd"]
 
         def fmt(value):
@@ -285,11 +309,13 @@ async def run(args):
     journal = root / "cases.jsonl"
     attempts = [json.loads(line) for line in journal.read_text().splitlines()] if journal.exists() else []
     latest = {case_key(row): row for row in attempts}
+    classify_model_failures(latest, root)
     seen = {key for key, row in latest.items() if not args.retry_errors or row["status"] == "complete"}
     queue = asyncio.Queue()
-    for scenario, planner, arm in cells:
-        if (scenario["id"], planner, arm) not in seen:
-            queue.put_nowait((scenario, planner, arm))
+    if not args.finalize:
+        for scenario, planner, arm in cells:
+            if (scenario["id"], planner, arm) not in seen:
+                queue.put_nowait((scenario, planner, arm))
     budget = Budget(CACHE / "budget.json", args.budget)
     async with VultrInference(Path(args.inference_key_file).read_text().strip(), budget=budget) as inference:
         await inference.catalog()
@@ -336,6 +362,7 @@ def main():
     parser.add_argument("--inference-key-file", required=True)
     parser.add_argument("--publish", action="store_true")
     parser.add_argument("--retry-errors", action="store_true")
+    parser.add_argument("--finalize", action="store_true", help="Regenerate reports from saved observations without inference")
     args = parser.parse_args()
     if not re.fullmatch(r"[A-Za-z0-9_-]+", args.run_id) or (args.sample is not None and not 1 <= args.sample <= 20):
         parser.error("Invalid run identifier or sample size")
